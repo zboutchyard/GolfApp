@@ -26,6 +26,7 @@ struct LandingView: View {
                 }
                 .tag(Tab.profile)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

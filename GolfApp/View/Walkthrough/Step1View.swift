@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Step1View: View {
     @StateObject var authViewModel = AuthViewModel()
-    @StateObject var mockViewModel = MockAuthViewModel()
+//    @StateObject var mockViewModel = MockAuthViewModel()
     @State private var user: User?
     @State private var isStep1Complete: Bool = false
     @State private var isLoading: Bool = true
@@ -20,7 +20,7 @@ struct Step1View: View {
                     HStack {
                         if !isLoading {
                             if let user = user {
-                               Text("Hello \(user.firstName)!")
+                                Text("Hello \(user.firstName)!")
                                     .padding()
                                 Spacer()
                                 Button(action: {
@@ -29,9 +29,9 @@ struct Step1View: View {
                                     Text("Skip")
                                 })
                                 
-                           } else {
-                               Text("User Data not available")
-                           }
+                            } else {
+                                Text("User Data not available")
+                            }
                         }
                     }
                     .foregroundStyle(.black)
@@ -58,40 +58,42 @@ struct Step1View: View {
                         .padding()
                 }
             }
+            .overlay(
+                Button(action: {
+                    isStep1Complete = true
+                }, label: {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(width: 60, height: 60)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .overlay(
+                            ZStack{
+                                Circle()
+                                    .stroke(Color.black.opacity(0.04), lineWidth: 4)
+                                Circle()
+                                    .trim(from: 0, to: 0.3)
+                                    .stroke(Color.green, lineWidth: 4)
+                                    .rotationEffect(.init(degrees: -90))
+                            }
+                                .padding(-15)
+                        )
+                })
+                ,alignment: .bottom
+            )
+            .onAppear(){
+                fetchData()
+            }
+            .navigationDestination(isPresented: $isStep1Complete){
+                Step2View()
+            }
+            .padding()
+            .navigationBarBackButtonHidden()
         }
-        .navigationDestination(isPresented: $isStep1Complete){
-            Step2View()
-        }
-        .overlay(
-            Button(action: {}, label: {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 60, height: 60)
-                    .background(Color.blue)
-                    .clipShape(Circle())
-                    .overlay(
-                        ZStack{
-                            Circle()
-                                .stroke(Color.black.opacity(0.04), lineWidth: 4)
-                            Circle()
-                                .trim(from: 0, to: 0.3)
-                                .stroke(Color.green, lineWidth: 4)
-                                .rotationEffect(.init(degrees: -90))
-                        }
-                            .padding(-15)
-                    )
-            })
-            ,alignment: .bottom
-        )
-        .onAppear(){
-            fetchData()
-        }
-        .padding()
-        .navigationBarBackButtonHidden()
     }
     func fetchData() {
-        mockViewModel.fetchUserDataFromFirebase() { fetchedUser in
+        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             isLoading = false
         }

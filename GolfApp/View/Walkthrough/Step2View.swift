@@ -8,11 +8,12 @@ import SwiftUI
 
 struct Step2View: View {
     @StateObject var authViewModel = AuthViewModel()
-    @StateObject var mockViewModel = MockAuthViewModel()
+//    @StateObject var mockViewModel = MockAuthViewModel()
     @State private var user: User?
     @State private var isLoading: Bool = true
     @State var bioText: String = ""
     @State var charLimitReached: Bool = false
+    @State var isStepComplete: Bool = false
     let characterLimit = 120
     var remainingCharacters: Int {
         if(characterLimit - bioText.count < 0){
@@ -21,58 +22,65 @@ struct Step2View: View {
         return characterLimit - bioText.count
     }
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    if !isLoading {
-                        if let user = user {
-                            Text("Hello \(user.firstName)!")
-                                .padding()
-                            Spacer()
-                            Button(action: {
+        NavigationStack {
+            ZStack {
+                VStack {
+                    HStack {
+                        if !isLoading {
+                            if let user = user {
+                                Text("Hello \(user.firstName)!")
+                                    .padding()
+                                Spacer()
+                                Button(action: {
+                                    isStepComplete = true
+                                }, label: {
+                                    Text("Skip")
+                                })
                                 
-                            }, label: {
-                                Text("Skip")
-                            })
-                            
-                        } else {
-                            Text("User Data not available")
+                            } else {
+                                Text("User Data not available")
+                            }
                         }
                     }
-                }
-                .foregroundStyle(.black)
-                .fontWeight(.semibold)
-                .kerning(1.2)
-                Spacer()
-                Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
-                    .foregroundColor(remainingCharacters > -1 ? .green : .red)
-                    .font(.caption)
-                    .padding()
-                TextField("...Tell us something", text: $bioText)
-                    .padding()
-                    .font(.system(size: 12))
-                    .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
-                Text("Step 2")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.black)
-                    .padding(.top)
-                Text("Now briefly tell us something about yourself.")
                     .foregroundStyle(.black)
                     .fontWeight(.semibold)
                     .kerning(1.2)
-                    .multilineTextAlignment(.center)
-                    .padding(.top)
-                Spacer(minLength: 100)
-            }
-            if isLoading {
-                ProgressView("Fetching your profile information")
-                    .progressViewStyle(.circular)
-                    .padding()
+                    Spacer()
+                    Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
+                        .foregroundColor(remainingCharacters > -1 ? .green : .red)
+                        .font(.caption)
+                        .padding()
+                    TextField("...Tell us something", text: $bioText)
+                        .padding()
+                        .font(.system(size: 12))
+                        .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                    Text("Step 2")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                        .padding(.top)
+                    Text("Now briefly tell us something about yourself.")
+                        .foregroundStyle(.black)
+                        .fontWeight(.semibold)
+                        .kerning(1.2)
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                    Spacer(minLength: 100)
+                }
+                if isLoading {
+                    ProgressView("Fetching your profile information")
+                        .progressViewStyle(.circular)
+                        .padding()
+                }
             }
         }
+        .navigationDestination(isPresented: $isStepComplete) {
+            Step3View()
+        }
         .overlay(
-            Button(action: {}, label: {
+            Button(action: {
+                isStepComplete = true
+            }, label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
@@ -97,10 +105,9 @@ struct Step2View: View {
             fetchData()
         }
         .padding()
-        .navigationBarBackButtonHidden()
     }
     func fetchData() {
-        mockViewModel.fetchUserDataFromFirebase() { fetchedUser in
+        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             isLoading = false
         }

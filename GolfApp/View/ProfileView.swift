@@ -9,17 +9,17 @@ import SwiftUI
 import FirebaseDatabase
 
 
-class MockAuthViewModel: ObservableObject {
-    func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
-        // Mock implementation for testing in previews
-        let mockUser = User(firstName: "Zack", lastName: "Boutchyard", email: "Zackboutchyard@gmail.com")
-        completion(mockUser)
-    }
-}
+//class MockAuthViewModel: ObservableObject {
+//    func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
+//        // Mock implementation for testing in previews
+//        let mockUser = User(firstName: "Zack", lastName: "Boutchyard", email: "Zackboutchyard@gmail.com")
+//        completion(mockUser)
+//    }
+//}
 
 struct ProfileView: View {
 //    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-    @StateObject var authViewModel: MockAuthViewModel = MockAuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var user: User?
     @State private var isLoading: Bool = true
     var body: some View {
