@@ -22,6 +22,14 @@
 		1032E9D62AF7FFEB00001048 /* Step1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9D52AF7FFEB00001048 /* Step1View.swift */; };
 		1032E9D92AF8580C00001048 /* Step2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9D82AF8580C00001048 /* Step2View.swift */; };
 		1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9DA2AF9172F00001048 /* Step3View.swift */; };
+		1032E9DD2AF9E43B00001048 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9DC2AF9E43B00001048 /* Message.swift */; };
+		1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9DF2AF9E54000001048 /* MessageBubble.swift */; };
+		1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9E12AF9EB3800001048 /* TopRow.swift */; };
+		1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9E32AF9EE4A00001048 /* ChatView.swift */; };
+		1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9E62AF9F41D00001048 /* Extensions.swift */; };
+		1032E9E92AF9F99100001048 /* MessageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9E82AF9F99100001048 /* MessageField.swift */; };
+		1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */; };
+		1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EC2AFB1E5300001048 /* AllChatsView.swift */; };
 		108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */; };
 		108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36C82AF57C6A005DAD22 /* LoginView.swift */; };
 		108D36CB2AF57C6B005DAD22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108D36CA2AF57C6B005DAD22 /* Assets.xcassets */; };
@@ -60,6 +68,14 @@
 		1032E9D52AF7FFEB00001048 /* Step1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step1View.swift; sourceTree = "<group>"; };
 		1032E9D82AF8580C00001048 /* Step2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step2View.swift; sourceTree = "<group>"; };
 		1032E9DA2AF9172F00001048 /* Step3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Step3View.swift; sourceTree = "<group>"; };
+		1032E9DC2AF9E43B00001048 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		1032E9DF2AF9E54000001048 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+		1032E9E12AF9EB3800001048 /* TopRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRow.swift; sourceTree = "<group>"; };
+		1032E9E32AF9EE4A00001048 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		1032E9E62AF9F41D00001048 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		1032E9E82AF9F99100001048 /* MessageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageField.swift; sourceTree = "<group>"; };
+		1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
+		1032E9EC2AFB1E5300001048 /* AllChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatsView.swift; sourceTree = "<group>"; };
 		108D36C32AF57C6A005DAD22 /* GolfApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GolfApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppApp.swift; sourceTree = "<group>"; };
 		108D36C82AF57C6A005DAD22 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -120,6 +136,16 @@
 			path = Walkthrough;
 			sourceTree = "<group>";
 		};
+		1032E9DE2AF9E53100001048 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				1032E9DF2AF9E54000001048 /* MessageBubble.swift */,
+				1032E9E12AF9EB3800001048 /* TopRow.swift */,
+				1032E9E82AF9F99100001048 /* MessageField.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
 		108D36BA2AF57C6A005DAD22 = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +176,7 @@
 				108D36F02AF57C85005DAD22 /* Model */,
 				108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */,
 				108D36CA2AF57C6B005DAD22 /* Assets.xcassets */,
+				1032E9E62AF9F41D00001048 /* Extensions.swift */,
 				108D36CC2AF57C6B005DAD22 /* Preview Content */,
 			);
 			path = GolfApp;
@@ -184,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				1032E9C72AF665BF00001048 /* User.swift */,
+				1032E9DC2AF9E43B00001048 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,6 +219,7 @@
 		108D36F12AF57C8F005DAD22 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1032E9DE2AF9E53100001048 /* Message */,
 				1032E9D72AF857CD00001048 /* Walkthrough */,
 				108D36C82AF57C6A005DAD22 /* LoginView.swift */,
 				108D36F32AF57FB0005DAD22 /* RegisterView.swift */,
@@ -198,6 +227,8 @@
 				1032E9CB2AF68C8E00001048 /* LandingView.swift */,
 				1032E9CD2AF6928200001048 /* HomeView.swift */,
 				1032E9D12AF7D53B00001048 /* ProfileImage.swift */,
+				1032E9E32AF9EE4A00001048 /* ChatView.swift */,
+				1032E9EC2AFB1E5300001048 /* AllChatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -206,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				1032E9C92AF66B1100001048 /* AuthViewModel.swift */,
+				1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -354,14 +386,22 @@
 			files = (
 				1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
+				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
 				108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */,
+				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,
 				1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */,
 				1032E9D62AF7FFEB00001048 /* Step1View.swift in Sources */,
 				1032E9D92AF8580C00001048 /* Step2View.swift in Sources */,
 				108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */,
 				1032E9D22AF7D53B00001048 /* ProfileImage.swift in Sources */,
+				1032E9E92AF9F99100001048 /* MessageField.swift in Sources */,
+				1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */,
 				1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */,
+				1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */,
+				1032E9DD2AF9E43B00001048 /* Message.swift in Sources */,
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
+				1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */,
+				1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */,
 				1032E9C82AF665BF00001048 /* User.swift in Sources */,
 				108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */,
 			);

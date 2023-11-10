@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseDatabaseInternal
+import FirebaseFirestore
 import FirebaseAuth
 import SwiftUI
 import PhotosUI
@@ -90,21 +90,31 @@ class AuthViewModel: ObservableObject {
     // ... (other properties and methods)
 
     func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
-        let ref = Database.database().reference().child("Users").child(Auth.auth().currentUser?.uid ?? "")
-
-        ref.observeSingleEvent(of: .value) { snapshot, error  in
-            if let userData = snapshot.value as? [String: Any],
-               let firstName = userData["firstName"] as? String,
-               let lastName = userData["lastName"] as? String,
-               let email = userData["email"] as? String {
-                let userModel = User(firstName: firstName, lastName: lastName, email: email)
-                completion(userModel)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let usersRef = db.collection("Users").document(uid)
+        
+        usersRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let data = document.data(),
+                   let firstName = data["firstName"] as? String,
+                   let lastName = data["lastName"] as? String,
+                   let chats = data["chats"] as? [String],
+                   let email = data["email"] as? String {
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats)
+                    completion(userModel)
+                } else {
+                    completion(nil)
+                }
             } else {
                 completion(nil)
             }
         }
     }
-    
     func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if error != nil {
@@ -116,16 +126,24 @@ class AuthViewModel: ObservableObject {
     }
     
     func createFirestoreUserDocument(email: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
-        let database = Database.database().reference()
-        let usersRef = database.child("Users").child(Auth.auth().currentUser?.uid ?? "")
+        // Get the current user's UID
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
+            return
+        }
+
+        let db = Firestore.firestore()
+        let usersCollection = db.collection("Users")
         
-        
+        // Define the user document data
         let userData: [String: Any] = [
-                "email": email,
-                "firstName": firstName,
-                "lastName": lastName
-            ]
-        usersRef.setValue(userData){ (error, _) in
+            "email": email,
+            "firstName": firstName,
+            "lastName": lastName
+        ]
+        
+        // Create a new document with the user's UID as the document name
+        usersCollection.document(uid).setData(userData) { error in
             if let error = error {
                 completion(error)
             } else {

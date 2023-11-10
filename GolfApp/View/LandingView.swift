@@ -12,22 +12,30 @@ struct LandingView: View {
     enum Tab {
         case home
         case profile
+        case chatView
     }
     var body: some View {
         TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                .tag(Tab.home)
-            ProfileView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.fill")
-                }
-                .tag(Tab.profile)
+            Group {
+                HomeView()
+                    .tabItem {
+                        Label("Home", systemImage: "house.fill")
+                    }
+                    .tag(Tab.home)
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person.fill")
+                    }
+                    .tag(Tab.profile)
+                AllChatsView()
+                    .tabItem {
+                        Label("Messages", systemImage: "message.fill")
+                    }
+                    .tag(Tab.chatView)
+            }
         }
         .navigationBarBackButtonHidden()
-    }
+        }
 }
 
 #Preview {
