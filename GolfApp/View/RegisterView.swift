@@ -60,16 +60,12 @@ struct RegisterView: View {
                         .underline()
                 }
                 .navigationBarBackButtonHidden()
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.top)
                     .navigationDestination(isPresented: $isRegistered) {
                         Step1View()
                     }
                     
             }
         }
-        .padding()
     }
     func registerUser() {
         authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName, lastName: lastName) { error in

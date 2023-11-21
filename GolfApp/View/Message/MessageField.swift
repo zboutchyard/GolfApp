@@ -9,11 +9,13 @@ import SwiftUI
 
 struct MessageField: View {
     @State private var message: String = ""
+    @State var chatId: String
+    @EnvironmentObject var msgViewModel: MessageViewModel
     var body: some View {
         HStack {
             CustomTextField(placeholder: Text("...type something"), text: $message)
             Button(action: {
-                print("Message sent")
+                msgViewModel.sendMessage(chatId: chatId, text: message)
                 message = ""
             }, label: {
                 Image(systemName: "paperplane.fill")
@@ -46,8 +48,4 @@ struct CustomTextField: View {
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
         }
     }
-}
-
-#Preview {
-    MessageField()
 }

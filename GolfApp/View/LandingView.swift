@@ -16,7 +16,6 @@ struct LandingView: View {
     }
     var body: some View {
         TabView(selection: $selectedTab) {
-            Group {
                 HomeView()
                     .tabItem {
                         Label("Home", systemImage: "house.fill")
@@ -32,7 +31,6 @@ struct LandingView: View {
                         Label("Messages", systemImage: "message.fill")
                     }
                     .tag(Tab.chatView)
-            }
         }
         .navigationBarBackButtonHidden()
         }

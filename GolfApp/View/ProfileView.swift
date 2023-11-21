@@ -39,6 +39,7 @@ struct ProfileView: View {
             }
         } .onAppear(){
             fetchData()
+            print("here is user in profile view \(user)")
         }
     }
     func fetchData() {

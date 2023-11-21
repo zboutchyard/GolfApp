@@ -115,6 +115,30 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
+        let db  = Firestore.firestore()
+        print("here is the id in the fetchOther function \(id)")
+        let usersRef = db.collection("Users").document(id)
+        usersRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let data = document.data(),
+                   let firstName = data["firstName"] as? String,
+                   let lastName = data["lastName"] as? String {
+                    let otherUserModel = OtherUser(firstName: firstName, lastName: lastName)
+                    completion(otherUserModel)
+                    print("viewmodel other user \(otherUserModel)")
+                } else {
+                    print(error?.localizedDescription ?? "")
+                    completion(nil)
+                }
+            } else {
+                print(error?.localizedDescription ?? "")
+                completion(nil)
+            }
+        }
+    }
+    
     func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if error != nil {

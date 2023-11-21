@@ -6,35 +6,35 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MessageBubble: View {
     var message: Message
     @State private var showTime: Bool = false
     var body: some View {
-        VStack(alignment: message.received ? .leading : .trailing){
+        let received: Bool = message.sender == Auth.auth().currentUser?.uid ? false : true
+
+        VStack(alignment: received ? .leading : .trailing){
             HStack {
-                Text(message.text)
+                Text(message.text ?? "")
                     .padding()
-                    .background(message.received ? Color("Gray") : Color.blue)
+                    .background(received ? Color("Gray") : Color.blue)
                     .clipShape(RoundedRectangle(cornerRadius: 30))
             }
-            .frame(maxWidth: 300, alignment: message.received ? .leading : .trailing)
+            .frame(maxWidth: 300, alignment: received ? .leading : .trailing)
             .onTapGesture {
                 showTime.toggle()
             }
             if showTime {
-                Text("\(message.timestamp.formatted(.dateTime.hour().minute()))")
+                Text("\(message.timestamp!.formatted(.dateTime.hour().minute()))")
                     .font(.caption2)
                     .foregroundStyle(.gray)
-                    .padding(message.received ? .leading : .trailing, 25)
+                    .padding(received ? .leading : .trailing, 25)
             }
         }
-        .frame(maxWidth: .infinity, alignment: message.received ? .leading : .trailing)
-        .padding(message.received ? .leading : .trailing)
+        .frame(maxWidth: .infinity, alignment: received ? .leading : .trailing)
+        .padding(received ? .leading : .trailing)
         .padding(.horizontal, 10)
     }
 }
 
-#Preview {
-    MessageBubble(message: Message(id: "12345", text: "Hello user, this is a pretty cool chat app that I've made with SwiftUI.. How neat!", received: true, timestamp: Date()))
-}

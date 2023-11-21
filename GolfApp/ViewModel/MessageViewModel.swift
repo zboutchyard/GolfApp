@@ -13,45 +13,73 @@ import PhotosUI
 import FirebaseStorage
 
 class MessageViewModel: ObservableObject {
-    func getChatMessages(chatId: String, completion: @escaping (Error?) -> Void) {
-        let messagesCollectionRef = Firestore.firestore().collection("Chats").document(chatId).collection("messages")
-        
-        messagesCollectionRef.getDocuments { (querySnapshot, error) in
-            if let error = error {
-                completion(error)
-            } else {
-                var messages: [Message] = []
-                for document in querySnapshot!.documents {
-                    if let message = try? document.data(as: Message.self) {
-                        messages.append(message)
-                    }
+    @Published var messages: [Message] = []
+    @Published private(set) var lastMessage = ""
+    let db = Firestore.firestore()
+    
+    func fetchChat(chatId: String, completion: @escaping (Chat?) -> Void?) {
+        db.collection("Chats").document(chatId).addSnapshotListener { querySnapshot, error in
+            guard let document = querySnapshot else {
+                print("error fetching document \(String(describing: error))")
+                return
+            }
+            do {
+                let chat = try document.data(as: Chat.self)
+                self.messages = chat.messages ?? []
+                if let text = self.messages.last?.text {
+                    self.lastMessage = text
                 }
-                completion(nil)
+                completion(chat)
+            } catch {
+                print("error decoding document into chat \(error)")
+                return 
             }
         }
     }
     
-    
-    
-    func getChatParticipants(chatId: String, completion: @escaping (Participants?)-> Void) {
-        let messagesCollectionRef = Firestore.firestore().collection("Chats").document(chatId)
-        print("chat id: \(chatId)")
+    func sendMessage(chatId: String, text: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+                print("Current user not found")
+                return
+            }
         
-        messagesCollectionRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let data = document.data(),
-                   let participantData = data["participants"] as? [String] {
-                    let participantsModel = Participants(participants: participantData)
-                    print("Participants Data: \(participantData)")
-                    completion(participantsModel)
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date()] as [String : Any]
+        //if the
+        let chatRef = db.collection("Chats").document(chatId)
+
+            // Update the messages array using arrayUnion
+            chatRef.updateData([
+                "messages": FieldValue.arrayUnion([newMessage])
+            ]) { error in
+                if let error = error {
+                    print("Error updating document: \(error.localizedDescription)")
                 } else {
-                    print("Participants field missing or not an array of strings.")
-                    completion(nil)
+                    print("Message sent successfully!")
                 }
-            } else {
-                print("Document does not exist or there was an error: \(error?.localizedDescription ?? "Unknown Error")")
-                completion(nil)
             }
-        }
     }
+
+
+    
+//    func getChatParticipants(chatId: String, completion: @escaping (Participants?)-> Void) {
+//        let messagesCollectionRef = Firestore.firestore().collection("Chats").document(chatId)
+//        print("chat id: \(chatId)")
+//        
+//        messagesCollectionRef.getDocument { (document, error) in
+//            if let document = document, document.exists {
+//                if let data = document.data(),
+//                   let participantData = data["participants"] as? [String] {
+//                    let participantsModel = Participants(participants: participantData)
+//                    print("Participants Data: \(participantData)")
+//                    completion(participantsModel)
+//                } else {
+//                    print("Participants field missing or not an array of strings.")
+//                    completion(nil)
+//                }
+//            } else {
+//                print("Document does not exist or there was an error: \(error?.localizedDescription ?? "Unknown Error")")
+//                completion(nil)
+//            }
+//        }
+//    }
 }

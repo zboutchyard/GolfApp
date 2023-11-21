@@ -6,32 +6,48 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct ChatView: View {
-    var messageArray = [
-        "Hey, whats up?",
-        "Hey, not much just hanging out at the house",
-        "Oh nice, you want to meet up tonight?",
-        "Yeah sure, where you thinking?",
-        "Let's go grab a coffee at the shop down the road",
-        "Sounds good, I'll be up there shortly"
-    ]
+    @StateObject var msgViewModel = MessageViewModel()
+    @State var chatId: String
+    @State var otherUser: OtherUser
+    @State var messages: [Message] = []
+    
     var body: some View {
         VStack {
             VStack {
-                TopRow()
+                TopRow(otherUser: otherUser)
                     .onTapGesture {
                         hideKeyboard()
                     }
                     .background(Color("Green"))
-                ScrollView {
-                    ForEach(messageArray, id: \.self) { message in
-                        MessageBubble(message: Message(id: "12345", text: message, received: true, timestamp: Date()))
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        ForEach(messages, id: \.text) { message in
+                            MessageBubble(message: Message( sender: message.sender, text: message.text, timestamp: message.timestamp))
+                        }
+                    }
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+                    .onAppear() {
+                        withAnimation {
+                            proxy.scrollTo(messages.last?.text, anchor: .bottom)
+                        }
+                    }
+                    .onChange(of: msgViewModel.lastMessage){
+                        if msgViewModel.lastMessage == messages.last?.text{
+                            withAnimation {
+                                proxy.scrollTo(messages.last?.text, anchor: .bottom)
+                            }
+                        } else {
+                            
+                        }
                     }
                 }
-                .onTapGesture {
-                    hideKeyboard()
-                }
+                
+                
                 .padding(.top, 10)
                 .background(.white)
                 .cornerRadius(30, corners: [.topLeft, .topRight])
@@ -39,7 +55,12 @@ struct ChatView: View {
             .background(Color("Green").ignoresSafeArea())
             
             Divider()
-            MessageField()
+            MessageField(chatId: chatId)
+                .environmentObject(msgViewModel)
+        } .onAppear() {
+            msgViewModel.fetchChat(chatId: chatId) { fetchedChat in
+                messages = fetchedChat?.messages ?? []
+            }
         }
     }
     private func hideKeyboard() {
@@ -47,6 +68,6 @@ struct ChatView: View {
        }
 }
 
-#Preview {
-    ChatView()
-}
+//#Preview {
+//    ChatView()
+//}

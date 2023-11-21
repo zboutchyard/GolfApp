@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct TopRow: View {
+    @State var otherUser: OtherUser
     var photoUrl = URL(string: "https://images.unsplash.com/photo-1629747490241-624f07d70e1e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cG9ydHJhaXRzfGVufDB8fDB8fHww")
-    var name: String = "Zack Boutchyard"
     var body: some View {
         HStack(spacing: 20) {
             VStack(alignment: .trailing) {
-                Text(name)
+                Text(otherUser.firstName)
                     .font(.title).bold()
                 Text("Online")
                     .font(.caption)
@@ -34,6 +34,3 @@ struct TopRow: View {
     }
 }
 
-#Preview {
-    TopRow()
-}

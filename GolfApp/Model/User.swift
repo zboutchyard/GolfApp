@@ -20,3 +20,13 @@ class User: ObservableObject{
         self.chats = chats
     }
 }
+
+class OtherUser: ObservableObject {
+    @Published var firstName: String
+    @Published var lastName: String
+    
+    init(firstName: String, lastName: String) {
+        self.firstName = firstName
+        self.lastName = lastName
+    }
+}
