@@ -13,8 +13,10 @@ import PhotosUI
 import FirebaseStorage
 
 class MessageViewModel: ObservableObject {
-    @Published var messages: [Message] = []
+    @Published private(set) var messages: [Message] = []
     @Published private(set) var lastMessage = ""
+    @Published private(set) var chatId = ""
+    
     let db = Firestore.firestore()
     
     func fetchChat(chatId: String, completion: @escaping (Chat?) -> Void?) {
@@ -32,54 +34,88 @@ class MessageViewModel: ObservableObject {
                 completion(chat)
             } catch {
                 print("error decoding document into chat \(error)")
-                return 
+                return
             }
         }
     }
     
     func sendMessage(chatId: String, text: String) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-                print("Current user not found")
-                return
-            }
+            print("Current user not found")
+            return
+        }
         
         let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date()] as [String : Any]
-        //if the
         let chatRef = db.collection("Chats").document(chatId)
+        
+        chatRef.updateData([
+            "messages": FieldValue.arrayUnion([newMessage])
+        ]) { error in
+            if let error = error {
+                print("Error updating document: \(error.localizedDescription)")
+            } else {
+                print("Message sent successfully!")
+            }
+        }
+    }
+    
+    func createChatAndSendMessage(text: String, otherUserId: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("Current user not found")
+            return
+        }
+        let otherUserRef = db.collection("Users").document(otherUserId)
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date()] as [String : Any]
+        let participants = [currentUserID, otherUserId]
+        let chatRef = db.collection("Chats").addDocument(data: ["messages": FieldValue.arrayUnion([newMessage])]) { error in
+            if let error = error {
+                print("Error updating document: \(error.localizedDescription)")
+            } else {
+                print("Message sent successfully!")
+            }
+        }
+        let chatId = chatRef.documentID
+        self.chatId = chatId
+        print("here is the chatId in the createChatAndSendMessage \(self.chatId)")
+        let participantsRef = db.collection("Chats").document(chatId)
+        participantsRef.updateData(["participants": FieldValue.arrayUnion(participants)])
+        let userRef = db.collection("Users").document(currentUserID)
+        userRef.updateData(["chats": FieldValue.arrayUnion([chatId])]){ error in
+            if let error = error {
+                print("Error updating current users data \(error.localizedDescription)")
+            } else {
+                print("updated successully")
+            }
+        }
+        otherUserRef.updateData(["chats": FieldValue.arrayUnion([chatId])]) { error in
+            if let error = error {
+                print("Error updating other users data \(error.localizedDescription)")
+            } else {
+                print("updated successfully")
+            }
 
-            // Update the messages array using arrayUnion
-            chatRef.updateData([
-                "messages": FieldValue.arrayUnion([newMessage])
+        }
+        fetchChat(chatId: chatRef.documentID) { fetchedChat in
+            if let chat = fetchedChat {
+                self.messages = (fetchedChat?.messages!)!
+            }
+        }
+    }
+    
+    func deleteUserChat(chatId: String){
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("Current user not found")
+            return
+        }
+        let userChatRef = db.collection("Users").document(currentUserID)
+        userChatRef.updateData([
+                "chats": FieldValue.arrayRemove([chatId])
             ]) { error in
                 if let error = error {
-                    print("Error updating document: \(error.localizedDescription)")
+                    print("Error removing chatId from chats array: \(error.localizedDescription)")
                 } else {
-                    print("Message sent successfully!")
+                    print("ChatId removed successfully")
                 }
             }
     }
-
-
-    
-//    func getChatParticipants(chatId: String, completion: @escaping (Participants?)-> Void) {
-//        let messagesCollectionRef = Firestore.firestore().collection("Chats").document(chatId)
-//        print("chat id: \(chatId)")
-//        
-//        messagesCollectionRef.getDocument { (document, error) in
-//            if let document = document, document.exists {
-//                if let data = document.data(),
-//                   let participantData = data["participants"] as? [String] {
-//                    let participantsModel = Participants(participants: participantData)
-//                    print("Participants Data: \(participantData)")
-//                    completion(participantsModel)
-//                } else {
-//                    print("Participants field missing or not an array of strings.")
-//                    completion(nil)
-//                }
-//            } else {
-//                print("Document does not exist or there was an error: \(error?.localizedDescription ?? "Unknown Error")")
-//                completion(nil)
-//            }
-//        }
-//    }
 }

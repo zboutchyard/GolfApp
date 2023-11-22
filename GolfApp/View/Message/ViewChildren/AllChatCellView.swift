@@ -12,6 +12,7 @@ import Firebase
 struct AllChatCellView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @Binding var selectedChatId: String?
     @State private var otherUser: OtherUser?
     @State private var chatModel: Chat?
     @State private var isLoading: Bool = true
@@ -104,6 +105,7 @@ struct AllChatCellView: View {
     func fetchData() {
         getAllConversations()
         isLoading = false
+        selectedChatId = chatId
     }
     
     func getAllConversations() {
@@ -123,7 +125,6 @@ struct AllChatCellView: View {
                 otherUser = fetchedUser
             }
         }
-        
     }
     
 }

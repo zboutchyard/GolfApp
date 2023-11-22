@@ -9,14 +9,30 @@ import SwiftUI
 
 struct MessageField: View {
     @State private var message: String = ""
-    @State var chatId: String
+    @State var chatId: String?
     @EnvironmentObject var msgViewModel: MessageViewModel
+    @StateObject var messageViewmodel: MessageViewModel = MessageViewModel()
+    @State var isNewMessage: Bool = false
+    @State var otherUser: OtherUser?
     var body: some View {
         HStack {
             CustomTextField(placeholder: Text("...type something"), text: $message)
             Button(action: {
-                msgViewModel.sendMessage(chatId: chatId, text: message)
-                message = ""
+                if !isNewMessage {
+                    if let chatId = chatId {
+                        msgViewModel.sendMessage(chatId: chatId, text: message)
+                        message = ""
+                    }
+                } else {
+                    if let otherUser {
+                        messageViewmodel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)
+                        messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
+                            
+                        }
+                        message = ""
+                    }
+                }
+                
             }, label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundStyle(.white)

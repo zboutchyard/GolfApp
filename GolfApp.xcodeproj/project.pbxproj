@@ -40,6 +40,8 @@
 		108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F32AF57FB0005DAD22 /* RegisterView.swift */; };
 		108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F52AF582AB005DAD22 /* ProfileView.swift */; };
 		10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */; };
+		10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */; };
+		10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3632B0D6F75004D45E7 /* NewChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +92,8 @@
 		108D36F32AF57FB0005DAD22 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		108D36F52AF582AB005DAD22 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatCellView.swift; sourceTree = "<group>"; };
+		10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageView.swift; sourceTree = "<group>"; };
+		10B1D3632B0D6F75004D45E7 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,10 +145,11 @@
 		1032E9DE2AF9E53100001048 /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				1032E9DF2AF9E54000001048 /* MessageBubble.swift */,
-				1032E9E12AF9EB3800001048 /* TopRow.swift */,
-				1032E9E82AF9F99100001048 /* MessageField.swift */,
-				10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */,
+				10B1D3632B0D6F75004D45E7 /* NewChatView.swift */,
+				1032E9E32AF9EE4A00001048 /* ChatView.swift */,
+				10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */,
+				1032E9EC2AFB1E5300001048 /* AllChatsView.swift */,
+				10B1D3622B0D6F25004D45E7 /* ViewChildren */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -230,8 +235,6 @@
 				1032E9CB2AF68C8E00001048 /* LandingView.swift */,
 				1032E9CD2AF6928200001048 /* HomeView.swift */,
 				1032E9D12AF7D53B00001048 /* ProfileImage.swift */,
-				1032E9E32AF9EE4A00001048 /* ChatView.swift */,
-				1032E9EC2AFB1E5300001048 /* AllChatsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -243,6 +246,17 @@
 				1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		10B1D3622B0D6F25004D45E7 /* ViewChildren */ = {
+			isa = PBXGroup;
+			children = (
+				1032E9DF2AF9E54000001048 /* MessageBubble.swift */,
+				1032E9E12AF9EB3800001048 /* TopRow.swift */,
+				1032E9E82AF9F99100001048 /* MessageField.swift */,
+				10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */,
+			);
+			path = ViewChildren;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */,
+				10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
 				10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */,
 				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
@@ -406,6 +421,7 @@
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
 				1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */,
 				1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */,
+				10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */,
 				1032E9C82AF665BF00001048 /* User.swift in Sources */,
 				108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */,
 			);

@@ -14,6 +14,7 @@ import FirebaseStorage
 
 class AuthViewModel: ObservableObject {  
     @Published var photo: UIImage?
+    @Published var otherUsers: [OtherUser] = []
     enum ImageState {
         case empty
         case loading(Progress)
@@ -104,8 +105,9 @@ class AuthViewModel: ObservableObject {
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String,
                    let chats = data["chats"] as? [String],
+                   let friendsList = data["friendsList"] as? [String],
                    let email = data["email"] as? String {
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats)
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList)
                     completion(userModel)
                 } else {
                     completion(nil)
@@ -118,16 +120,16 @@ class AuthViewModel: ObservableObject {
     
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
         let db  = Firestore.firestore()
-        print("here is the id in the fetchOther function \(id)")
         let usersRef = db.collection("Users").document(id)
         usersRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 if let data = document.data(),
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String {
-                    let otherUserModel = OtherUser(firstName: firstName, lastName: lastName)
+                    let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
+                    self.otherUsers.append(otherUserModel)
+                    
                     completion(otherUserModel)
-                    print("viewmodel other user \(otherUserModel)")
                 } else {
                     print(error?.localizedDescription ?? "")
                     completion(nil)
