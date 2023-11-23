@@ -8,32 +8,54 @@
 import SwiftUI
 
 struct LandingView: View {
+    @State private var isMessageBtnClicked = false
     @State private var selectedTab: Tab = .home
     enum Tab {
         case home
         case profile
         case chatView
+        case teeTimeView
     }
     var body: some View {
-        TabView(selection: $selectedTab) {
+        NavigationStack {
+            HStack {
+                Text("par pal")
+                    .font(.title).bold()
+                    .foregroundStyle(Color("Heading"))
+                    .padding(.leading)
+                Spacer()
+                Button(action: {
+                    isMessageBtnClicked = true
+                }, label: {
+                    Image(systemName: "plus.message")
+                })
+                .font(.system(size: 25))
+                .padding(.trailing)
+            }
+            
+            Divider()
+            TabView(selection: $selectedTab) {
                 HomeView()
                     .tabItem {
                         Label("Home", systemImage: "house.fill")
                     }
                     .tag(Tab.home)
+                TeeTimeView()
+                    .tabItem {
+                        Label("Tee Time", systemImage: "figure.golf")
+                    }
+                    .tag(Tab.teeTimeView)
                 ProfileView()
                     .tabItem {
                         Label("Profile", systemImage: "person.fill")
                     }
                     .tag(Tab.profile)
-                AllChatsView()
-                    .tabItem {
-                        Label("Messages", systemImage: "message.fill")
-                    }
-                    .tag(Tab.chatView)
+            }
+            .navigationBarBackButtonHidden()
+        } .navigationDestination(isPresented: $isMessageBtnClicked) {
+            AllChatsView()
         }
-        .navigationBarBackButtonHidden()
-        }
+    }
 }
 
 #Preview {

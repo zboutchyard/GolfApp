@@ -42,6 +42,7 @@
 		10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */; };
 		10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */; };
 		10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3632B0D6F75004D45E7 /* NewChatView.swift */; };
+		10B1D3662B0EBA40004D45E7 /* TeeTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatCellView.swift; sourceTree = "<group>"; };
 		10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageView.swift; sourceTree = "<group>"; };
 		10B1D3632B0D6F75004D45E7 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
+		10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeTimeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +237,7 @@
 				1032E9CB2AF68C8E00001048 /* LandingView.swift */,
 				1032E9CD2AF6928200001048 /* HomeView.swift */,
 				1032E9D12AF7D53B00001048 /* ProfileImage.swift */,
+				10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
 				10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */,
+				10B1D3662B0EBA40004D45E7 /* TeeTimeView.swift in Sources */,
 				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
 				108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */,
 				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,

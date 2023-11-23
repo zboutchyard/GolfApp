@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct NewChatView: View {
+    @Environment(\.colorScheme) var colorScheme
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State private var message: String = ""
     @State var otherUser: OtherUser?
@@ -18,12 +19,8 @@ struct NewChatView: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        VStack {
             VStack {
                 TopRow(otherUser: otherUser!)
-                //                    //                        .onTapGesture {
-                //                    //                            hideKeyboard()
-                //                    //                        }
                     .background(Color("Green"))
                 ScrollViewReader { proxy in
                     ScrollView {
@@ -54,14 +51,15 @@ struct NewChatView: View {
                         }
                     }
                 }
-                .padding(.top, 10)
-                .background(.white)
-                .cornerRadius(30, corners: [.topLeft, .topRight])
+               
             }
-        }
+//            .padding(.top, 10)
+            .background(colorScheme == .dark ? Color("DarkGray") : .white)
+            .cornerRadius(30, corners: [.topLeft, .topRight])
+        
         Divider()
         HStack {
-            CustomTextField(placeholder: Text("...type something"), text: $message)
+            CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $message)
             Button(action: {
                     if let otherUser {
                         msgViewModel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)

@@ -15,6 +15,7 @@ struct TopRow: View {
             VStack(alignment: .trailing) {
                 Text(otherUser.firstName)
                     .font(.title).bold()
+                    .foregroundStyle(.black)
                 Text("Online")
                     .font(.caption)
                     .foregroundStyle(.gray)

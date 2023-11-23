@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ChatView: View {
+    @Environment(\.colorScheme) var colorScheme
     @StateObject var msgViewModel = MessageViewModel()
     @State var chatId: String
     @State var otherUser: OtherUser?
@@ -50,7 +51,7 @@ struct ChatView: View {
                     
                     
                     .padding(.top, 10)
-                    .background(.white)
+                    .background(colorScheme == .dark ? Color("DarkGray") : .white)
                     .cornerRadius(30, corners: [.topLeft, .topRight])
                 }
                 .background(Color("Green").ignoresSafeArea())

@@ -26,6 +26,7 @@ struct GolfAppApp: App {
     var body: some Scene {
         WindowGroup {
             RegisterView(isRegistered: false)
+            //TODO: set default font here
         }
     }
 }

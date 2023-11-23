@@ -16,7 +16,7 @@ struct MessageField: View {
     @State var otherUser: OtherUser?
     var body: some View {
         HStack {
-            CustomTextField(placeholder: Text("...type something"), text: $message)
+            CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $message)
             Button(action: {
                 if !isNewMessage {
                     if let chatId = chatId {
