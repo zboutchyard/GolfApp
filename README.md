@@ -13,10 +13,9 @@ Click on “new branch”
 
 ￼
 
-Branch naming needs to be specific to the feature you are adding/ bug you are fixing, and the action needs to prefix the feature/bugfix. 
-Examples: 
-feature/addModal-profile-view
-bugfix/fix-duplicated-views
+Branch naming needs to be have the JIRA story number followed by a description of the issue/feature you are working on. 
+SPRINT-123/addModal-profile-view
+SPRINT-335/fix-duplicated-views
 
 
 
