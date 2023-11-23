@@ -16,6 +16,7 @@ Click on “new branch”
 Branch naming needs to be have the JIRA story number followed by a description of the issue/feature you are working on. 
 
 SPRINT-123/addModal-profile-view
+
 SPRINT-335/fix-duplicated-views
 
 
