@@ -45,6 +45,7 @@ struct AllChatsView: View {
                         if let user = user {
                                 ForEach((user.chats), id: \.self){  chat in
                                     AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
+                                        .frame(maxWidth: .infinity)
                                 }
                                 .onDelete(perform: deleteItem)
                             

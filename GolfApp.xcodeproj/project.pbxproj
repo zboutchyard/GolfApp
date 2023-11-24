@@ -44,6 +44,9 @@
 		10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3632B0D6F75004D45E7 /* NewChatView.swift */; };
 		10B1D3662B0EBA40004D45E7 /* TeeTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */; };
 		10B1D3682B100AA0004D45E7 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3672B100AA0004D45E7 /* PostView.swift */; };
+		10B1D36A2B103F7A004D45E7 /* ProfileHeadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3692B103F7A004D45E7 /* ProfileHeadingView.swift */; };
+		10B1D36C2B10403E004D45E7 /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36B2B10403E004D45E7 /* ProfileInfoView.swift */; };
+		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +101,9 @@
 		10B1D3632B0D6F75004D45E7 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
 		10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeTimeView.swift; sourceTree = "<group>"; };
 		10B1D3672B100AA0004D45E7 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		10B1D3692B103F7A004D45E7 /* ProfileHeadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeadingView.swift; sourceTree = "<group>"; };
+		10B1D36B2B10403E004D45E7 /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
+		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,15 +237,13 @@
 		108D36F12AF57C8F005DAD22 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				10B1D36D2B104129004D45E7 /* Profile */,
 				1032E9DE2AF9E53100001048 /* Message */,
 				1032E9D72AF857CD00001048 /* Walkthrough */,
 				108D36C82AF57C6A005DAD22 /* LoginView.swift */,
 				108D36F32AF57FB0005DAD22 /* RegisterView.swift */,
-				108D36F52AF582AB005DAD22 /* ProfileView.swift */,
 				1032E9CB2AF68C8E00001048 /* LandingView.swift */,
 				1032E9CD2AF6928200001048 /* HomeView.swift */,
-				1032E9D12AF7D53B00001048 /* ProfileImage.swift */,
-				10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */,
 				10B1D3672B100AA0004D45E7 /* PostView.swift */,
 			);
 			path = View;
@@ -263,6 +267,19 @@
 				10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */,
 			);
 			path = ViewChildren;
+			sourceTree = "<group>";
+		};
+		10B1D36D2B104129004D45E7 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				1032E9D12AF7D53B00001048 /* ProfileImage.swift */,
+				10B1D3692B103F7A004D45E7 /* ProfileHeadingView.swift */,
+				10B1D36B2B10403E004D45E7 /* ProfileInfoView.swift */,
+				10B1D36E2B10425D004D45E7 /* EditProfileView.swift */,
+				10B1D3652B0EBA40004D45E7 /* TeeTimeView.swift */,
+				108D36F52AF582AB005DAD22 /* ProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,6 +424,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10B1D36C2B10403E004D45E7 /* ProfileInfoView.swift in Sources */,
 				1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */,
 				10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
@@ -420,10 +438,12 @@
 				1032E9D62AF7FFEB00001048 /* Step1View.swift in Sources */,
 				1032E9D92AF8580C00001048 /* Step2View.swift in Sources */,
 				108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */,
+				10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */,
 				1032E9D22AF7D53B00001048 /* ProfileImage.swift in Sources */,
 				1032E9E92AF9F99100001048 /* MessageField.swift in Sources */,
 				1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */,
 				1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */,
+				10B1D36A2B103F7A004D45E7 /* ProfileHeadingView.swift in Sources */,
 				1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */,
 				1032E9DD2AF9E43B00001048 /* Chat.swift in Sources */,
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
