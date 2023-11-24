@@ -10,6 +10,8 @@ import SwiftUI
 struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var selectedTab: Tab = .home
+    @State private var isSearchBtnClicked = false
+    @State private var searchText: String = ""
     enum Tab {
         case home
         case profile
@@ -24,6 +26,13 @@ struct LandingView: View {
                     .foregroundStyle(Color("Heading"))
                     .padding(.leading)
                 Spacer()
+                Button(action: {
+                    isSearchBtnClicked = true
+                }, label: {
+                    Image(systemName: "magnifyingglass")
+                })
+                .font(.system(size: 25))
+                .padding(.trailing)
                 Button(action: {
                     isMessageBtnClicked = true
                 }, label: {
@@ -54,6 +63,17 @@ struct LandingView: View {
             .navigationBarBackButtonHidden()
         } .navigationDestination(isPresented: $isMessageBtnClicked) {
             AllChatsView()
+        }
+        .navigationDestination(isPresented: $isSearchBtnClicked) {
+            SearchDetailView(searchText: $searchText)
+                .toolbar(content: {
+                    ToolbarItem(placement: .principal) {
+                        TextField("search users", text: $searchText)
+                            .padding(4)
+                            .font(.system(size: 20))
+                            .background(RoundedRectangle(cornerRadius: 30).stroke(Color.gray, lineWidth: .init(1.0)))
+                    }
+                })
         }
     }
 }

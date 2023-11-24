@@ -19,25 +19,7 @@ struct PostView: View {
                 Button(action: {
                     userClicked = true
                 }, label: {
-                    HStack {
-                        Image(systemName: "person.fill")
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .frame(width: 50, height: 50)
-                            .background {
-                                Circle().fill(Color("Gray"))
-                            }
-                        VStack {
-                            Text("Zack Boutchyard")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text("3h")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .font(.caption)
-                        }
-                    }
-                    .padding([.leading, .trailing, .top])
+                    PersonCellView()
                 })
                 .buttonStyle(.plain)
                 

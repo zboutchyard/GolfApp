@@ -12,9 +12,9 @@ import SwiftUI
 import PhotosUI
 import FirebaseStorage
 
-class AuthViewModel: ObservableObject {  
+class AuthViewModel: ObservableObject {
     @Published var photo: UIImage?
-    @Published var otherUsers: [OtherUser] = []
+    @Published var otherUsers: [OtherUser]?
     enum ImageState {
         case empty
         case loading(Progress)
@@ -22,34 +22,39 @@ class AuthViewModel: ObservableObject {
         case failure(Error)
     }
     
+    init() {
+        fetchAllOtherUsersFromFirebase() { user in }
+    }
+    
+    
     
     
     enum TransferError: Error {
         case importFailed
     }
-        
+    
     struct ProfileImage: Transferable {
         let image: Image
-
+        
         static var transferRepresentation: some TransferRepresentation {
             DataRepresentation(importedContentType: .image) { data in
-            #if canImport(AppKit)
+#if canImport(AppKit)
                 guard let nsImage = NSImage(data: data) else {
                     throw TransferError.importFailed
                 }
                 let image = Image(nsImage: nsImage)
                 return ProfileImage(image: image)
-            #elseif canImport(UIKit)
+#elseif canImport(UIKit)
                 guard let uiImage = UIImage(data: data) else {
                     throw TransferError.importFailed
                 }
                 let image = Image(uiImage: uiImage)
                 let viewModel: AuthViewModel = AuthViewModel()
-                //instead of adding the photo in 1 register page, we could first create the user within a register page, establish a uid, then proceed to a walkthrugh screen and call uploadPhoto() here when the photo gets updated. 
+                //instead of adding the photo in 1 register page, we could first create the user within a register page, establish a uid, then proceed to a walkthrugh screen and call uploadPhoto() here when the photo gets updated.
                 return ProfileImage(image: image)
-            #else
+#else
                 throw TransferError.importFailed
-            #endif
+#endif
             }
         }
     }
@@ -89,7 +94,7 @@ class AuthViewModel: ObservableObject {
     
     
     // ... (other properties and methods)
-
+    
     func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
@@ -121,14 +126,13 @@ class AuthViewModel: ObservableObject {
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
         let db  = Firestore.firestore()
         let usersRef = db.collection("Users").document(id)
-        usersRef.getDocument { (document, error) in
+        usersRef.getDocument { [self] (document, error) in
             if let document = document, document.exists {
-                if let data = document.data(),
+                if let data = document.data() ?? nil,
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String {
                     let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
-                    self.otherUsers.append(otherUserModel)
-                    
+                    self.otherUsers = otherUsers
                     completion(otherUserModel)
                 } else {
                     print(error?.localizedDescription ?? "")
@@ -140,6 +144,32 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchAllOtherUsersFromFirebase(completion: @escaping ([OtherUser]?) -> Void) {
+        let db  = Firestore.firestore()
+        let usersRef = db.collection("Users")
+        
+        usersRef.getDocuments { (documents, error) in
+            if let documents = documents {
+                var otherUsers = [OtherUser]()
+                
+                for document in documents.documents {
+                    if let data = document.data() ?? nil,
+                       let firstName = data["firstName"] as? String,
+                       let lastName = data["lastName"] as? String {
+                        let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName)
+                        otherUsers.append(otherUserModel)
+                    }
+                }
+                self.otherUsers = otherUsers
+                completion(otherUsers)
+            } else {
+                print(error?.localizedDescription ?? "")
+                completion(nil)
+            }
+        }
+    }
+    
     
     func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
@@ -157,7 +187,7 @@ class AuthViewModel: ObservableObject {
             completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
             return
         }
-
+        
         let db = Firestore.firestore()
         let usersCollection = db.collection("Users")
         
