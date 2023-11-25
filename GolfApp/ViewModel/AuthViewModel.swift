@@ -16,7 +16,10 @@ class AuthViewModel: ObservableObject {
     @Published var photo: UIImage?
     @Published var otherUsers: [OtherUser]?
     @Published var friends: [OtherUser]?
+    @Published var friend: OtherUser?
     @State var friendId: String?
+    @Published var friendsList: [OtherUser]?
+    
     enum ImageState {
         case empty
         case loading(Progress)
@@ -26,9 +29,6 @@ class AuthViewModel: ObservableObject {
     
     init() {
         fetchAllOtherUsersFromFirebase() { user in }
-        if friendId != nil {
-            fetchOtherUserFromFirebase(id: friendId ?? "") { friend in }
-        }
     }
     
     
@@ -137,8 +137,7 @@ class AuthViewModel: ObservableObject {
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String {
                     let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
-                    friends?.append(otherUserModel)
-                    self.friends = friends
+//                    self.friends?.append(otherUserModel)
                     completion(otherUserModel)
                 } else {
                     print(error?.localizedDescription ?? "")
@@ -147,6 +146,33 @@ class AuthViewModel: ObservableObject {
             } else {
                 print(error?.localizedDescription ?? "")
                 completion(nil)
+            }
+        }
+    }
+    
+    func fetchFriendsFromFirebase(ids: [String], completion: @escaping ([OtherUser]?) -> Void) {
+        let db = Firestore.firestore()
+        var otherUsers = [OtherUser]()
+        print("here are the user ids \(ids)")
+        for id in ids {
+            let usersRef = db.collection("Users").document(id)
+            usersRef.getDocument { [self] (document, error) in
+                if let document = document, document.exists {
+                    if let data = document.data() ?? nil,
+                       let firstName = data["firstName"] as? String,
+                       let lastName = data["lastName"] as? String {
+                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
+                        otherUsers.append(otherUserModel)
+                        self.friendsList = otherUsers
+                        completion(otherUsers)
+                    } else {
+                        print(error?.localizedDescription ?? "")
+                        completion(nil)
+                    }
+                } else {
+                    print(error?.localizedDescription ?? "")
+                    completion(nil)
+                }
             }
         }
     }

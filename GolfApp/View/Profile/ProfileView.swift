@@ -19,10 +19,9 @@ struct ProfileView: View {
     @State private var isOtherViewClicked = false
     @State private var isAddFriendClicked = false
     @State var searchText: String = ""
-    @State var friends: [OtherUser] = []
+    @State var friends: [OtherUser]?
     @State private var filteredUsers: [OtherUser]?
-    let coverPhotoUrl = URL(string: "https://i.pinimg.com/564x/5e/2c/65/5e2c653bfbf2d681fa39358aa4132f9e.jpg")
-    let userPhotoUrl = URL(string: "https://images.unsplash.com/photo-1629747490241-624f07d70e1e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cG9ydHJhaXRzfGVufDB8fDB8fHww")
+   
     
     var body: some View {
         NavigationStack {
@@ -56,7 +55,7 @@ struct ProfileView: View {
                                 profileBtnSelected = false
                                 friendsListBtnSelected = true
                                 isOtherViewClicked = true
-                                friends.removeAll()
+                                friends = nil
                                 getOtherUserInfo(friendsList: user?.friendsList ?? [])
                             }, label: {
                                 Text("Friends")
@@ -93,7 +92,7 @@ struct ProfileView: View {
                                 .font(.system(size: 20))
                                 .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
                             Divider()
-                            ForEach(filteredUsers ?? friends, id: \.id){ friend in
+                            ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
                                 HStack {
                                     Image(systemName: "person.fill")
                                         .scaledToFill()
@@ -153,23 +152,20 @@ struct ProfileView: View {
     
     
     func getOtherUserInfo(friendsList: [String]){
-        for friend in friendsList {
-            authViewModel.fetchOtherUserFromFirebase(id: friend){ friend in
-                if let friend = friend {
-                    friends.append(friend)
-                }
-                
-            }
+        authViewModel.fetchFriendsFromFirebase(ids: friendsList) { allFriends in
+            friends = allFriends
         }
     }
     
     private func filterUsers() {
         if searchText != "" {
-            if let allUsers = authViewModel.otherUsers {
+            print("inside the filter \(authViewModel.friendsList)")
+            if let allUsers = authViewModel.friendsList {
                 filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
             }
         } else {
-            filteredUsers = nil
+            print("outisde the filter \(authViewModel.friendsList)")
+            filteredUsers = authViewModel.friendsList
         }
         
     }
