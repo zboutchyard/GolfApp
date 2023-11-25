@@ -20,7 +20,8 @@ struct LandingView: View {
     }
     var body: some View {
         NavigationStack {
-            HStack {
+        VStack {
+            HStack(spacing: 0) {
                 Text("par pal")
                     .font(.title).bold()
                     .foregroundStyle(Color("Heading"))
@@ -41,26 +42,29 @@ struct LandingView: View {
                 .font(.system(size: 25))
                 .padding(.trailing)
             }
-            
-            Divider()
+            .padding(.bottom, 15)
+            .background(.whiteOrDark)
             TabView(selection: $selectedTab) {
-                HomeView()
-                    .tabItem {
-                        Label("Home", systemImage: "house.fill")
-                    }
-                    .tag(Tab.home)
-                TeeTimeView()
-                    .tabItem {
-                        Label("Tee Time", systemImage: "figure.golf")
-                    }
-                    .tag(Tab.teeTimeView)
-                ProfileView()
-                    .tabItem {
-                        Label("Profile", systemImage: "person.fill")
-                    }
-                    .tag(Tab.profile)
+                Group {
+                    HomeView()
+                        .tabItem {
+                            Label("Home", systemImage: "house.fill")
+                        }
+                    TeeTimeView()
+                        .tabItem {
+                            Label("Tee Time", systemImage: "figure.golf")
+                        }
+                    ProfileView()
+                        .tabItem {
+                            Label("Profile", systemImage: "person.fill")
+                        }
+                }
+                .toolbar(.visible, for: .tabBar)
+                .toolbarBackground(Color("WhiteOrDark"), for: .tabBar)
             }
             .navigationBarBackButtonHidden()
+        }
+        .padding(.top, 0)
         } .navigationDestination(isPresented: $isMessageBtnClicked) {
             AllChatsView()
         }

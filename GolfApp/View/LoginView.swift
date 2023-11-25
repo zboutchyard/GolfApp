@@ -40,6 +40,7 @@ struct LoginView: View {
             .navigationDestination(isPresented: $isLoggedIn){
                 LandingView()
                     .navigationBarBackButtonHidden()
+                    .toolbar(.hidden)
             }
         }
         .padding()
