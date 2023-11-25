@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileInfoView: View {
+    @State var user: User
     var body: some View {
         Divider()
         Text("Information")
@@ -26,13 +27,15 @@ struct ProfileInfoView: View {
                     .padding()
                     .padding(.leading)
                 Spacer()
-                Text("here is a bio written from the user that describes something unique about them, it has to be less than 200 chars")
-                    .fontWeight(.light)
-                    .kerning(1.2)
-                    .padding()
-                    .padding(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .multilineTextAlignment(.trailing)
+                if let bio = user.bio {
+                    Text(bio)
+                        .fontWeight(.light)
+                        .kerning(1.2)
+                        .padding()
+                        .padding(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                }
             }
             HStack {
                 Text("Interests:")
@@ -41,13 +44,16 @@ struct ProfileInfoView: View {
                     .padding()
                     .padding(.leading)
                 Spacer()
-                Text("Volleyball, Tennis, Stuff, Things, Things I like to Do")
-                    .fontWeight(.light)
-                    .kerning(1.2)
-                    .padding()
-                    .padding(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .multilineTextAlignment(.trailing)
+                if let interests = user.interests {
+                    Text(interests)
+                        .fontWeight(.light)
+                        .kerning(1.2)
+                        .padding()
+                        .padding(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                }
+                
             }
             HStack {
                 Text("Handicap:")
@@ -56,13 +62,15 @@ struct ProfileInfoView: View {
                     .padding()
                     .padding(.leading)
                 Spacer()
-                Text("18")
-                    .fontWeight(.light)
-                    .kerning(1.2)
-                    .padding()
-                    .padding(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .multilineTextAlignment(.trailing)
+                if let handicap = user.handicap {
+                    Text(String(handicap))
+                        .fontWeight(.light)
+                        .kerning(1.2)
+                        .padding()
+                        .padding(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                }
             }
             HStack {
                 Text("Home course:")
@@ -71,18 +79,21 @@ struct ProfileInfoView: View {
                     .padding()
                     .padding(.leading)
                 Spacer()
-                Text("Asheboro Municipal")
-                    .fontWeight(.light)
-                    .kerning(1.2)
-                    .padding()
-                    .padding(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .multilineTextAlignment(.trailing)
+                if let homeCourse = user.homeCourse {
+                    Text(homeCourse)
+                        .fontWeight(.light)
+                        .kerning(1.2)
+                        .padding()
+                        .padding(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                }
+                
             }
         }
     }
 }
 
 #Preview {
-    ProfileInfoView()
+    ProfileInfoView(user: User(firstName: "Zack", lastName: "Boutchyard", email: "zackboutchyard@gmail.com", chats: ["123123"], friendsList: ["123123"], bio: "Here is a short bio about a boy who was sitting on the ouch doing nothing but coding for months so he could get maybe a slightly bigger paycheck", handicap: 12, homeCourse: "asheboro municipal"))
 }

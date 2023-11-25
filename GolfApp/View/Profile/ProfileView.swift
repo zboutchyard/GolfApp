@@ -1,5 +1,5 @@
 //
-//  LandingView.swift
+//  ProfileView.swift
 //  GolfApp
 //
 //  Created by Zack Boutchyard on 11/3/23.
@@ -65,7 +65,9 @@ struct ProfileView: View {
                         } .padding(.vertical, 5)
                         
                         if profileBtnSelected {
-                            ProfileInfoView()
+                            if let user = user {
+                                ProfileInfoView(user: user)
+                            }
                         }
                         if teeTimeBtnSelected {
                             VStack {
@@ -119,8 +121,6 @@ struct ProfileView: View {
                                 }
                                 Divider()
                             }
-                        } else {
-                            ProgressView()
                         }
                     }
                 }
@@ -159,12 +159,10 @@ struct ProfileView: View {
     
     private func filterUsers() {
         if searchText != "" {
-            print("inside the filter \(authViewModel.friendsList)")
             if let allUsers = authViewModel.friendsList {
                 filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
             }
         } else {
-            print("outisde the filter \(authViewModel.friendsList)")
             filteredUsers = authViewModel.friendsList
         }
         
