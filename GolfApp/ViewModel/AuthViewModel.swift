@@ -15,6 +15,8 @@ import FirebaseStorage
 class AuthViewModel: ObservableObject {
     @Published var photo: UIImage?
     @Published var otherUsers: [OtherUser]?
+    @Published var friends: [OtherUser]?
+    @State var friendId: String?
     enum ImageState {
         case empty
         case loading(Progress)
@@ -24,6 +26,9 @@ class AuthViewModel: ObservableObject {
     
     init() {
         fetchAllOtherUsersFromFirebase() { user in }
+        if friendId != nil {
+            fetchOtherUserFromFirebase(id: friendId ?? "") { friend in }
+        }
     }
     
     
@@ -132,7 +137,8 @@ class AuthViewModel: ObservableObject {
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String {
                     let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
-                    self.otherUsers = otherUsers
+                    friends?.append(otherUserModel)
+                    self.friends = friends
                     completion(otherUserModel)
                 } else {
                     print(error?.localizedDescription ?? "")
