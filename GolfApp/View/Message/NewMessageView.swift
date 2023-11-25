@@ -68,7 +68,7 @@ struct NewMessageView: View {
             }
         }
          .onAppear() {
-                getOtherUserInfo(friendsList: user.friendsList)
+                getOtherUserInfo(friendsList: user.friendsList ?? [])
         }
     }
     

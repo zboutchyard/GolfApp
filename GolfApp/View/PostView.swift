@@ -14,7 +14,7 @@ struct PostView: View {
     @State private var userClicked: Bool = false
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 30).fill(.white).overlay {
+        RoundedRectangle(cornerRadius: 30).fill(.whiteOrDark).overlay {
             VStack {
                 Button(action: {
                     userClicked = true
@@ -32,7 +32,7 @@ struct PostView: View {
                 HStack {
                     Image(systemName: "hand.thumbsup.fill")
                         .background(Circle().fill(.blue).frame(width: 20, height: 20))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.whiteOrDark)
                         .padding([.leading])
                     Text("2")
                         Spacer()
@@ -78,7 +78,7 @@ struct PostView: View {
                     
                 }
             }
-            .background(Color.white)
+            .background(.whiteOrDark)
 
         }
         .frame(height: 300)

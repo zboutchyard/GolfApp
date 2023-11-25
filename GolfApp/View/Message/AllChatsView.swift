@@ -1,5 +1,5 @@
 //
-//  LandingView.swift
+//  AllChatsView.swift
 //  GolfApp
 //
 //  Created by Zack Boutchyard on 11/3/23.
@@ -8,15 +8,6 @@
 import SwiftUI
 import FirebaseDatabase
 import Firebase
-
-
-//class MockAuthViewModel: ObservableObject {
-//    func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
-//        // Mock implementation for testing in previews
-//        let mockUser = User(firstName: "Zack", lastName: "Boutchyard", email: "Zackboutchyard@gmail.com")
-//        completion(mockUser)
-//    }
-//}
 
 struct AllChatsView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -42,8 +33,8 @@ struct AllChatsView: View {
                 }
                 Divider()
                     List {
-                        if let user = user {
-                                ForEach((user.chats), id: \.self){  chat in
+                        if let chats = user?.chats {
+                                ForEach((chats), id: \.self){  chat in
                                     AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
                                         .frame(maxWidth: .infinity)
                                 }
@@ -52,7 +43,9 @@ struct AllChatsView: View {
                         }
                     }
                     .sheet(isPresented: $isAddMessageButtonClicked) {
-                        NewMessageView(user: user!, isPresented: $isAddMessageButtonClicked)
+                        if let user = user {
+                            NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)
+                        }
                     }
             } 
             .toolbar {

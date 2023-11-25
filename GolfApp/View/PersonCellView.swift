@@ -13,6 +13,7 @@ struct PersonCellView: View {
         if let otherUser = otherUser {
             HStack {
                 Image(systemName: "person.fill")
+                    .foregroundStyle(.whiteOrDark)
                     .scaledToFill()
                     .clipShape(Circle())
                     .frame(width: 50, height: 50)
@@ -21,6 +22,7 @@ struct PersonCellView: View {
                     }
                 VStack {
                     Text("\(otherUser.firstName) \(otherUser.lastName)")
+                        .foregroundStyle(.whiteOrDark)
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -32,6 +34,7 @@ struct PersonCellView: View {
             HStack {
                 Image(systemName: "person.fill")
                     .scaledToFill()
+                    .foregroundStyle(.whiteOrDark)
                     .clipShape(Circle())
                     .frame(width: 50, height: 50)
                     .background {

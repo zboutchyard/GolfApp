@@ -7,20 +7,16 @@
 
 import Foundation
 
-class User: ObservableObject{
-    @Published var firstName: String
-    @Published var lastName: String
-    @Published var email: String
-    @Published var chats: [String]
-    @Published var friendsList: [String]
-    
-    init(firstName: String, lastName: String, email: String, chats: [String], friendsList: [String]) {
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.chats = chats
-        self.friendsList = friendsList
-    }
+struct User: Codable, Hashable {
+    var firstName: String
+    var lastName: String
+    var email: String
+    var chats: [String]?
+    var friendsList: [String]?
+    var bio: String?
+    var interests: String?
+    var handicap: Int?
+    var homeCourse: String?
 }
 
 class OtherUser: ObservableObject {

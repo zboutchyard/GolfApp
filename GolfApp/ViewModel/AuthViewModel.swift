@@ -116,8 +116,12 @@ class AuthViewModel: ObservableObject {
                    let lastName = data["lastName"] as? String,
                    let chats = data["chats"] as? [String],
                    let friendsList = data["friendsList"] as? [String],
-                   let email = data["email"] as? String {
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList)
+                   let email = data["email"] as? String,
+                   let bio = data["bio"] as? String,
+                   let handicap = data["handicap"] as? Int,
+                   let interests = data["interests"] as? String,
+                   let homeCourse = data["homeCourse"] as? String {
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse)
                     completion(userModel)
                 } else {
                     completion(nil)

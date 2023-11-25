@@ -116,6 +116,8 @@ struct Step3View: View {
             }
             .navigationDestination(isPresented: $isStepComplete) {
                 LandingView()
+                    .navigationBarBackButtonHidden()
+                    .toolbar(.hidden)
             }
             .padding()
         }
