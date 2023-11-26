@@ -30,14 +30,14 @@ struct AllChatCellView: View {
                     if let otherUser = otherUser {
                         NavigationStack {
                             HStack {
-                                Circle()
-                                    .overlay {
-                                        Text(otherUser.firstName.prefix(1))
-                                            .font(.title)
-                                            .foregroundStyle(.black)
+                                Image(systemName: "person.fill")
+                                    .foregroundStyle(.whiteOrDark)
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50)
+                                    .background {
+                                        Circle().fill(Color("Gray"))
                                     }
-                                    .foregroundStyle(generateRandomAccessibleColor())
-                                    .frame(width: 75, height: 75)
                                 VStack {
                                     Text("\(otherUser.firstName) \(otherUser.lastName)")
                                         .font(.title3)

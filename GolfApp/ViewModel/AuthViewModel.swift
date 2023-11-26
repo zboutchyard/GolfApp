@@ -157,7 +157,6 @@ class AuthViewModel: ObservableObject {
     func fetchFriendsFromFirebase(ids: [String], completion: @escaping ([OtherUser]?) -> Void) {
         let db = Firestore.firestore()
         var otherUsers = [OtherUser]()
-        print("here are the user ids \(ids)")
         for id in ids {
             let usersRef = db.collection("Users").document(id)
             usersRef.getDocument { [self] (document, error) in

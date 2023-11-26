@@ -9,11 +9,17 @@ import SwiftUI
 
 struct TeeTimeView: View {
     var body: some View {
-        VStack{
-            Text("Hello, World!")
+        ScrollView {
+            VStack{
+                Text("Hello, World!")
+                    .background(Color.gray)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 250)
+            }
+            .background(Color.gray)
+            
+            
         }
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .background(Color("BackgroundMainView"))
     }
 }
 

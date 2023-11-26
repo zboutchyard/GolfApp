@@ -42,6 +42,7 @@ struct AllChatsView: View {
                             
                         }
                     }
+                    .listStyle(.plain)
                     .sheet(isPresented: $isAddMessageButtonClicked) {
                         if let user = user {
                             NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)

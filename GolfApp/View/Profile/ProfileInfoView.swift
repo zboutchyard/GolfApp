@@ -20,7 +20,7 @@ struct ProfileInfoView: View {
         Divider()
             .padding(.horizontal)
         Section {
-            HStack {
+            HStack(alignment: .top) {
                 Text("About me:")
                     .fontWeight(.regular)
                     .kerning(1.2)
@@ -37,7 +37,7 @@ struct ProfileInfoView: View {
                         .multilineTextAlignment(.trailing)
                 }
             }
-            HStack {
+            HStack(alignment: .top) {
                 Text("Interests:")
                     .fontWeight(.regular)
                     .kerning(1.2)
@@ -55,7 +55,7 @@ struct ProfileInfoView: View {
                 }
                 
             }
-            HStack {
+            HStack(alignment: .top) {
                 Text("Handicap:")
                     .fontWeight(.regular)
                     .kerning(1.2)
@@ -72,7 +72,7 @@ struct ProfileInfoView: View {
                         .multilineTextAlignment(.trailing)
                 }
             }
-            HStack {
+            HStack(alignment: .top) {
                 Text("Home course:")
                     .fontWeight(.regular)
                     .kerning(1.2)

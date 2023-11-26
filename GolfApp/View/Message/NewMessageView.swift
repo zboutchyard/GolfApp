@@ -36,14 +36,14 @@ struct NewMessageView: View {
                 ScrollView {
                         ForEach(otherUsers, id: \.firstName){ friend in
                                 HStack {
-                                    Circle()
-                                        .overlay {
-                                            Text(friend.firstName.prefix(1))
-                                                .font(.title)
-                                                .foregroundStyle(.black)
+                                    Image(systemName: "person.fill")
+                                        .foregroundStyle(.whiteOrDark)
+                                        .scaledToFill()
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("Gray"))
                                         }
-                                        .foregroundStyle(generateRandomAccessibleColor())
-                                        .frame(width: 75, height: 75)
                                     VStack {
                                         Text("\(friend.firstName) \(friend.lastName)")
                                             .font(.title3)
@@ -80,28 +80,6 @@ struct NewMessageView: View {
                 }
             }
         }
-    }
-    
-    func generateRandomAccessibleColor() -> Color {
-        let minimumLuminance: CGFloat = 0.3
-        let maximumLuminance: CGFloat = 0.7
-
-        var red: CGFloat = 0.0
-        var green: CGFloat = 0.0
-        var blue: CGFloat = 0.0
-
-        repeat {
-            red = CGFloat.random(in: 0...1)
-            green = CGFloat.random(in: 0...1)
-            blue = CGFloat.random(in: 0...1)
-        } while !isColorAccessible(red: red, green: green, blue: blue, minimumLuminance: minimumLuminance, maximumLuminance: maximumLuminance)
-
-        return Color(red: red, green: green, blue: blue)
-    }
-    
-    func isColorAccessible(red: CGFloat, green: CGFloat, blue: CGFloat, minimumLuminance: CGFloat, maximumLuminance: CGFloat) -> Bool {
-        let luminance = (0.2126 * red) + (0.7152 * green) + (0.0722 * blue)
-        return luminance >= minimumLuminance && luminance <= maximumLuminance
     }
 }
 
