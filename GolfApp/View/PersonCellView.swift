@@ -22,7 +22,7 @@ struct PersonCellView: View {
                     }
                 VStack {
                     Text("\(otherUser.firstName) \(otherUser.lastName)")
-                        .foregroundStyle(.whiteOrDark)
+                        .foregroundStyle(.heading)
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .frame(maxWidth: .infinity, alignment: .leading)

@@ -14,7 +14,6 @@ struct PostView: View {
     @State private var userClicked: Bool = false
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 30).fill(.whiteOrDark).overlay {
             VStack {
                 Button(action: {
                     userClicked = true
@@ -24,9 +23,9 @@ struct PostView: View {
                 .buttonStyle(.plain)
                 
                 Text("Here is some text about a post that might contain something that they want to say or complain about. ")
-                    .fontWeight(.medium)
+                    .fontWeight(.light)
                     .kerning(1.2)
-                    .font(.title3)
+                    .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.leading, .trailing])
                 HStack {
@@ -41,7 +40,7 @@ struct PostView: View {
                 .padding(.top, 0.5)
                 .padding(.bottom, 0.5)
                 Divider()
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 5)
                 HStack {
                     Button(action: {
                         likeBtnClicked.toggle()
@@ -77,11 +76,9 @@ struct PostView: View {
                     .buttonStyle(.plain)
                     
                 }
+                .padding(.bottom)
             }
             .background(.whiteOrDark)
-
-        }
-        .frame(height: 300)
             }
 }
 

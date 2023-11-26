@@ -9,17 +9,10 @@ import SwiftUI
 
 struct LandingView: View {
     @State private var isMessageBtnClicked = false
-    @State private var selectedTab: Tab = .home
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
-    enum Tab {
-        case home
-        case profile
-        case chatView
-        case teeTimeView
-    }
+  
     var body: some View {
-        NavigationStack {
         VStack {
             HStack(spacing: 0) {
                 Text("par pal")
@@ -44,7 +37,8 @@ struct LandingView: View {
             }
             .padding(.bottom, 15)
             .background(.whiteOrDark)
-            TabView(selection: $selectedTab) {
+            Divider()
+            TabView() {
                 Group {
                     HomeView()
                         .tabItem {
@@ -60,12 +54,15 @@ struct LandingView: View {
                         }
                 }
                 .toolbar(.visible, for: .tabBar)
-                .toolbarBackground(Color("WhiteOrDark"), for: .tabBar)
+                .toolbarBackground(Color.whiteOrDark, for: .tabBar)
+                .background(Color.whiteOrDark)
             }
-            .navigationBarBackButtonHidden()
+            .background(Color.whiteOrDark)
+            .padding(.top, 0)
         }
+        .background(Color.whiteOrDark)
         .padding(.top, 0)
-        } .navigationDestination(isPresented: $isMessageBtnClicked) {
+        .navigationDestination(isPresented: $isMessageBtnClicked) {
             AllChatsView()
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
@@ -73,12 +70,14 @@ struct LandingView: View {
                 .toolbar(content: {
                     ToolbarItem(placement: .principal) {
                         TextField("search users", text: $searchText)
+                            .padding(.leading)
                             .padding(4)
                             .font(.system(size: 20))
                             .background(RoundedRectangle(cornerRadius: 30).stroke(Color.gray, lineWidth: .init(1.0)))
                     }
                 })
         }
+        
     }
 }
 

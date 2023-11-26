@@ -10,7 +10,6 @@ import SwiftUI
 struct HomeView: View {
     @State private var postSubmissionText: String = ""
     var body: some View {
-        NavigationStack {
             ScrollView {
                 VStack {
                     HStack {
@@ -22,6 +21,7 @@ struct HomeView: View {
                                 .background {
                                     Circle().fill(Color("Gray"))
                                 }
+                                .foregroundStyle(.whiteOrDark)
                             TextField("", text: $postSubmissionText, prompt: Text("write something..."))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -36,10 +36,7 @@ struct HomeView: View {
                     }
                     .ignoresSafeArea()
                     .background(.whiteOrDark)
-                    Spacer().frame(height: 13)
-                    Divider()
-                    Spacer().frame(height: 13)
-
+                    Spacer().frame(height: 8)
                     VStack {
                             PostView()
                             PostView()
@@ -49,8 +46,6 @@ struct HomeView: View {
             }
             .frame(maxHeight: .infinity)
             .background(Color.blackOrGray)
-        }
-        .background(Color.blackOrGray)
     }
 }
 
