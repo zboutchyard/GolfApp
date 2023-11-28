@@ -17,6 +17,7 @@ struct User: Codable, Hashable {
     var interests: String?
     var handicap: Int?
     var homeCourse: String?
+    var posts: [String]?
 }
 
 class OtherUser: ObservableObject {

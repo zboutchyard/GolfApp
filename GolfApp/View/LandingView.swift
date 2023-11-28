@@ -30,7 +30,7 @@ struct LandingView: View {
                 Button(action: {
                     isMessageBtnClicked = true
                 }, label: {
-                    Image(systemName: "plus.message")
+                    Image(systemName: "message")
                 })
                 .font(.system(size: 25))
                 .padding(.trailing)
@@ -48,6 +48,10 @@ struct LandingView: View {
                         .tabItem {
                             Label("Tee Time", systemImage: "figure.golf")
                         }
+                    AlertView()
+                        .tabItem {
+                            Label("Notifications", systemImage: "bell.fill")
+                        }
                     ProfileView()
                         .tabItem {
                             Label("Profile", systemImage: "person.fill")
@@ -55,6 +59,7 @@ struct LandingView: View {
                 }
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(Color.whiteOrDark, for: .tabBar)
+                
                 .background(Color.whiteOrDark)
             }
             .background(Color.whiteOrDark)
@@ -66,7 +71,7 @@ struct LandingView: View {
             AllChatsView()
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
-            SearchDetailView(searchText: $searchText)
+            SearchDetailView(searchText: $searchText, isAddFriendView: .constant(false))
                 .toolbar(content: {
                     ToolbarItem(placement: .principal) {
                         TextField("search users", text: $searchText)

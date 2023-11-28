@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		100634972B1303DA005CF4CB /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 100634962B1303DA005CF4CB /* AlertToast */; };
+		100634992B1390FA005CF4CB /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100634982B1390FA005CF4CB /* AlertView.swift */; };
+		1006349B2B13EDA8005CF4CB /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006349A2B13EDA8005CF4CB /* Post.swift */; };
 		1032E9BC2AF584F400001048 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1032E9BB2AF584EB00001048 /* GoogleService-Info.plist */; };
 		1032E9BD2AF5851000001048 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1032E9BB2AF584EB00001048 /* GoogleService-Info.plist */; };
 		1032E9BE2AF5851100001048 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1032E9BB2AF584EB00001048 /* GoogleService-Info.plist */; };
@@ -49,6 +52,9 @@
 		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
+		6B4E69A1B2E2663A4605B112 /* Pods_GolfAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */; };
+		A3FBD9BD1F77F7007A6A1CE9 /* Pods_GolfApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */; };
+		A4D3D401333A1DBA13E8B7AE /* Pods_GolfApp_GolfAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +75,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfAppTests.release.xcconfig"; path = "Target Support Files/Pods-GolfAppTests/Pods-GolfAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		100634982B1390FA005CF4CB /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		1006349A2B13EDA8005CF4CB /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1032E9BB2AF584EB00001048 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1032E9C72AF665BF00001048 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1032E9C92AF66B1100001048 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -108,6 +117,14 @@
 		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
+		112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp-GolfAppUITests.release.xcconfig"; path = "Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfApp_GolfAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp-GolfAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfAppTests.debug.xcconfig"; path = "Target Support Files/Pods-GolfAppTests/Pods-GolfAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.debug.xcconfig"; sourceTree = "<group>"; };
+		E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.release.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +135,9 @@
 				1032E9C62AF5869800001048 /* FirebaseDatabase in Frameworks */,
 				1032E9D42AF7D77C00001048 /* FirebaseStorage in Frameworks */,
 				1032E9C22AF5868C00001048 /* FirebaseAuth in Frameworks */,
+				100634972B1303DA005CF4CB /* AlertToast in Frameworks */,
 				1032E9C42AF5869300001048 /* FirebaseFirestore in Frameworks */,
+				A3FBD9BD1F77F7007A6A1CE9 /* Pods_GolfApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B4E69A1B2E2663A4605B112 /* Pods_GolfAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4D3D401333A1DBA13E8B7AE /* Pods_GolfApp_GolfAppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +163,9 @@
 		1032E9C02AF5868C00001048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */,
+				121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */,
+				E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,6 +201,7 @@
 				108D36E02AF57C6C005DAD22 /* GolfAppUITests */,
 				108D36C42AF57C6A005DAD22 /* Products */,
 				1032E9C02AF5868C00001048 /* Frameworks */,
+				F0460787AB6B9497A1F1C862 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -234,6 +259,7 @@
 			children = (
 				1032E9C72AF665BF00001048 /* User.swift */,
 				1032E9DC2AF9E43B00001048 /* Chat.swift */,
+				1006349A2B13EDA8005CF4CB /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -251,6 +277,7 @@
 				10B1D3672B100AA0004D45E7 /* PostView.swift */,
 				10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */,
 				10B1D3742B110A73004D45E7 /* PersonCellView.swift */,
+				100634982B1390FA005CF4CB /* AlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -288,6 +315,19 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		F0460787AB6B9497A1F1C862 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */,
+				FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */,
+				19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */,
+				112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */,
+				74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */,
+				009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -295,9 +335,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108D36E72AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfApp" */;
 			buildPhases = (
+				5FD45A917D156195D693F253 /* [CP] Check Pods Manifest.lock */,
 				108D36BF2AF57C6A005DAD22 /* Sources */,
 				108D36C02AF57C6A005DAD22 /* Frameworks */,
 				108D36C12AF57C6A005DAD22 /* Resources */,
+				1BA6265E854D7ACCD9237104 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -309,6 +351,7 @@
 				1032E9C32AF5869300001048 /* FirebaseFirestore */,
 				1032E9C52AF5869800001048 /* FirebaseDatabase */,
 				1032E9D32AF7D77C00001048 /* FirebaseStorage */,
+				100634962B1303DA005CF4CB /* AlertToast */,
 			);
 			productName = GolfApp;
 			productReference = 108D36C32AF57C6A005DAD22 /* GolfApp.app */;
@@ -318,6 +361,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppTests" */;
 			buildPhases = (
+				8E678A4ED5CFC1B26D9B138F /* [CP] Check Pods Manifest.lock */,
 				108D36CF2AF57C6C005DAD22 /* Sources */,
 				108D36D02AF57C6C005DAD22 /* Frameworks */,
 				108D36D12AF57C6C005DAD22 /* Resources */,
@@ -336,9 +380,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppUITests" */;
 			buildPhases = (
+				4094E8CE684FE5169610A214 /* [CP] Check Pods Manifest.lock */,
 				108D36D92AF57C6C005DAD22 /* Sources */,
 				108D36DA2AF57C6C005DAD22 /* Frameworks */,
 				108D36DB2AF57C6C005DAD22 /* Resources */,
+				B61D1FC2D096A20F1F3289D6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -384,6 +430,7 @@
 			mainGroup = 108D36BA2AF57C6A005DAD22;
 			packageReferences = (
 				1032E9BF2AF5855E00001048 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				100634952B1303DA005CF4CB /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = 108D36C42AF57C6A005DAD22 /* Products */;
 			projectDirPath = "";
@@ -425,6 +472,109 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1BA6265E854D7ACCD9237104 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4094E8CE684FE5169610A214 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GolfApp-GolfAppUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FD45A917D156195D693F253 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GolfApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E678A4ED5CFC1B26D9B138F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GolfAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B61D1FC2D096A20F1F3289D6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		108D36BF2AF57C6A005DAD22 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -434,12 +584,14 @@
 				1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */,
 				10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
+				100634992B1390FA005CF4CB /* AlertView.swift in Sources */,
 				10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */,
 				10B1D3662B0EBA40004D45E7 /* TeeTimeView.swift in Sources */,
 				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
 				108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */,
 				10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */,
 				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,
+				1006349B2B13EDA8005CF4CB /* Post.swift in Sources */,
 				10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */,
 				10B1D3682B100AA0004D45E7 /* PostView.swift in Sources */,
 				1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */,
@@ -617,6 +769,7 @@
 		};
 		108D36E82AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -625,6 +778,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"GolfApp/Preview Content\"";
 				DEVELOPMENT_TEAM = Q7899LD2FG;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -646,6 +800,7 @@
 		};
 		108D36E92AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -654,6 +809,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"GolfApp/Preview Content\"";
 				DEVELOPMENT_TEAM = Q7899LD2FG;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -675,6 +831,7 @@
 		};
 		108D36EB2AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -695,6 +852,7 @@
 		};
 		108D36EC2AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -715,6 +873,7 @@
 		};
 		108D36EE2AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -733,6 +892,7 @@
 		};
 		108D36EF2AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -791,6 +951,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		100634952B1303DA005CF4CB /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
 		1032E9BF2AF5855E00001048 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -802,6 +970,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		100634962B1303DA005CF4CB /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100634952B1303DA005CF4CB /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
 		1032E9C12AF5868C00001048 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1032E9BF2AF5855E00001048 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

@@ -130,7 +130,7 @@ struct ProfileView: View {
             }
         }
         .navigationDestination(isPresented: $isAddFriendClicked) {
-            SearchDetailView(searchText: $searchText)
+            SearchDetailView(searchText: $searchText, isAddFriendView: .constant(true))
                 .toolbar(content: {
                     ToolbarItem(placement: .principal) {
                         TextField("search users", text: $searchText)

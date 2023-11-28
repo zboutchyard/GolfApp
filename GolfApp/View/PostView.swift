@@ -8,21 +8,23 @@
 import SwiftUI
 
 struct PostView: View {
-//    var photoUrl = URL(string: "https://images.unsplash.com/photo-1629747490241-624f07d70e1e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cG9ydHJhaXRzfGVufDB8fDB8fHww")
     @State private var likeBtnClicked: Bool = false
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @State private var user: User?
+    @State var post: Post
 
     var body: some View {
             VStack {
                 Button(action: {
                     userClicked = true
                 }, label: {
-                    PersonCellView()
+                    PersonCellView(post: post)
                 })
                 .buttonStyle(.plain)
                 
-                Text("Here is some text about a post that might contain something that they want to say or complain about. ")
+                Text(post.text)
                     .fontWeight(.light)
                     .kerning(1.2)
                     .font(.subheadline)
@@ -33,9 +35,10 @@ struct PostView: View {
                         .background(Circle().fill(.blue).frame(width: 20, height: 20))
                         .foregroundStyle(.whiteOrDark)
                         .padding([.leading])
-                    Text("2")
+                    if post.likes.count > 0 {
+                        Text(String(post.likes.count))
+                    }
                         Spacer()
-                    
                 }
                 .padding(.top, 0.5)
                 .padding(.bottom, 0.5)
@@ -80,8 +83,19 @@ struct PostView: View {
             }
             .background(.whiteOrDark)
             }
+    
+    
+    
+//    func fetchData() {
+//        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
+//            if let posts =
+//            user = fetchedUser
+//        }
+//    }
+    
+   
 }
 
-#Preview {
-    PostView()
-}
+//#Preview {
+//    PostView()
+//}

@@ -9,48 +9,52 @@ import SwiftUI
 
 struct PersonCellView: View {
     @State var otherUser: OtherUser?
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @State var post: Post?
     var body: some View {
-        if let otherUser = otherUser {
-            HStack {
-                Image(systemName: "person.fill")
-                    .foregroundStyle(.whiteOrDark)
-                    .scaledToFill()
-                    .clipShape(Circle())
-                    .frame(width: 50, height: 50)
-                    .background {
-                        Circle().fill(Color("Gray"))
+                        
+            if let post = post {
+                HStack {
+                    Image(systemName: "person.fill")
+                        .scaledToFill()
+                        .foregroundStyle(.whiteOrDark)
+                        .clipShape(Circle())
+                        .frame(width: 50, height: 50)
+                        .background {
+                            Circle().fill(Color("Gray"))
+                        }
+                    VStack {
+                        if let user = otherUser {
+                            Text("\(user.firstName) \(user.lastName)")
+                                .fontWeight(.semibold)
+                                .kerning(1.2)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.caption)
+                        } else {
+                            ProgressView()
+                        }
+                        
+                        
+                        
                     }
-                VStack {
-                    Text("\(otherUser.firstName) \(otherUser.lastName)")
-                        .foregroundStyle(.heading)
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
                 }
-            }
-            .padding([.leading, .trailing, .top])
-        }
-        else {
-            HStack {
-                Image(systemName: "person.fill")
-                    .scaledToFill()
-                    .foregroundStyle(.whiteOrDark)
-                    .clipShape(Circle())
-                    .frame(width: 50, height: 50)
-                    .background {
-                        Circle().fill(Color("Gray"))
-                    }
-                VStack {
-                    Text("Zack Boutchyard")
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("3h")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.caption)
+                .onAppear() {
+                    getUser(userId: post.user)
                 }
+                .padding([.leading, .trailing, .top])
+            } else {
+                ProgressView()
             }
-            .padding([.leading, .trailing, .top])
+            
+    }
+    func getUser(userId: String) {
+        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedUser in
+            print("here is the opther user \(fetchedUser)")
+                otherUser = fetchedUser
         }
     }
 }

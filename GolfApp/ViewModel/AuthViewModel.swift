@@ -19,6 +19,7 @@ class AuthViewModel: ObservableObject {
     @Published var friend: OtherUser?
     @State var friendId: String?
     @Published var friendsList: [OtherUser]?
+    @Published var posts: [Post] = []
     
     enum ImageState {
         case empty
@@ -205,6 +206,38 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func fetchAllPostsFromFirebase() {
+        guard let user = Auth.auth().currentUser else {
+            return
+        }
+
+        Firestore.firestore().collection("Posts").getDocuments { (snapshot, error) in
+            guard let snapshot = snapshot, error == nil else {
+                print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
+                return
+            }
+
+            print("Number of documents: \(snapshot.documents.count)")
+
+            self.posts = snapshot.documents.compactMap { documentSnapshot -> Post? in
+                do {
+                    let documentData = try documentSnapshot.data(as: Post.self)
+                    return documentData
+                } catch {
+                    print("Error decoding document:", error.localizedDescription)
+                    return nil
+                }
+            }
+
+            if self.posts.isEmpty {
+                print("No valid posts found.")
+            } else {
+                print("Fetched posts successfully:")
+            }
+        }
+    }
+
+
     
     func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
