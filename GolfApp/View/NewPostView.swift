@@ -11,6 +11,9 @@ struct NewPostView: View {
     @State var postText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User
+    @Environment(\.presentationMode) var presentationMode
+    var onPostSubmitted: (() -> Void)?
+
     var body: some View {
         ScrollView {
             HStack {
@@ -28,7 +31,10 @@ struct NewPostView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Button(action: {
-                    authViewModel.addPost(text: postText) {post in}
+                    authViewModel.addPost(text: postText) {post in
+                        onPostSubmitted?()
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }, label: {
                     Text("Post")
                 })                        .buttonStyle(.borderedProminent)

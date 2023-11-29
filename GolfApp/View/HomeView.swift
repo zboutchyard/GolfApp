@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct HomeView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
     @State var user: User?
     @State var isAddPostClicked: Bool = false
+    @State var isPostSubmitted: Bool = false
     
     var body: some View {
         ScrollView {
@@ -55,16 +57,23 @@ struct HomeView: View {
             }
             .sheet(isPresented: $isAddPostClicked, content: {
                 if let user = user {
-                    NewPostView(user: user)
+                    NewPostView(user: user, onPostSubmitted: {
+                        authViewModel.fetchAllPostsFromFirebase()
+                        isPostSubmitted = true
+                    })
                 }
             })
         }
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)
+        .toast(isPresenting: $isPostSubmitted, alert: {
+            AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
+        })
         .onAppear() {
             fetchUser()
             authViewModel.fetchAllPostsFromFirebase()
         }
+        
     }
     func fetchUser() {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
