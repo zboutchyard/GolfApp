@@ -20,7 +20,7 @@ struct PostView: View {
                 Button(action: {
                     userClicked = true
                 }, label: {
-                    PersonCellView(post: post)
+                    PersonCellView(post: post, isPostView: .constant(true))
                 })
                 .buttonStyle(.plain)
                 

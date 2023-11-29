@@ -32,7 +32,7 @@ struct SearchDetailView: View {
                             Button(action: {
                                 //do something
                             }, label: {
-                                PersonCellView(otherUser: otherUser)
+                                PersonCellView(otherUser: otherUser, isPostView: .constant(false))
                             })
                             .buttonStyle(.plain)
                             if isAddFriendView == true {
