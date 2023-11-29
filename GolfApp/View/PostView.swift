@@ -31,12 +31,12 @@ struct PostView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.leading, .trailing])
                 HStack {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .background(Circle().fill(.blue).frame(width: 20, height: 20))
-                        .foregroundStyle(.whiteOrDark)
-                        .padding([.leading])
-                    if post.likes.count > 0 {
-                        Text(String(post.likes.count))
+                    if let likes = post.likes {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .background(Circle().fill(.blue).frame(width: 20, height: 20))
+                            .foregroundStyle(.whiteOrDark)
+                            .padding([.leading])
+                        Text(String(likes.count))
                     }
                         Spacer()
                 }

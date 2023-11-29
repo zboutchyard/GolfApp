@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
+    @State var user: User?
+    @State var isAddPostClicked: Bool = false
     
     var body: some View {
         ScrollView {
@@ -24,7 +26,13 @@ struct HomeView: View {
                                 Circle().fill(Color("Gray"))
                             }
                             .foregroundStyle(.whiteOrDark)
-                        TextField("", text: $postSubmissionText, prompt: Text("write something..."))
+                        Button(action: {
+                            isAddPostClicked = true
+                        }, label: {
+                            Text("tell me something...")
+                        })
+                        .buttonStyle(.plain)
+                        .opacity(0.3)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.top, .leading, .bottom])
@@ -45,11 +53,22 @@ struct HomeView: View {
                         }
                 }
             }
+            .sheet(isPresented: $isAddPostClicked, content: {
+                if let user = user {
+                    NewPostView(user: user)
+                }
+            })
         }
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)
         .onAppear() {
+            fetchUser()
             authViewModel.fetchAllPostsFromFirebase()
+        }
+    }
+    func fetchUser() {
+        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
+            user = fetchedUser
         }
     }
 }

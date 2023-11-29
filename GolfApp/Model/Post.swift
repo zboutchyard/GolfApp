@@ -10,7 +10,7 @@ import Foundation
 
 
 struct Post: Codable, Hashable {
-    var likes: [String]
+    var likes: [String]?
     var text: String
     var timeStamp: Date
     var user: String

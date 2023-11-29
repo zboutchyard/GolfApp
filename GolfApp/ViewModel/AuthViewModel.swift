@@ -236,6 +236,29 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func addPost(text: String, completion: @escaping (Error?) -> Void) {
+        let db  = Firestore.firestore()
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("Current user not found")
+            return
+        }
+        
+        let newPost: [String: Any] = [
+            "text": text,
+            "timeStamp": Date.now,
+            "user": currentUserID
+        ]
+        let postRef = db.collection("Posts")
+        
+        postRef.addDocument(data: newPost) { error in
+            if let error = error {
+                completion(error)
+            } else {
+                completion(nil)
+            }
+        }
+    }
 
 
     
