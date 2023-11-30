@@ -20,6 +20,7 @@ class AuthViewModel: ObservableObject {
     @State var friendId: String?
     @Published var friendsList: [OtherUser]?
     @Published var posts: [Post] = []
+    @Published var post: Post?
     
     enum ImageState {
         case empty
@@ -55,7 +56,6 @@ class AuthViewModel: ObservableObject {
                     throw TransferError.importFailed
                 }
                 let image = Image(uiImage: uiImage)
-                let viewModel: AuthViewModel = AuthViewModel()
                 //instead of adding the photo in 1 register page, we could first create the user within a register page, establish a uid, then proceed to a walkthrugh screen and call uploadPhoto() here when the photo gets updated.
                 return ProfileImage(image: image)
 #else
@@ -206,6 +206,42 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            completion(nil)
+            return
+        }
+
+        let db = Firestore.firestore()
+        let postRef = db.collection("Posts").document(postId)
+
+        postRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                do {
+                    var documentData = try document.data(as: Post?.self)
+
+                    if var unwrappedDocumentData = documentData {
+                        unwrappedDocumentData.id = document.documentID
+                        self.post = unwrappedDocumentData
+                        completion(unwrappedDocumentData)
+                    } else {
+                        print("Error decoding document data as Post")
+                        completion(nil)
+                    }
+                } catch {
+                    print("Error decoding document:", error.localizedDescription)
+                    completion(nil)
+                }
+            } else {
+                print(error?.localizedDescription ?? "")
+                completion(nil)
+            }
+        }
+    }
+
+
+
+
     func fetchAllPostsFromFirebase() {
         guard let user = Auth.auth().currentUser else {
             return
@@ -221,7 +257,8 @@ class AuthViewModel: ObservableObject {
 
             self.posts = snapshot.documents.compactMap { documentSnapshot -> Post? in
                 do {
-                    let documentData = try documentSnapshot.data(as: Post.self)
+                    var documentData = try documentSnapshot.data(as: Post.self)
+                    documentData.id = documentSnapshot.documentID
                     return documentData
                 } catch {
                     print("Error decoding document:", error.localizedDescription)
@@ -233,6 +270,52 @@ class AuthViewModel: ObservableObject {
                 print("No valid posts found.")
             } else {
                 print("Fetched posts successfully:")
+            }
+        }
+    }
+    
+    func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
+        print("postId in the add like \(postId)")
+
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        postRef.updateData([
+            "likes": FieldValue.arrayUnion([uid])
+        ]) { error in
+            if let error = error {
+                print("Error adding user ID to likes array: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                print("User ID added to likes array successfully.")
+                completion(nil)
+            }
+        }
+    }
+    
+    func removeUserIdFromLikes(postId: String, completion: @escaping (Post?) -> Void) {
+        print("postId in the remove like \(postId)")
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+
+        postRef.updateData([
+            "likes": FieldValue.arrayRemove([uid])
+        ]) { error in
+            if let error = error {
+                completion(nil)
+
+                print("Error removing user ID from likes array: \(error.localizedDescription)")
+            } else {
+                completion(nil)
+
+                print("User ID removed from likes array successfully.")
+
             }
         }
     }

@@ -85,7 +85,6 @@ struct PersonCellView: View {
     }
     func getUser(userId: String) {
         authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedUser in
-            print("here is the opther user \(fetchedUser)")
                 otherUser = fetchedUser
         }
     }

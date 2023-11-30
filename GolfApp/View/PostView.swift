@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct PostView: View {
     @State private var likeBtnClicked: Bool = false
@@ -14,7 +15,10 @@ struct PostView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var user: User?
     @State var post: Post
-
+    @State var userId: String = Auth.auth().currentUser?.uid ?? ""
+    @State var isLoading: Bool = false
+    @State var tempPost: Post?
+    
     var body: some View {
             VStack {
                 Button(action: {
@@ -32,13 +36,15 @@ struct PostView: View {
                     .padding([.leading, .trailing])
                 HStack {
                     if let likes = post.likes {
-                        Image(systemName: "hand.thumbsup.fill")
-                            .background(Circle().fill(.blue).frame(width: 20, height: 20))
-                            .foregroundStyle(.whiteOrDark)
-                            .padding([.leading])
-                        Text(String(likes.count))
+                        if post.likes!.count > 0 {
+                            Image(systemName: "hand.thumbsup.fill")
+                                .background(Circle().fill(.blue).frame(width: 20, height: 20))
+                                .foregroundStyle(.whiteOrDark)
+                                .padding([.leading])
+                            Text(String(likes.count))
+                        }
                     }
-                        Spacer()
+                    Spacer()
                 }
                 .padding(.top, 0.5)
                 .padding(.bottom, 0.5)
@@ -46,7 +52,32 @@ struct PostView: View {
                     .padding(.bottom, 5)
                 HStack {
                     Button(action: {
-                        likeBtnClicked.toggle()
+                        Task {
+                                likeBtnClicked.toggle()
+                                
+                                if likeBtnClicked {
+                                    if let id = post.id {
+                                        await addLikeToFirebase(postId: id)
+                                    }
+                                } else {
+                                    if let id = post.id {
+                                        await removeLikeFromFirebase(postId: id)
+
+                                    }
+                                }
+
+
+                                authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
+                                    if let reloadedPost = fetchedPost {
+                                        post = reloadedPost
+                                    }
+                                }
+                            }
+                        
+                            
+                        
+                       
+                        
                     }, label: {
                         HStack {
                             Image(systemName: "hand.thumbsup")
@@ -57,6 +88,7 @@ struct PostView: View {
                                 .kerning(1.2)
                         }
                     })
+                    .disabled(isLoading)
                     .buttonStyle(.plain)
                     .foregroundStyle(likeBtnClicked ? .blue : .primary)
                     
@@ -82,18 +114,31 @@ struct PostView: View {
                 .padding(.bottom)
             }
             .background(.whiteOrDark)
+            .onAppear() {
+                if let likes = post.likes {
+                    if ((likes.contains(userId))) {
+                        likeBtnClicked = true
+                    }
+                }
+                
             }
-    
-    
-    
-//    func fetchData() {
-//        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-//            if let posts =
-//            user = fetchedUser
-//        }
-//    }
-    
-   
+        
+        
+        
+        
+    }
+    func addLikeToFirebase(postId: String) async {
+        authViewModel.addUserIdToLikes(postId: postId) { addedLike in}
+        authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
+            tempPost = fetchedPost
+        }
+    }
+    func removeLikeFromFirebase(postId: String) async {
+        authViewModel.removeUserIdFromLikes(postId: postId) { removedLike in}
+        authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
+            tempPost = fetchedPost
+        }
+    }
 }
 
 //#Preview {

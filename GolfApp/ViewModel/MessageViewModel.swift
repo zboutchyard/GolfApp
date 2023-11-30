@@ -76,7 +76,6 @@ class MessageViewModel: ObservableObject {
         }
         let chatId = chatRef.documentID
         self.chatId = chatId
-        print("here is the chatId in the createChatAndSendMessage \(self.chatId)")
         let participantsRef = db.collection("Chats").document(chatId)
         participantsRef.updateData(["participants": FieldValue.arrayUnion(participants)])
         let userRef = db.collection("Users").document(currentUserID)
