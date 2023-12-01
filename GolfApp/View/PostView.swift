@@ -18,6 +18,7 @@ struct PostView: View {
     @State var userId: String = Auth.auth().currentUser?.uid ?? ""
     @State var isLoading: Bool = false
     @State var tempPost: Post?
+    @State var isPostDetailView: Bool = false
     
     var body: some View {
             VStack {
@@ -45,6 +46,18 @@ struct PostView: View {
                         }
                     }
                     Spacer()
+                    if !isPostDetailView {
+                        if let comments = post.comments {
+                            Button(action: {
+                                commentBtnClicked = true
+                            }, label: {
+                                Text(comments.count == 1 ? "\(comments.count) comment" : "\(comments.count) comments")
+                            })
+                            .padding(.trailing)
+                            .buttonStyle(.plain)
+                            .underline()
+                        }
+                    }
                 }
                 .padding(.top, 0.5)
                 .padding(.bottom, 0.5)
@@ -121,6 +134,9 @@ struct PostView: View {
                     }
                 }
                 
+            }
+            .navigationDestination(isPresented: $commentBtnClicked) {
+                PostDetailView(post: post)
             }
         
         

@@ -15,4 +15,11 @@ struct Post: Codable, Hashable {
     var text: String
     var timeStamp: Date
     var user: String
+    var comments: [Comment]?
+}
+
+struct Comment: Codable, Hashable {
+    var text: String
+    var timestamp: Date
+    var userCommenting: String
 }
