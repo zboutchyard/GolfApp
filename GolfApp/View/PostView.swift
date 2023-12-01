@@ -21,127 +21,114 @@ struct PostView: View {
     @State var isPostDetailView: Bool = false
     
     var body: some View {
-            VStack {
+        VStack {
+            Button(action: {
+                userClicked = true
+            }, label: {
+                PersonCellView(post: post, isPostView: .constant(true))
+            })
+            .buttonStyle(.plain)
+            Text(post.text)
+                .fontWeight(.light)
+                .kerning(1.2)
+                .font(.subheadline)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.leading, .trailing])
+            HStack {
+                if let likes = post.likes {
+                    if post.likes!.count > 0 {
+                        Image(systemName: "hand.thumbsup.fill")
+                            .background(Circle().fill(.blue).frame(width: 20, height: 20))
+                            .foregroundStyle(.whiteOrDark)
+                            .padding([.leading])
+                        Text(String(likes.count))
+                    }
+                }
+                Spacer()
+                if !isPostDetailView {
+                    if let comments = post.comments {
+                        Button(action: {
+                            commentBtnClicked = true
+                        }, label: {
+                            Text(comments.count == 1 ? "\(comments.count) comment" : "\(comments.count) comments")
+                        })
+                        .padding(.trailing)
+                        .buttonStyle(.plain)
+                        .underline()
+                    }
+                }
+            }
+            .padding(.top, 0.5)
+            .padding(.bottom, 0.5)
+            Divider()
+                .padding(.bottom, 5)
+            HStack {
                 Button(action: {
-                    userClicked = true
+                    Task {
+                        likeBtnClicked.toggle()
+                        
+                        if likeBtnClicked {
+                            if let id = post.id {
+                                await addLikeToFirebase(postId: id)
+                            }
+                        } else {
+                            if let id = post.id {
+                                await removeLikeFromFirebase(postId: id)
+                                
+                            }
+                        }
+                        authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
+                            if let reloadedPost = fetchedPost {
+                                post = reloadedPost
+                            }
+                        }
+                    }
                 }, label: {
-                    PersonCellView(post: post, isPostView: .constant(true))
+                    HStack {
+                        Image(systemName: "hand.thumbsup")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                        Text("Like")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                    }
+                })
+                .disabled(isLoading)
+                .buttonStyle(.plain)
+                .foregroundStyle(likeBtnClicked ? .blue : .primary)
+                .padding(.leading, 50)
+                Spacer()
+                Button(action: {
+                    if !isPostDetailView {
+                        commentBtnClicked = true
+                    }
+                }, label: {
+                    HStack {
+                        Image(systemName: "message")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                        Text("Comment")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                    }
+                    .padding(.trailing, 50)
                 })
                 .buttonStyle(.plain)
-                
-                Text(post.text)
-                    .fontWeight(.light)
-                    .kerning(1.2)
-                    .font(.subheadline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding([.leading, .trailing])
-                HStack {
-                    if let likes = post.likes {
-                        if post.likes!.count > 0 {
-                            Image(systemName: "hand.thumbsup.fill")
-                                .background(Circle().fill(.blue).frame(width: 20, height: 20))
-                                .foregroundStyle(.whiteOrDark)
-                                .padding([.leading])
-                            Text(String(likes.count))
-                        }
-                    }
-                    Spacer()
-                    if !isPostDetailView {
-                        if let comments = post.comments {
-                            Button(action: {
-                                commentBtnClicked = true
-                            }, label: {
-                                Text(comments.count == 1 ? "\(comments.count) comment" : "\(comments.count) comments")
-                            })
-                            .padding(.trailing)
-                            .buttonStyle(.plain)
-                            .underline()
-                        }
-                    }
-                }
-                .padding(.top, 0.5)
-                .padding(.bottom, 0.5)
-                Divider()
-                    .padding(.bottom, 5)
-                HStack {
-                    Button(action: {
-                        Task {
-                                likeBtnClicked.toggle()
-                                
-                                if likeBtnClicked {
-                                    if let id = post.id {
-                                        await addLikeToFirebase(postId: id)
-                                    }
-                                } else {
-                                    if let id = post.id {
-                                        await removeLikeFromFirebase(postId: id)
-
-                                    }
-                                }
-
-
-                                authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
-                                    if let reloadedPost = fetchedPost {
-                                        post = reloadedPost
-                                    }
-                                }
-                            }
-                        
-                            
-                        
-                       
-                        
-                    }, label: {
-                        HStack {
-                            Image(systemName: "hand.thumbsup")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                            Text("Like")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                        }
-                    })
-                    .disabled(isLoading)
-                    .buttonStyle(.plain)
-                    .foregroundStyle(likeBtnClicked ? .blue : .primary)
-                    
-                    
-                    .padding(.leading, 50)
-                    Spacer()
-                    Button(action: {
-                        commentBtnClicked = true
-                    }, label: {
-                        HStack {
-                            Image(systemName: "message")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                            Text("Comment")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                        }
-                        .padding(.trailing, 50)
-                    })
-                    .buttonStyle(.plain)
-                    
-                }
-                .padding(.bottom)
             }
-            .background(.whiteOrDark)
-            .onAppear() {
-                if let likes = post.likes {
-                    if ((likes.contains(userId))) {
-                        likeBtnClicked = true
-                    }
+            .padding(.bottom)
+        }
+        .background(.whiteOrDark)
+        .onAppear() {
+            if let likes = post.likes {
+                if ((likes.contains(userId))) {
+                    likeBtnClicked = true
                 }
-                
             }
-            .navigationDestination(isPresented: $commentBtnClicked) {
-                PostDetailView(post: post)
-            }
-        
-        
-        
-        
+            
+        }
+        .navigationDestination(isPresented: $commentBtnClicked) {
+            PostDetailView(post: post)
+        }
     }
     func addLikeToFirebase(postId: String) async {
         authViewModel.addUserIdToLikes(postId: postId) { addedLike in}

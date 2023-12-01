@@ -14,7 +14,7 @@ struct PostDetailView: View {
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-
+    
     var body: some View {
         ScrollView {
             if let post = post {
@@ -47,13 +47,73 @@ struct PostDetailView: View {
                         }
                         .padding()
                     }
+                    Divider()
                 }
-                Divider()
             }
         }
         .background(.whiteOrDark)
+        .toolbar {
+            MessageToolbar()
+        }
     }
-
+    
+    struct MessageToolbar: ToolbarContent {
+        @State private var comment: String = ""
+        var body: some ToolbarContent {
+            ToolbarItem(placement: .bottomBar) {
+                HStack {
+                    CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment)
+                    Button(action: {
+                        //                        if !isNewMessage {
+                        //                            if let chatId = chatId {
+                        //                                msgViewModel.sendMessage(chatId: chatId, text: message)
+                        //                                message = ""
+                        //                            }
+                        //                        } else {
+                        //                            if let otherUser {
+                        //                                messageViewmodel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)
+                        //                                messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
+                        //
+                        //                                }
+                        //                                message = ""
+                        //                            }
+                        //                        }
+                        
+                    }, label: {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.white)
+                            .padding(5)
+                            .background(Color("Green"))
+                            .cornerRadius(50)
+                    })
+                }
+                .foregroundStyle(.black)
+                .padding(.horizontal)
+                .padding(.vertical, 6)
+                .background(Color("Gray"))
+                .cornerRadius(50)
+                .padding()
+            }
+        }
+    }
+    
+    struct CustomTextField: View {
+        var placeholder: Text
+        @Binding var text: String
+        var editingChanged: (Bool) -> () = {_ in}
+        var commit: () -> () = {}
+        
+        var body: some View {
+            ZStack(alignment: .leading) {
+                if text.isEmpty {
+                    placeholder
+                        .opacity(0.5)
+                }
+                TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+            }
+        }
+    }
+    
     func fetchOtherUserById(id: String) {
         if otherUsers[id] == nil {
             authViewModel.fetchOtherUserFromFirebase(id: id) { fetchedUser in

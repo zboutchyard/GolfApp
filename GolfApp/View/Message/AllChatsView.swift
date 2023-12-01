@@ -39,7 +39,6 @@ struct AllChatsView: View {
                                         .frame(maxWidth: .infinity)
                                 }
                                 .onDelete(perform: deleteItem)
-                            
                         }
                     }
                     .listStyle(.plain)
