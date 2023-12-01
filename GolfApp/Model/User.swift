@@ -18,6 +18,13 @@ struct User: Codable, Hashable {
     var handicap: Int?
     var homeCourse: String?
     var posts: [String]?
+    var notifications: [Notification]?
+}
+
+struct Notification: Codable, Hashable {
+    var text: String
+    var timeStamp: Date
+    var userCommenting: String
 }
 
 class OtherUser: ObservableObject {

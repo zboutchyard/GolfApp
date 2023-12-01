@@ -121,8 +121,23 @@ class AuthViewModel: ObservableObject {
                    let bio = data["bio"] as? String,
                    let handicap = data["handicap"] as? Int,
                    let interests = data["interests"] as? String,
-                   let homeCourse = data["homeCourse"] as? String {
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse)
+                   let homeCourse = data["homeCourse"] as? String,
+                   let notificationsData = data["notifications"] as? [[String: Any]]
+                {
+                    // Convert notificationsData into an array of Notification objects
+                    let notifications = notificationsData.compactMap { notificationData in
+                        if let text = notificationData["text"] as? String,
+                           let timeStamp = notificationData["timestamp"] as? Timestamp,
+                           let userCommenting = notificationData["userCommenting"] as? String
+                        {
+                            let timeStamp = timeStamp.dateValue()
+                            return Notification(text: text, timeStamp: timeStamp, userCommenting: userCommenting)
+                        }
+                        return nil
+                    }
+
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, notifications: notifications)
+                    print(userModel.notifications)
                     completion(userModel)
                 } else {
                     completion(nil)
@@ -132,6 +147,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+
     
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
         let db  = Firestore.firestore()
