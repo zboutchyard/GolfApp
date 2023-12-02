@@ -19,6 +19,7 @@ struct PostView: View {
     @State var isLoading: Bool = false
     @State var tempPost: Post?
     @State var isPostDetailView: Bool = false
+    @FocusState var isTextFieldFocused: Bool
     
     var body: some View {
         VStack {
@@ -101,6 +102,9 @@ struct PostView: View {
                 Button(action: {
                     if !isPostDetailView {
                         commentBtnClicked = true
+                    }
+                    if isPostDetailView {
+                        isTextFieldFocused = true
                     }
                 }, label: {
                     HStack {

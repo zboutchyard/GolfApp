@@ -18,7 +18,7 @@ struct Step2View: View {
     @State var password: String
     @State var firstName: String
     @State var lastName: String
-    @State var handicap: Int?
+    @State var handicap: Int = 0
     @State var homeCourse: String = ""
     @State var handicapSelection: [Int] = Array(-5...40)
     var remainingCharacters: Int {
@@ -29,64 +29,56 @@ struct Step2View: View {
     }
     var body: some View {
         NavigationStack {
-            ZStack {
-                VStack {
-                    HStack {
-                        Button(action: {
-                            isStepComplete = true
-                        }, label: {
-                            Text("Skip")
-                        })
-                        
-                        
-                        
-                    }
-                    .fontWeight(.semibold)
-                    .kerning(1.2)
-                    Spacer()
-                    Text("Now briefly tell us something about yourself.")
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .multilineTextAlignment(.center)
-                        .padding(.top)
-                    Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
-                        .foregroundColor(remainingCharacters > -1 ? .green : .red)
-                        .font(.caption)
-                        .padding()
-                    TextField("...Tell us something", text: $bioText)
-                        .padding()
-                        .font(.system(size: 12))
-                        .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
-                    Divider()
-                    Spacer()
-                    Text("What is your handicap?")
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .multilineTextAlignment(.center)
-                        .padding(.top)
-                    Picker(selection: $handicapSelection, label: Text("Handicap")) {
-                        ForEach(handicapSelection, id: \.self) { value in
-                            Text("\(value)")
+            ScrollView {
+                Spacer()
+                    VStack {
+                        Spacer()
+                        Text("Now briefly tell us something about yourself.")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                            .multilineTextAlignment(.center)
+                            .padding(.top)
+                        Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
+                            .foregroundColor(remainingCharacters > -1 ? .green : .red)
+                            .font(.caption)
+                            .padding()
+                        TextField("...Tell us something", text: $bioText)
+                            .padding()
+                            .font(.system(size: 12))
+                            .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                        Divider()
+                            .padding(.top)
+                        Spacer()
+                        Text("What is your handicap?")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                            .multilineTextAlignment(.center)
+                            .padding(.top)
+                        Picker(selection: $handicap, label: Text("Handicap")) {
+                            ForEach(handicapSelection, id: \.self) { value in
+                                Text("\(value)")
+                            }
                         }
+                        .pickerStyle(.wheel)
+                        .frame(height: 120)
+                        Spacer()
+                        Divider()
+                            .padding(.top)
+                        Text("Where is your home course?")
+                            .fontWeight(.semibold)
+                            .kerning(1.2)
+                            .multilineTextAlignment(.center)
+                            .padding(.top)
+                            .padding(.bottom)
+                        TextField("...Home course", text: $homeCourse)
+                            .padding()
+                            .font(.system(size: 12))
+                            .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                        
                     }
-                    .pickerStyle(.wheel)
-                    .frame(height: 120)
-                    Spacer()
-                    Divider()
-                    Text("Where is your home course?")
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .multilineTextAlignment(.center)
-                        .padding(.top)
-                    TextField("...Home course", text: $homeCourse)
-                        .padding()
-                        .font(.system(size: 12))
-                        .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
-                    Spacer()
-                    Spacer()
-                    
-                }
+                
             }
+            
         }
         .navigationDestination(isPresented: $isStepComplete) {
             Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse)

@@ -63,11 +63,6 @@ struct Step3View: View {
                             })
                         }
                     }
-                    
-                    Text("Step 3")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.top)
                     Text("Almost done... Let's add a few of your interests or hobbies.")
                         .fontWeight(.semibold)
                         .kerning(1.2)

@@ -14,11 +14,12 @@ struct PostDetailView: View {
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @FocusState var isTextFieldFocused: Bool
     
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(post: post, isPostDetailView: true)
+                PostView(post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused)
                 Divider()
                 if let comments = post.comments {
                     ForEach(comments, id: \.self) { comment in
@@ -51,18 +52,23 @@ struct PostDetailView: View {
                 }
             }
         }
+        .onTapGesture {
+            isTextFieldFocused = false
+        }
         .background(.whiteOrDark)
         .toolbar {
-            MessageToolbar()
+            MessageToolbar(isTextFieldFocused: _isTextFieldFocused)
         }
     }
     
     struct MessageToolbar: ToolbarContent {
         @State private var comment: String = ""
+        @FocusState var isTextFieldFocused: Bool
+        
         var body: some ToolbarContent {
             ToolbarItem(placement: .bottomBar) {
                 HStack {
-                    CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment)
+                    CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
                     Button(action: {
                         //                        if !isNewMessage {
                         //                            if let chatId = chatId {
@@ -102,6 +108,7 @@ struct PostDetailView: View {
         @Binding var text: String
         var editingChanged: (Bool) -> () = {_ in}
         var commit: () -> () = {}
+        @FocusState var isTextFieldFocused: Bool
         
         var body: some View {
             ZStack(alignment: .leading) {
@@ -110,6 +117,7 @@ struct PostDetailView: View {
                         .opacity(0.5)
                 }
                 TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+                    .focused($isTextFieldFocused)
             }
         }
     }
