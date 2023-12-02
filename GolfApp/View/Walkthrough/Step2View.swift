@@ -8,13 +8,19 @@ import SwiftUI
 
 struct Step2View: View {
     @StateObject var authViewModel = AuthViewModel()
-//    @StateObject var mockViewModel = MockAuthViewModel()
-    @State private var user: User?
-    @State private var isLoading: Bool = true
+    //    @StateObject var mockViewModel = MockAuthViewModel()
+    @State var user: User?
     @State var bioText: String = ""
     @State var charLimitReached: Bool = false
     @State var isStepComplete: Bool = false
     let characterLimit = 120
+    @State var email: String
+    @State var password: String
+    @State var firstName: String
+    @State var lastName: String
+    @State var handicap: Int?
+    @State var homeCourse: String = ""
+    @State var handicapSelection: [Int] = Array(-5...40)
     var remainingCharacters: Int {
         if(characterLimit - bioText.count < 0){
             charLimitReached = true
@@ -26,26 +32,23 @@ struct Step2View: View {
             ZStack {
                 VStack {
                     HStack {
-                        if !isLoading {
-                            if let user = user {
-                                Text("Hello \(user.firstName)!")
-                                    .padding()
-                                Spacer()
-                                Button(action: {
-                                    isStepComplete = true
-                                }, label: {
-                                    Text("Skip")
-                                })
-                                
-                            } else {
-                                Text("User Data not available")
-                            }
-                        }
+                        Button(action: {
+                            isStepComplete = true
+                        }, label: {
+                            Text("Skip")
+                        })
+                        
+                        
+                        
                     }
-                    .foregroundStyle(.black)
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
+                    Text("Now briefly tell us something about yourself.")
+                        .fontWeight(.semibold)
+                        .kerning(1.2)
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
                     Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
                         .foregroundColor(remainingCharacters > -1 ? .green : .red)
                         .font(.caption)
@@ -54,28 +57,39 @@ struct Step2View: View {
                         .padding()
                         .font(.system(size: 12))
                         .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
-                    Text("Step 2")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.black)
-                        .padding(.top)
-                    Text("Now briefly tell us something about yourself.")
-                        .foregroundStyle(.black)
+                    Divider()
+                    Spacer()
+                    Text("What is your handicap?")
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .multilineTextAlignment(.center)
                         .padding(.top)
-                    Spacer(minLength: 100)
-                }
-                if isLoading {
-                    ProgressView("Fetching your profile information")
-                        .progressViewStyle(.circular)
+                    Picker(selection: $handicapSelection, label: Text("Handicap")) {
+                        ForEach(handicapSelection, id: \.self) { value in
+                            Text("\(value)")
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(height: 120)
+                    Spacer()
+                    Divider()
+                    Text("Where is your home course?")
+                        .fontWeight(.semibold)
+                        .kerning(1.2)
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                    TextField("...Home course", text: $homeCourse)
                         .padding()
+                        .font(.system(size: 12))
+                        .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                    Spacer()
+                    Spacer()
+                    
                 }
             }
         }
         .navigationDestination(isPresented: $isStepComplete) {
-            Step3View()
+            Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse)
         }
         .overlay(
             Button(action: {
@@ -101,19 +115,11 @@ struct Step2View: View {
             })
             ,alignment: .bottom
         )
-        .onAppear(){
-            fetchData()
-        }
+        
         .padding()
-    }
-    func fetchData() {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            isLoading = false
-        }
     }
 }
 
 #Preview {
-    Step2View()
+    Step2View(email: "zack@zack.com", password: "yaya", firstName: "Zack", lastName: "Boutchyard")
 }

@@ -111,19 +111,23 @@ class AuthViewModel: ObservableObject {
         let usersRef = db.collection("Users").document(uid)
         
         usersRef.getDocument { (document, error) in
+            print("Raw data from Firestore: \(document?.data())")
+            
             if let document = document, document.exists {
                 if let data = document.data(),
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String,
-                   let chats = data["chats"] as? [String],
-                   let friendsList = data["friendsList"] as? [String],
-                   let email = data["email"] as? String,
-                   let bio = data["bio"] as? String,
-                   let handicap = data["handicap"] as? Int,
-                   let interests = data["interests"] as? String,
-                   let homeCourse = data["homeCourse"] as? String,
-                   let notificationsData = data["notifications"] as? [[String: Any]]
+                   let email = data["email"] as? String
                 {
+                    // Optional fields with default values
+                    let chats = data["chats"] as? [String] ?? []
+                    let friendsList = data["friendsList"] as? [String] ?? []
+                    let bio = data["bio"] as? String ?? ""
+                    let handicap = data["handicap"] as? Int ?? 0
+                    let interests = data["interests"] as? String ?? ""
+                    let homeCourse = data["homeCourse"] as? String ?? ""
+                    let notificationsData = data["notifications"] as? [[String: Any]] ?? []
+
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
@@ -137,16 +141,19 @@ class AuthViewModel: ObservableObject {
                     }
 
                     let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, notifications: notifications)
-                    print(userModel.notifications)
+                    print("User model created successfully.")
                     completion(userModel)
                 } else {
+                    print("User data not present or incomplete in Firestore document.")
                     completion(nil)
                 }
             } else {
+                print("Document doesn't exist in Firestore.")
                 completion(nil)
             }
         }
     }
+
 
     
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
@@ -361,34 +368,49 @@ class AuthViewModel: ObservableObject {
 
 
     
-    func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
+    func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print(error?.localizedDescription as Any)
-            } else {
-                self.createFirestoreUserDocument(email: email, firstName: firstName, lastName: lastName, completion: completion)
+            if let error = error {
+                completion(error)
+                return
             }
+
+            guard let uid = result?.user.uid else {
+                completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User ID not available"]))
+                return
+            }
+
+            self.createFirestoreUserDocument(uid: uid, email: email, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, completion: completion)
         }
     }
-    
-    func createFirestoreUserDocument(email: String, firstName: String, lastName: String, completion: @escaping (Error?) -> Void) {
-        // Get the current user's UID
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"]))
-            return
-        }
-        
+
+    func createFirestoreUserDocument(uid: String, email: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("Users")
-        
-        // Define the user document data
-        let userData: [String: Any] = [
+
+        var userData: [String: Any] = [
             "email": email,
             "firstName": firstName,
             "lastName": lastName
         ]
-        
-        // Create a new document with the user's UID as the document name
+
+        // Add optional fields if provided
+        if let bio = bio {
+            userData["bio"] = bio
+        }
+
+        if let interests = interests {
+            userData["interests"] = interests
+        }
+
+        if let handicap = handicap {
+            userData["handicap"] = handicap
+        }
+
+        if let homeCourse = homeCourse {
+            userData["homeCourse"] = homeCourse
+        }
+
         usersCollection.document(uid).setData(userData) { error in
             if let error = error {
                 completion(error)
@@ -397,6 +419,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+
     
     func uploadPhoto(uiImage: UIImage ) {
         //make sure that the selected image is not nil

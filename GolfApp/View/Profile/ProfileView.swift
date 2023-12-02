@@ -25,7 +25,10 @@ struct ProfileView: View {
     
     var body: some View {
         ScrollView {
-            ProfileHeadingView(isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
+            if let user = user {
+                ProfileHeadingView(user: user, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
+            }
+            
             if !isEditButtonClicked {
                 VStack {
                     HStack {

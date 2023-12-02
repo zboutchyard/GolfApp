@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct LoginView: View {
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var isLoggedIn: Bool
     @State private var email: String = ""
     @State private var password: String = ""
@@ -38,9 +39,9 @@ struct LoginView: View {
                     .padding(.top)
             }
             .navigationDestination(isPresented: $isLoggedIn){
-                LandingView()
-                    .navigationBarBackButtonHidden()
-                    .toolbar(.hidden)
+                    LandingView()
+                        .navigationBarBackButtonHidden()
+                        .toolbar(.hidden)
             }
         }
         .padding()

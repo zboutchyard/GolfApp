@@ -49,7 +49,7 @@ struct RegisterView: View {
                     .padding(.top)
                 Button("Register"){
                     Task {
-                        registerUser()
+                        isRegistered = true
                     }
                 }.buttonStyle(.borderedProminent)
                     .padding(.leading)
@@ -61,18 +61,9 @@ struct RegisterView: View {
                 }
                 .navigationBarBackButtonHidden()
                     .navigationDestination(isPresented: $isRegistered) {
-                        Step1View()
+                        Step1View(email: email, password: password, firstName: firstName, lastName: lastName)
                     }
                     
-            }
-        }
-    }
-    func registerUser() {
-        authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName, lastName: lastName) { error in
-            if let error = error {
-                print(error)
-            } else {
-                isRegistered = true
             }
         }
     }

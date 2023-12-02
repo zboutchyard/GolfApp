@@ -9,32 +9,25 @@ import SwiftUI
 
 struct Step1View: View {
     @StateObject var authViewModel = AuthViewModel()
-//    @StateObject var mockViewModel = MockAuthViewModel()
-    @State private var user: User?
+    //    @StateObject var mockViewModel = MockAuthViewModel()
+    @State var user: User?
+    @State var email: String
+    @State var password: String
+    @State var firstName: String
+    @State var lastName: String
     @State private var isStep1Complete: Bool = false
-    @State private var isLoading: Bool = true
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack {
                     HStack {
-                        if !isLoading {
-                            if let user = user {
-                                Text("Hello \(user.firstName)!")
-                                    .padding()
-                                Spacer()
-                                Button(action: {
-                                    isStep1Complete = true
-                                }, label: {
-                                    Text("Skip")
-                                })
-                                
-                            } else {
-                                Text("User Data not available")
-                            }
-                        }
+                        Button(action: {
+                            isStep1Complete = true
+                        }, label: {
+                            Text("Skip")
+                        })
+                        
                     }
-                    .foregroundStyle(.black)
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
@@ -42,20 +35,13 @@ struct Step1View: View {
                     Text("Step 1")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundStyle(.black)
                         .padding(.top)
                     Text("Let's start by getting an image for your profile.")
-                        .foregroundStyle(.black)
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .multilineTextAlignment(.center)
                         .padding(.top)
                     Spacer(minLength: 100)
-                }
-                if isLoading {
-                    ProgressView("Fetching your profile information")
-                        .progressViewStyle(.circular)
-                        .padding()
                 }
             }
             .overlay(
@@ -82,24 +68,13 @@ struct Step1View: View {
                 })
                 ,alignment: .bottom
             )
-            .onAppear(){
-                fetchData()
-            }
             .navigationDestination(isPresented: $isStep1Complete){
-                Step2View()
+                Step2View(email: email, password: password, firstName: firstName, lastName: lastName)
             }
             .padding()
             .navigationBarBackButtonHidden()
         }
     }
-    func fetchData() {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            isLoading = false
-        }
-    }
 }
 
-#Preview {
-    Step1View()
-}
+

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileHeadingView: View {
+    @State var user: User
     @Binding var isEditButtonClicked: Bool
     @Binding var isOtherViewTriggered: Bool
     var body: some View {
@@ -25,7 +26,7 @@ struct ProfileHeadingView: View {
             .frame(maxWidth: .infinity)
             .background(Image("golf-background").resizable().ignoresSafeArea())
             HStack {
-                Text("Zachary Boutchyard")
+                Text("\(user.firstName) \(user.lastName)")
                     .fontWeight(.light)
                     .kerning(1.2)
                     .padding(.leading)
@@ -60,6 +61,6 @@ struct ProfileHeadingView: View {
         }    }
 }
 
-#Preview {
-    ProfileHeadingView(isEditButtonClicked: .constant(false), isOtherViewTriggered: .constant(false))
-}
+//#Preview {
+//    ProfileHeadingView(isEditButtonClicked: .constant(false), isOtherViewTriggered: .constant(false))
+//}

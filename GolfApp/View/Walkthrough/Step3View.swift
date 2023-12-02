@@ -9,13 +9,20 @@ import SwiftUI
 
 struct Step3View: View {
     @StateObject var authViewModel = AuthViewModel()
-//    @StateObject var mockViewModel = MockAuthViewModel()
+    //    @StateObject var mockViewModel = MockAuthViewModel()
     @State private var user: User?
-    @State private var isLoading: Bool = true
     @State var isStepComplete: Bool = false
     @State private var selectedInterests: [String] = []
     @State private var isSelected: Bool = false
-    let interests: Array = [
+    @State var interestsString: String?
+    @State var email: String
+    @State var password: String
+    @State var firstName: String
+    @State var lastName: String
+    @State var bio: String?
+    @State var handicap: Int?
+    @State var homeCourse: String?
+    @State var interests: Array = [
         "baseball",
         "football",
         "basketball",
@@ -29,23 +36,13 @@ struct Step3View: View {
             ZStack {
                 VStack {
                     HStack {
-                        if !isLoading {
-                            if let user = user {
-                                Text("Hello \(user.firstName)!")
-                                    .padding()
-                                Spacer()
-                                Button(action: {
-                                    isStepComplete = true
-                                }, label: {
-                                    Text("Skip")
-                                })
-                                
-                            } else {
-                                Text("User Data not available")
-                            }
-                        }
+                        Button(action: {
+                            isStepComplete = true
+                        }, label: {
+                            Text("Skip")
+                        })
+                        
                     }
-                    .foregroundStyle(.black)
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
@@ -63,7 +60,6 @@ struct Step3View: View {
                                         RoundedRectangle(cornerRadius: 25)
                                             .stroke(selectedInterests.contains(item) ? Color.blue : Color.gray, lineWidth: 2)
                                     )
-                                    .foregroundColor(.black)
                             })
                         }
                     }
@@ -71,25 +67,21 @@ struct Step3View: View {
                     Text("Step 3")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundStyle(.black)
                         .padding(.top)
                     Text("Almost done... Let's add a few of your interests or hobbies.")
-                        .foregroundStyle(.black)
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .multilineTextAlignment(.center)
                         .padding(.top)
                     Spacer(minLength: 100)
                 }
-                if isLoading {
-                    ProgressView("Fetching your profile information")
-                        .progressViewStyle(.circular)
-                        .padding()
-                }
             }
             .overlay(
                 Button(action: {
-                    isStepComplete = true
+                    if !selectedInterests.isEmpty {
+                        interestsString = selectedInterests.joined(separator: ", ")
+                    }
+                    registerUser(interests: interestsString ?? "")
                 }, label: {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 20, weight: .semibold))
@@ -111,9 +103,7 @@ struct Step3View: View {
                 })
                 ,alignment: .bottom
             )
-            .onAppear(){
-                fetchData()
-            }
+            
             .navigationDestination(isPresented: $isStepComplete) {
                 LandingView()
                     .navigationBarBackButtonHidden()
@@ -122,12 +112,7 @@ struct Step3View: View {
             .padding()
         }
     }
-    func fetchData() {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            isLoading = false
-        }
-    }
+    
     
     func toggleInterest(interest: String) {
         if selectedInterests.contains(interest) {
@@ -139,8 +124,15 @@ struct Step3View: View {
         }
         isSelected.toggle()
     }
+    func registerUser(interests: String) {
+        authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName, lastName: lastName, bio: bio ?? "", interests: interestsString, handicap: handicap, homeCourse: homeCourse) { error in
+            if let error = error {
+                print(error)
+            } else {
+                isStepComplete = true
+            }
+        }
+    }
 }
 
-#Preview {
-    Step3View()
-}
+
