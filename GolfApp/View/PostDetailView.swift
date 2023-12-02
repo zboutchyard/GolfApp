@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-
-import SwiftUI
+import FirebaseAuth
 
 struct PostDetailView: View {
     @State var post: Post?
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel = AuthViewModel()
     @FocusState var isTextFieldFocused: Bool
     
     var body: some View {
@@ -57,34 +56,33 @@ struct PostDetailView: View {
         }
         .background(.whiteOrDark)
         .toolbar {
-            MessageToolbar(isTextFieldFocused: _isTextFieldFocused)
+            if let post = post {
+                MessageToolbar(post: post ,isTextFieldFocused: _isTextFieldFocused) {
+                    authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
+                        self.post = fetchedPost
+                    }
+                }
+            }
+           
         }
     }
     
     struct MessageToolbar: ToolbarContent {
+        @State var post: Post
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
+        var onCommentAdded: () -> Void
+        @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+
         
         var body: some ToolbarContent {
             ToolbarItem(placement: .bottomBar) {
                 HStack {
                     CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
                     Button(action: {
-                        //                        if !isNewMessage {
-                        //                            if let chatId = chatId {
-                        //                                msgViewModel.sendMessage(chatId: chatId, text: message)
-                        //                                message = ""
-                        //                            }
-                        //                        } else {
-                        //                            if let otherUser {
-                        //                                messageViewmodel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)
-                        //                                messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
-                        //
-                        //                                }
-                        //                                message = ""
-                        //                            }
-                        //                        }
-                        
+                        authViewModel.addComment(postId: post.id ?? "", text: comment, userCommenting: Auth.auth().currentUser?.uid ?? "")
+                        comment = ""
+                        onCommentAdded()
                     }, label: {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundStyle(.white)

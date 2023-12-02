@@ -127,7 +127,7 @@ class AuthViewModel: ObservableObject {
                     let interests = data["interests"] as? String ?? ""
                     let homeCourse = data["homeCourse"] as? String ?? ""
                     let notificationsData = data["notifications"] as? [[String: Any]] ?? []
-
+                    
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
@@ -139,7 +139,7 @@ class AuthViewModel: ObservableObject {
                         }
                         return nil
                     }
-
+                    
                     let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, notifications: notifications)
                     print("User model created successfully.")
                     completion(userModel)
@@ -153,8 +153,8 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
+    
+    
     
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
         let db  = Firestore.firestore()
@@ -165,7 +165,7 @@ class AuthViewModel: ObservableObject {
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String {
                     let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
-//                    self.friends?.append(otherUserModel)
+                    //                    self.friends?.append(otherUserModel)
                     completion(otherUserModel)
                 } else {
                     print(error?.localizedDescription ?? "")
@@ -234,15 +234,15 @@ class AuthViewModel: ObservableObject {
             completion(nil)
             return
         }
-
+        
         let db = Firestore.firestore()
         let postRef = db.collection("Posts").document(postId)
-
+        
         postRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 do {
                     var documentData = try document.data(as: Post?.self)
-
+                    
                     if var unwrappedDocumentData = documentData {
                         unwrappedDocumentData.id = document.documentID
                         self.post = unwrappedDocumentData
@@ -261,23 +261,45 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
-
-
+    
+    func addComment(postId: String, text: String, userCommenting: String) {
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let commentData: [String: Any] = [
+            "text": text,
+            "timeStamp": Date.now,
+            "userCommenting": userCommenting
+        ]
+        
+        postRef.updateData([
+            "comments": FieldValue.arrayUnion([commentData])
+        ]) { error in
+            if let error = error {
+                print("Error adding comment: \(error.localizedDescription)")
+            } else {
+                print("Comment added successfully")
+            }
+        }
+    }
+    
+    
+    
+    
     func fetchAllPostsFromFirebase() {
         guard let user = Auth.auth().currentUser else {
             return
         }
-
+        
         Firestore.firestore().collection("Posts").getDocuments { (snapshot, error) in
             guard let snapshot = snapshot, error == nil else {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
                 return
             }
-
+            
             print("Number of documents: \(snapshot.documents.count)")
-
+            
             self.posts = snapshot.documents.compactMap { documentSnapshot -> Post? in
                 do {
                     var documentData = try documentSnapshot.data(as: Post.self)
@@ -288,7 +310,7 @@ class AuthViewModel: ObservableObject {
                     return nil
                 }
             }
-
+            
             if self.posts.isEmpty {
                 print("No valid posts found.")
             } else {
@@ -299,7 +321,7 @@ class AuthViewModel: ObservableObject {
     
     func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
         print("postId in the add like \(postId)")
-
+        
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
@@ -326,19 +348,19 @@ class AuthViewModel: ObservableObject {
             completion(nil)
             return
         }
-
+        
         postRef.updateData([
             "likes": FieldValue.arrayRemove([uid])
         ]) { error in
             if let error = error {
                 completion(nil)
-
+                
                 print("Error removing user ID from likes array: \(error.localizedDescription)")
             } else {
                 completion(nil)
-
+                
                 print("User ID removed from likes array successfully.")
-
+                
             }
         }
     }
@@ -365,8 +387,8 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
+    
+    
     
     func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
@@ -374,43 +396,43 @@ class AuthViewModel: ObservableObject {
                 completion(error)
                 return
             }
-
+            
             guard let uid = result?.user.uid else {
                 completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User ID not available"]))
                 return
             }
-
+            
             self.createFirestoreUserDocument(uid: uid, email: email, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, completion: completion)
         }
     }
-
+    
     func createFirestoreUserDocument(uid: String, email: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("Users")
-
+        
         var userData: [String: Any] = [
             "email": email,
             "firstName": firstName,
             "lastName": lastName
         ]
-
+        
         // Add optional fields if provided
         if let bio = bio {
             userData["bio"] = bio
         }
-
+        
         if let interests = interests {
             userData["interests"] = interests
         }
-
+        
         if let handicap = handicap {
             userData["handicap"] = handicap
         }
-
+        
         if let homeCourse = homeCourse {
             userData["homeCourse"] = homeCourse
         }
-
+        
         usersCollection.document(uid).setData(userData) { error in
             if let error = error {
                 completion(error)
@@ -419,7 +441,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
+    
     
     func uploadPhoto(uiImage: UIImage ) {
         //make sure that the selected image is not nil

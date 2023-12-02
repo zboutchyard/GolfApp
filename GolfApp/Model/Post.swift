@@ -20,6 +20,6 @@ struct Post: Codable, Hashable {
 
 struct Comment: Codable, Hashable {
     var text: String
-    var timestamp: Date
+    var timeStamp: Date
     var userCommenting: String
 }
