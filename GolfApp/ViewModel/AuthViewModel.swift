@@ -217,7 +217,9 @@ class AuthViewModel: ObservableObject {
                        let firstName = data["firstName"] as? String,
                        let lastName = data["lastName"] as? String {
                         let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName)
-                        otherUsers.append(otherUserModel)
+                        if otherUserModel.id != Auth.auth().currentUser?.uid {
+                            otherUsers.append(otherUserModel)
+                        }
                     }
                 }
                 self.otherUsers = otherUsers

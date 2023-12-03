@@ -15,7 +15,7 @@ struct LandingView: View {
     var body: some View {
         VStack {
             HStack(spacing: 0) {
-                Text("par pal")
+                Text("par pals")
                     .font(.title).bold()
                     .foregroundStyle(Color("Heading"))
                     .padding(.leading)
