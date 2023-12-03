@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileInfoView: View {
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User
     var body: some View {
         Divider()
@@ -89,6 +90,26 @@ struct ProfileInfoView: View {
                         .multilineTextAlignment(.trailing)
                 }
                 
+            }
+            Divider()
+            VStack {
+                Text("Your Posts")
+                    .fontWeight(.semibold)
+                    .kerning(1.2)
+                    .padding()
+                    .padding(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
+                    PostView(post: post)
+                    Divider()
+                }
+            }
+            .onAppear(){
+                print(user.posts ?? "no user posts found")
+                if let posts = user.posts {
+                    authViewModel.fetchAllPostsInUserObject(postIds: posts)
+                }
             }
         }
     }

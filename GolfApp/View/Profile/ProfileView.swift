@@ -143,6 +143,7 @@ struct ProfileView: View {
                             .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
                     }
                 })
+            
         }
         .onAppear(){
             fetchData()

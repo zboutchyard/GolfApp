@@ -21,6 +21,7 @@ class AuthViewModel: ObservableObject {
     @Published var friendsList: [OtherUser]?
     @Published var posts: [Post] = []
     @Published var post: Post?
+    @Published var userPosts: [Post] = []
     
     enum ImageState {
         case empty
@@ -111,8 +112,6 @@ class AuthViewModel: ObservableObject {
         let usersRef = db.collection("Users").document(uid)
         
         usersRef.getDocument { (document, error) in
-            print("Raw data from Firestore: \(document?.data())")
-            
             if let document = document, document.exists {
                 if let data = document.data(),
                    let firstName = data["firstName"] as? String,
@@ -127,6 +126,7 @@ class AuthViewModel: ObservableObject {
                     let interests = data["interests"] as? String ?? ""
                     let homeCourse = data["homeCourse"] as? String ?? ""
                     let notificationsData = data["notifications"] as? [[String: Any]] ?? []
+                    let posts = data["posts"] as? [String] ?? []
                     
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
@@ -140,7 +140,7 @@ class AuthViewModel: ObservableObject {
                         return nil
                     }
                     
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, notifications: notifications)
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, notifications: notifications)
                     print("User model created successfully.")
                     completion(userModel)
                 } else {
@@ -229,6 +229,20 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func fetchAllPostsInUserObject(postIds: [String]) {
+        userPosts = []
+        for postId in postIds {
+            print("here is postid \(postId)")
+            fetchPostFromFirebase(postId: postId) { fetchedPost in
+                print(fetchedPost ?? "no fetched post")
+                if let userPost = fetchedPost {
+                    self.userPosts.append(userPost)
+                }
+            }
+            print(self.userPosts ?? "user posts is nil???")
+        }
+    }
+    
     func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
         guard let user = Auth.auth().currentUser else {
             completion(nil)
@@ -297,9 +311,6 @@ class AuthViewModel: ObservableObject {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
                 return
             }
-            
-            print("Number of documents: \(snapshot.documents.count)")
-            
             self.posts = snapshot.documents.compactMap { documentSnapshot -> Post? in
                 do {
                     var documentData = try documentSnapshot.data(as: Post.self)
@@ -320,8 +331,6 @@ class AuthViewModel: ObservableObject {
     }
     
     func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
-        print("postId in the add like \(postId)")
-        
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
@@ -342,7 +351,6 @@ class AuthViewModel: ObservableObject {
     }
     
     func removeUserIdFromLikes(postId: String, completion: @escaping (Post?) -> Void) {
-        print("postId in the remove like \(postId)")
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
@@ -366,7 +374,8 @@ class AuthViewModel: ObservableObject {
     }
     
     func addPost(text: String, completion: @escaping (Error?) -> Void) {
-        let db  = Firestore.firestore()
+        let db = Firestore.firestore()
+        
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("Current user not found")
             return
@@ -377,16 +386,35 @@ class AuthViewModel: ObservableObject {
             "timeStamp": Date.now,
             "user": currentUserID
         ]
-        let postRef = db.collection("Posts")
         
-        postRef.addDocument(data: newPost) { error in
+        let postRef = db.collection("Posts")
+        let userRef = db.collection("Users").document(currentUserID)
+        
+        // Add new post to the "Posts" collection
+        let addedPostRef = postRef.addDocument(data: newPost) { error in
             if let error = error {
                 completion(error)
-            } else {
-                completion(nil)
             }
         }
+        
+        // Use the documentID of the added post in the user's document
+        let newPostID = addedPostRef.documentID
+        userRef.getDocument { userDocument, userError in
+            if let userError = userError {
+                completion(userError)
+            } else if let userDocument = userDocument, userDocument.exists {
+                var currentPosts = userDocument["posts"] as? [String] ?? []
+                currentPosts.append(newPostID)
+                
+                userRef.updateData(["posts": currentPosts]) { updateError in
+                    completion(updateError)
+                }
+            }
+        }
+        
     }
+    
+    
     
     
     
