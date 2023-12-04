@@ -11,6 +11,8 @@ struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @State var user: User?
   
     var body: some View {
         VStack {
@@ -21,7 +23,10 @@ struct LandingView: View {
                     .padding(.leading)
                 Spacer()
                 Button(action: {
-                    isSearchBtnClicked = true
+                    Task {
+                        await fetchUser()
+                        isSearchBtnClicked = true
+                    }
                 }, label: {
                     Image(systemName: "magnifyingglass")
                 })
@@ -71,18 +76,24 @@ struct LandingView: View {
             AllChatsView()
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
-            SearchDetailView(searchText: $searchText, isAddFriendView: .constant(false))
-                .toolbar(content: {
-                    ToolbarItem(placement: .principal) {
-                        TextField("search users", text: $searchText)
-                            .padding(.leading)
-                            .padding(4)
-                            .font(.system(size: 20))
-                            .background(RoundedRectangle(cornerRadius: 30).stroke(Color.gray, lineWidth: .init(1.0)))
-                    }
-                })
+            if let currentUser = user {
+                SearchDetailView(searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                    .toolbar(content: {
+                        ToolbarItem(placement: .principal) {
+                            TextField("search users", text: $searchText)
+                                .padding(.leading)
+                                .padding(4)
+                                .font(.system(size: 20))
+                                .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
+                        }
+                    })
+            }
         }
-        
+    }
+    func fetchUser() async {
+        authViewModel.fetchUserDataFromFirebase { fetchedUser in
+            user = fetchedUser
+        }
     }
 }
 
