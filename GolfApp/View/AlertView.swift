@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct AlertView: View {
     @State private var user: User?
     @State private var otherUser: OtherUser?
     @ObservedObject private var authViewModel: AuthViewModel = AuthViewModel()
     @State private var isLoading: Bool = true
+    @ObservedObject private var notificationViewModel: NotificationViewModel = NotificationViewModel()
     @State var otherUserPendingRequest: [OtherUser] = []
+    @State var isRequestAccepted: Bool = false
+    @State var isRequestDeclined: Bool = false
+    
     
     var body: some View {
         Group {
@@ -36,11 +41,24 @@ struct AlertView: View {
                                         .fontWeight(.medium)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     HStack {
-                                        Button(action: {}, label: {
+                                        Button(action: {
+                                            Task {
+                                                notificationViewModel.addFriend(userId: otherUser.id)
+                                                notificationViewModel.removePendingRequests(userId: otherUser.id)
+                                                otherUserPendingRequest.removeAll()
+                                                fetchUser()
+                                                isRequestAccepted = true
+                                            }
+                                        }, label: {
                                             Text("Accept")
                                         })
                                         .buttonStyle(.borderedProminent)
-                                        Button(action: {}, label: {
+                                        Button(action: {
+                                            notificationViewModel.removePendingRequests(userId: otherUser.id)
+                                            otherUserPendingRequest.removeAll()
+                                            fetchUser()
+                                            isRequestDeclined = true
+                                        }, label: {
                                             Text("Decline")
                                         })
                                         .buttonStyle(.borderedProminent)
@@ -50,6 +68,9 @@ struct AlertView: View {
                             }
                             .padding()
                             Divider()
+                        }
+                        .onAppear() {
+                            fetchUser()
                         }
                     }
                     
@@ -91,14 +112,20 @@ struct AlertView: View {
         }
         .onAppear {
             Task {
-                await fetchUser()
+                fetchUser()
                 await fetchOtherUsersByRequest()
                 isLoading = false
             }
         }
+        .toast(isPresenting: $isRequestAccepted) {
+            AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
+        }
+        .toast(isPresenting: $isRequestDeclined) {
+            AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
+        }
     }
     
-    func fetchUser() async {
+    func fetchUser() {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
         }

@@ -11,6 +11,7 @@ import AlertToast
 struct SearchDetailView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @Binding var searchText: String
+    @State var user: User?
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
@@ -37,13 +38,29 @@ struct SearchDetailView: View {
                             })
                             .buttonStyle(.plain)
                             if isAddFriendView == true {
-                                Button(action: {
-                                    notificationViewModel.sendRequest(userId: otherUser.id)
-                                    isAddFriendSelected = true
-                                }, label: {
-                                    Text("Add")
-                                })
-                                .buttonStyle(.borderedProminent)
+                                if let sentRequests = user?.sentRequests, let receivedRequests = user?.receivedRequests,
+                                   sentRequests.contains(where: { $0.user == otherUser.id }) || receivedRequests.contains(where: { $0.user == otherUser.id }) {
+                                    Button(action: {
+                                    }, label: {
+                                        Text("Pending approval")
+                                    })
+                                    .disabled(true)
+                                } else if ((user?.friendsList?.contains(otherUser.id)) != nil){
+                                    Button(action: {
+                                    }, label: {
+                                        Text("Friends")
+                                    })
+                                    .disabled(true)
+                                } else {
+                                    Button(action: {
+                                        notificationViewModel.sendRequest(userId: otherUser.id)
+                                        fetchCurrentUser()
+                                        isAddFriendSelected = true
+                                    }, label: {
+                                        Text("Add")
+                                    })
+                                    .buttonStyle(.borderedProminent)
+                                }
                             }
                             if isAddFriendView == false {
                                 Spacer()
@@ -72,6 +89,12 @@ struct SearchDetailView: View {
             if let users = users {
                 filteredUsers = users
             }
+        }
+    }
+    
+    private func fetchCurrentUser() {
+        authViewModel.fetchUserDataFromFirebase { fetchedUser in
+            user = fetchedUser
         }
     }
     
