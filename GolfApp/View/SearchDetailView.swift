@@ -14,6 +14,7 @@ struct SearchDetailView: View {
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
+    @ObservedObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
     
     var body: some View {
         NavigationStack {
@@ -37,6 +38,7 @@ struct SearchDetailView: View {
                             .buttonStyle(.plain)
                             if isAddFriendView == true {
                                 Button(action: {
+                                    notificationViewModel.sendRequest(userId: otherUser.id)
                                     isAddFriendSelected = true
                                 }, label: {
                                     Text("Add")
