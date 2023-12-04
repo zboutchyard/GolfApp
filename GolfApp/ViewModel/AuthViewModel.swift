@@ -127,6 +127,25 @@ class AuthViewModel: ObservableObject {
                     let homeCourse = data["homeCourse"] as? String ?? ""
                     let notificationsData = data["notifications"] as? [[String: Any]] ?? []
                     let posts = data["posts"] as? [String] ?? []
+                    let sentRequestsData = data["sentRequests"] as? [[String: Any]] ?? []
+                    let receivedRequestsData = data["receivedRequests"] as? [[String: Any]] ?? []
+                    
+                    let sentRequests = sentRequestsData.compactMap { requestData in
+                        if let user = requestData["user"] as? String
+                        {
+                            return Request(user: user)
+                        }
+                        return nil
+                    }
+                    
+                    let receivedRequests = receivedRequestsData.compactMap { requestData in
+                        if let user = requestData["user"] as? String
+                        {
+                            return Request(user: user)
+                        }
+                        return nil
+                    }
+                    
                     
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
@@ -140,7 +159,7 @@ class AuthViewModel: ObservableObject {
                         return nil
                     }
                     
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, notifications: notifications)
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
                     print("User model created successfully.")
                     completion(userModel)
                 } else {

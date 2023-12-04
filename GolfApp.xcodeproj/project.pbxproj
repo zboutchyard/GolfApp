@@ -35,6 +35,7 @@
 		1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */; };
 		1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EC2AFB1E5300001048 /* AllChatsView.swift */; };
 		108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32962B1976FB008F59F9 /* PostDetailView.swift */; };
+		108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */; };
 		108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */; };
 		108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36C82AF57C6A005DAD22 /* LoginView.swift */; };
 		108D36CB2AF57C6B005DAD22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 108D36CA2AF57C6B005DAD22 /* Assets.xcassets */; };
@@ -99,6 +100,7 @@
 		1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		1032E9EC2AFB1E5300001048 /* AllChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatsView.swift; sourceTree = "<group>"; };
 		108C32962B1976FB008F59F9 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		108D36C32AF57C6A005DAD22 /* GolfApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GolfApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppApp.swift; sourceTree = "<group>"; };
 		108D36C82AF57C6A005DAD22 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 			children = (
 				1032E9C92AF66B1100001048 /* AuthViewModel.swift */,
 				1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */,
+				108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -617,6 +620,7 @@
 				1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */,
 				1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */,
 				10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */,
+				108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */,
 				108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */,
 				1032E9C82AF665BF00001048 /* User.swift in Sources */,
 				108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */,

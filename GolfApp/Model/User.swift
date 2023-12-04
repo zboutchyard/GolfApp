@@ -18,7 +18,13 @@ struct User: Codable, Hashable {
     var handicap: Int?
     var homeCourse: String?
     var posts: [String]?
+    var sentRequests: [Request]?
+    var receivedRequests: [Request]?
     var notifications: [Notification]?
+}
+
+struct Request: Codable, Hashable {
+    var user: String
 }
 
 struct Notification: Codable, Hashable {

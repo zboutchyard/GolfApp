@@ -28,109 +28,109 @@ struct ProfileView: View {
             if !isLoading {
                 if user != nil {
                     ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
-                
-                
-                if !isEditButtonClicked {
-                    VStack {
-                        HStack {
-                            Button(action: {
-                                isOtherViewClicked = false
-                                profileBtnSelected = true
-                                teeTimeBtnSelected = false
-                                friendsListBtnSelected = false
-                            }, label: {
-                                Text("Profile")
-                            })
-                            .buttonStyle(.bordered)
-                            .tint(profileBtnSelected ? .blue : nil)
-                            Button(action: {
-                                teeTimeBtnSelected = true
-                                profileBtnSelected = false
-                                friendsListBtnSelected = false
-                                isOtherViewClicked = true
-                            }, label: {
-                                Text("Tee Time")
-                            })
-                            .buttonStyle(.bordered)
-                            .tint(teeTimeBtnSelected ? .blue : nil)
-                            Button(action: {
-                                teeTimeBtnSelected = false
-                                profileBtnSelected = false
-                                friendsListBtnSelected = true
-                                isOtherViewClicked = true
-                                friends = nil
-                                getOtherUserInfo(friendsList: user?.friendsList ?? [])
-                            }, label: {
-                                Text("Friends")
-                            })
-                            .buttonStyle(.bordered)
-                            .tint(friendsListBtnSelected ? .blue : nil)
-                        } .padding(.vertical, 5)
-                        
-                        if profileBtnSelected {
-                            if let user = user {
-                                ProfileInfoView(user: user)
-                            }
-                        }
-                        if teeTimeBtnSelected {
-                            VStack {
-                                Text("Some text about tee times...")
-                            }
-                        }
-                        if friendsListBtnSelected {
-                            Divider()
-                            HStack {
-                                Text("Your friends")
-                                    .kerning(1.0)
-                                    .fontWeight(.semibold)
-                                    .padding(.leading)
-                                Spacer()
-                                Button(action: {
-                                    isAddFriendClicked = true
-                                }, label: {
-                                    Text("Add friend")
-                                    
-                                }).buttonStyle(.borderedProminent)
-                                    .padding(.trailing)
-                            }
-                            TextField("search friends", text: $searchText)
-                                .padding(4)
-                                .font(.system(size: 20))
-                                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
-                            Divider()
-                            ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
-                                HStack {
-                                    Image(systemName: "person.fill")
-                                        .scaledToFill()
-                                        .clipShape(Circle())
-                                        .frame(width: 50, height: 50)
-                                        .background {
-                                            Circle().fill(Color("Gray"))
-                                        }
-                                    VStack {
-                                        Button {
-                                            isAddFriendClicked = true
-                                        } label: {
-                                            Text("\(friend.firstName) \(friend.lastName)")
-                                                .font(.title3)
-                                                .fontWeight(.semibold)
-                                                .multilineTextAlignment(.leading)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .padding()
-                                        
-                                    }
-                                    Spacer()
-                                }
-                                Divider()
-                            }
-                        }
-                    }
                     
+                    
+                    if !isEditButtonClicked {
+                        VStack {
+                            HStack {
+                                Button(action: {
+                                    isOtherViewClicked = false
+                                    profileBtnSelected = true
+                                    teeTimeBtnSelected = false
+                                    friendsListBtnSelected = false
+                                }, label: {
+                                    Text("Profile")
+                                })
+                                .buttonStyle(.bordered)
+                                .tint(profileBtnSelected ? .blue : nil)
+                                Button(action: {
+                                    teeTimeBtnSelected = true
+                                    profileBtnSelected = false
+                                    friendsListBtnSelected = false
+                                    isOtherViewClicked = true
+                                }, label: {
+                                    Text("Tee Time")
+                                })
+                                .buttonStyle(.bordered)
+                                .tint(teeTimeBtnSelected ? .blue : nil)
+                                Button(action: {
+                                    teeTimeBtnSelected = false
+                                    profileBtnSelected = false
+                                    friendsListBtnSelected = true
+                                    isOtherViewClicked = true
+                                    friends = nil
+                                    getOtherUserInfo(friendsList: user?.friendsList ?? [])
+                                }, label: {
+                                    Text("Friends")
+                                })
+                                .buttonStyle(.bordered)
+                                .tint(friendsListBtnSelected ? .blue : nil)
+                            } .padding(.vertical, 5)
+                            
+                            if profileBtnSelected {
+                                if let user = user {
+                                    ProfileInfoView(user: user)
+                                }
+                            }
+                            if teeTimeBtnSelected {
+                                VStack {
+                                    Text("Some text about tee times...")
+                                }
+                            }
+                            if friendsListBtnSelected {
+                                Divider()
+                                HStack {
+                                    Text("Your friends")
+                                        .kerning(1.0)
+                                        .fontWeight(.semibold)
+                                        .padding(.leading)
+                                    Spacer()
+                                    Button(action: {
+                                        isAddFriendClicked = true
+                                    }, label: {
+                                        Text("Add friend")
+                                        
+                                    }).buttonStyle(.borderedProminent)
+                                        .padding(.trailing)
+                                }
+                                TextField("search friends", text: $searchText)
+                                    .padding(4)
+                                    .font(.system(size: 20))
+                                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
+                                Divider()
+                                ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
+                                    HStack {
+                                        Image(systemName: "person.fill")
+                                            .scaledToFill()
+                                            .clipShape(Circle())
+                                            .frame(width: 50, height: 50)
+                                            .background {
+                                                Circle().fill(Color("Gray"))
+                                            }
+                                        VStack {
+                                            Button {
+                                                isAddFriendClicked = true
+                                            } label: {
+                                                Text("\(friend.firstName) \(friend.lastName)")
+                                                    .font(.title3)
+                                                    .fontWeight(.semibold)
+                                                    .multilineTextAlignment(.leading)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                            }
+                                            .buttonStyle(.plain)
+                                            .padding()
+                                            
+                                        }
+                                        Spacer()
+                                    }
+                                    Divider()
+                                }
+                            }
+                        }
+                        
+                    }
                 }
-                }
-                 
+                
             }
             
             if isLoading {
@@ -142,16 +142,19 @@ struct ProfileView: View {
             }
         }
         .navigationDestination(isPresented: $isAddFriendClicked) {
-            SearchDetailView(searchText: $searchText, isAddFriendView: .constant(true))
-                .toolbar(content: {
-                    ToolbarItem(placement: .principal) {
-                        TextField("search users", text: $searchText)
-                            .padding(.leading)
-                            .padding(4)
-                            .font(.system(size: 20))
-                            .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
-                    }
-                })
+            if let currentUser = user {
+                SearchDetailView(searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                    .toolbar(content: {
+                        ToolbarItem(placement: .principal) {
+                            TextField("search users", text: $searchText)
+                                .padding(.leading)
+                                .padding(4)
+                                .font(.system(size: 20))
+                                .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
+                        }
+                    })
+            }
+            
             
         }
         .onAppear(){
