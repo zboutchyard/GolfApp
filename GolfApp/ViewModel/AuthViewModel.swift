@@ -182,8 +182,16 @@ class AuthViewModel: ObservableObject {
             if let document = document, document.exists {
                 if let data = document.data() ?? nil,
                    let firstName = data["firstName"] as? String,
-                   let lastName = data["lastName"] as? String {
-                    let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
+                   let lastName = data["lastName"] as? String
+                    
+                {
+                    let bio = data["bio"] as? String ?? ""
+                    let interests = data["interests"] as? String ?? ""
+                    let handicap = data["handicap"] as? Int ?? 0
+                    let homeCourse = data["homeCourse"] as? String ?? ""
+                    let posts = data["posts"] as? [String] ?? []
+                    let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                    
                     //                    self.friends?.append(otherUserModel)
                     completion(otherUserModel)
                 } else {
@@ -207,7 +215,12 @@ class AuthViewModel: ObservableObject {
                     if let data = document.data() ?? nil,
                        let firstName = data["firstName"] as? String,
                        let lastName = data["lastName"] as? String {
-                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName)
+                        let bio = data["bio"] as? String ?? ""
+                        let interests = data["interests"] as? String ?? ""
+                        let handicap = data["handicap"] as? Int ?? 0
+                        let homeCourse = data["homeCourse"] as? String ?? ""
+                        let posts = data["posts"] as? [String] ?? []
+                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
                         otherUsers.append(otherUserModel)
                         self.friendsList = otherUsers
                         completion(otherUsers)
@@ -253,7 +266,6 @@ class AuthViewModel: ObservableObject {
     func fetchAllPostsInUserObject(postIds: [String]) {
         userPosts = []
         for postId in postIds {
-            print("here is postid \(postId)")
             fetchPostFromFirebase(postId: postId) { fetchedPost in
                 print(fetchedPost ?? "no fetched post")
                 if let userPost = fetchedPost {

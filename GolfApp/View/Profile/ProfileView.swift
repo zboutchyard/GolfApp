@@ -21,6 +21,8 @@ struct ProfileView: View {
     @State var searchText: String = ""
     @State var friends: [OtherUser]?
     @State private var filteredUsers: [OtherUser]?
+    @State private var isOtherUserClicked: Bool = false
+    @State var otherUser: OtherUser?
     
     
     var body: some View {
@@ -109,7 +111,9 @@ struct ProfileView: View {
                                             }
                                         VStack {
                                             Button {
-                                                isAddFriendClicked = true
+                                                print("here is friend \(friend)")
+                                                otherUser = friend
+                                                isOtherUserClicked = true
                                             } label: {
                                                 Text("\(friend.firstName) \(friend.lastName)")
                                                     .font(.title3)
@@ -156,6 +160,11 @@ struct ProfileView: View {
             }
             
             
+        }
+        .navigationDestination(isPresented: $isOtherUserClicked) {
+            if let otherUser = otherUser {
+                OtherUserProfileView(otherUser: otherUser)
+            }
         }
         .onAppear(){
             fetchData()

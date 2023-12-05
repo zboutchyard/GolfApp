@@ -33,14 +33,13 @@ struct Notification: Codable, Hashable {
     var userCommenting: String
 }
 
-class OtherUser: ObservableObject {
-    @Published var id: String
-    @Published var firstName: String
-    @Published var lastName: String
-    
-    init(id: String, firstName: String, lastName: String) {
-        self.id = id
-        self.firstName = firstName
-        self.lastName = lastName
-    }
+struct OtherUser: Codable, Hashable {
+    var id: String
+    var firstName: String
+    var lastName: String
+    var bio: String?
+    var interests: String?
+    var handicap: Int?
+    var homeCourse: String?
+    var posts: [String]?
 }
