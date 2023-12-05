@@ -17,6 +17,9 @@ struct AlertView: View {
     @State var otherUserPendingRequest: [OtherUser] = []
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
+    @State var otherUserNotification: OtherUser?
+    @State private var otherUserNotifications: [String: OtherUser] = [:]
+
     
     
     var body: some View {
@@ -78,7 +81,7 @@ struct AlertView: View {
                     if let notifications = user?.notifications {
                         ForEach(notifications, id: \.self) { notification in
                             Button(action: {
-                                // Handle button action here if needed
+                
                             }, label: {
                                 HStack {
                                     Image(systemName: "person.fill")
@@ -89,10 +92,12 @@ struct AlertView: View {
                                         .background {
                                             Circle().fill(Color("Gray"))
                                         }
+                                    
                                     VStack {
-                                        Text("\(notification.userCommenting) commented saying: \(notification.text)")
+                                        Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
                                             .fontWeight(.medium)
                                             .frame(maxWidth: .infinity, alignment: .leading)
+                                        
                                         Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
                                             .font(.caption2)
                                             .fontWeight(.light)
@@ -104,9 +109,19 @@ struct AlertView: View {
                             })
                             .buttonStyle(.plain)
                         }
+                        .onAppear {
+                            Task {
+                                for notification in notifications {
+                                    await fetchUserInfoById(userId: notification.userCommenting)
+                                }
+                            }
+                            
+                        }
+                        
+                        
+                        
+                        Divider()
                     }
-                    
-                    Divider()
                 }
             }
         }
@@ -115,6 +130,7 @@ struct AlertView: View {
                 fetchUser()
                 await fetchOtherUsersByRequest()
                 isLoading = false
+                print("here is user \(user)")
             }
         }
         .toast(isPresenting: $isRequestAccepted) {
@@ -147,6 +163,12 @@ struct AlertView: View {
                     }
                 }
             }
+        }
+    }
+    
+    func fetchUserInfoById(userId: String) async {
+        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
+            otherUserNotifications[userId] = fetchedOtherUser
         }
     }
 }

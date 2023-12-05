@@ -80,7 +80,7 @@ struct PostDetailView: View {
                 HStack {
                     CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
                     Button(action: {
-                        authViewModel.addComment(postId: post.id ?? "", text: comment, userCommenting: Auth.auth().currentUser?.uid ?? "")
+                        authViewModel.addComment(postId: post.id ?? "", text: comment, postOwner: post.user)
                         comment = ""
                         onCommentAdded()
                     }, label: {

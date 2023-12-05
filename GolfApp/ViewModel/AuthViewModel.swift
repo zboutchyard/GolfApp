@@ -150,7 +150,7 @@ class AuthViewModel: ObservableObject {
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
-                           let timeStamp = notificationData["timestamp"] as? Timestamp,
+                           let timeStamp = notificationData["timeStamp"] as? Timestamp,
                            let userCommenting = notificationData["userCommenting"] as? String
                         {
                             let timeStamp = timeStamp.dateValue()
@@ -297,7 +297,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func addComment(postId: String, text: String, userCommenting: String) {
+    func addComment(postId: String, text: String, postOwner: String) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
             return
@@ -305,8 +305,19 @@ class AuthViewModel: ObservableObject {
         let commentData: [String: Any] = [
             "text": text,
             "timeStamp": Date.now,
-            "userCommenting": userCommenting
+            "userCommenting": uid
         ]
+        
+        let notificationRef = Firestore.firestore().collection("Users").document(postOwner)
+        notificationRef.updateData([
+            "notifications": FieldValue.arrayUnion([commentData])
+        ]) { error in
+            if let error = error {
+                print("Error adding notification: \(error.localizedDescription)")
+            } else {
+                print("notification added successfully")
+            }
+        }
         
         postRef.updateData([
             "comments": FieldValue.arrayUnion([commentData])
