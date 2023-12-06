@@ -51,7 +51,9 @@ struct OtherUserProfileView: View {
                     Spacer()
                 }
                 ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
+                    .background(Color.whiteOrDark)
             }
+            .background(Color.whiteOrDark)
         }
         
     }

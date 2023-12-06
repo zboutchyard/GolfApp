@@ -16,6 +16,8 @@ struct SearchDetailView: View {
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
     @ObservedObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @State var selectedUser: OtherUser?
+    @State var isUserSelected: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -32,7 +34,8 @@ struct SearchDetailView: View {
                     ForEach(users, id: \.id) { otherUser in
                         HStack {
                             Button(action: {
-                                //do something
+                                selectedUser = otherUser
+                                isUserSelected = true
                             }, label: {
                                 PersonCellView(otherUser: otherUser, isPostView: .constant(false))
                             })
@@ -73,6 +76,12 @@ struct SearchDetailView: View {
                 }
             }
         }
+        .navigationDestination(isPresented: $isUserSelected, destination: {
+            if let user = selectedUser {
+                OtherUserProfileView(otherUser: user)
+            }
+            
+        })
         .toast(isPresenting: $isAddFriendSelected, alert: {
             AlertToast(displayMode: .banner(.pop), type: .complete(.mint), title: "Request sent")
         })

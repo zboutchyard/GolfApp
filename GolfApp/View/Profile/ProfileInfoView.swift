@@ -208,11 +208,16 @@ struct ProfileInfoView: View {
                         .padding(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
-//                        ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-//                            PostView(post: post)
-//                            Divider()
-//                        }
+                        ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
+                            PostView(post: post)
+                            Divider()
+                        }
                     
+                }
+            }
+            .onAppear(){
+                if let posts = otherUser?.posts {
+                    authViewModel.fetchAllPostsInUserObject(postIds: posts)
                 }
             }
         }
