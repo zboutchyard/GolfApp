@@ -216,11 +216,18 @@ struct ProfileInfoView: View {
                 }
             }
             .onAppear(){
-                if let posts = otherUser?.posts {
-                    authViewModel.fetchAllPostsInUserObject(postIds: posts)
+                Task {
+                    print("here is posts in the profileInfoView")
+                    if let posts = otherUser?.posts {
+                        await fetchPosts(postIds: posts)
+                    }
                 }
+                
             }
         }
+    }
+    func fetchPosts(postIds: [String]) async {
+        authViewModel.fetchAllPostsInUserObject(postIds: postIds)
     }
 }
 

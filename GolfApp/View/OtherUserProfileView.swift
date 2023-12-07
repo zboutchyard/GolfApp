@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OtherUserProfileView: View {
     @State var otherUser: OtherUser
+    @State var user: User?
     var body: some View {
         ScrollView {
             VStack (spacing: 0){
@@ -38,11 +39,21 @@ struct OtherUserProfileView: View {
                 .background(.gray)
                 HStack {
                     Spacer()
-                    Button(action: {}, label: {
-                        Text("Add friend")
-                    })
-                    .buttonStyle(.borderedProminent)
-                    .padding()
+                    if user?.sentRequests?.contains(where: { $0.user == otherUser.id }) == true {
+                        Text("Pending approval")
+                            .padding()
+                    } else if ((user?.friendsList?.contains(otherUser.id)) == true) {
+                        Text("Friend")
+                            .padding()
+                    } else {
+                        Button(action: {}, label: {
+                            Text("Add friend")
+                        })
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                    }
+                   
+                    
                     Button(action: {}, label: {
                         Text("Message")
                     })

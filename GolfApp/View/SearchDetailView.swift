@@ -77,8 +77,8 @@ struct SearchDetailView: View {
             }
         }
         .navigationDestination(isPresented: $isUserSelected, destination: {
-            if let user = selectedUser {
-                OtherUserProfileView(otherUser: user)
+            if let selectedUser = selectedUser {
+                OtherUserProfileView(otherUser: selectedUser, user: user)
             }
             
         })
