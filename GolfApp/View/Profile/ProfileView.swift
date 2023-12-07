@@ -163,7 +163,9 @@ struct ProfileView: View {
         }
         .navigationDestination(isPresented: $isOtherUserClicked) {
             if let otherUser = otherUser {
-                OtherUserProfileView(otherUser: otherUser, user: user)
+                if let user = user {
+                    OtherUserProfileView(otherUser: otherUser, user: user)
+                }
             }
         }
         .onAppear(){

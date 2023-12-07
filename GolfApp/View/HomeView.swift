@@ -51,7 +51,9 @@ struct HomeView: View {
                 Spacer().frame(height: 8)
                 VStack {
                     ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                            PostView(post: post)
+                        if let user = user {
+                            PostView(user: user, post: post)
+                        }
                         }
                 }
             }

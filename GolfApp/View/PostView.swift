@@ -13,18 +13,30 @@ struct PostView: View {
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @State private var user: User?
+    @State var user: User?
     @State var post: Post
     @State var userId: String = Auth.auth().currentUser?.uid ?? ""
     @State var isLoading: Bool = false
     @State var tempPost: Post?
     @State var isPostDetailView: Bool = false
     @FocusState var isTextFieldFocused: Bool
+    @State var otherUser: OtherUser?
+    @State var otherUserClicked: Bool = false
     
     var body: some View {
         VStack {
             Button(action: {
-                userClicked = true
+               
+                if userId != post.user {
+                    Task {
+                        getOtherUserData(userId: post.user)
+                    }
+                    otherUserClicked = true
+                    print("other user clicked")
+                } else {
+                    userClicked = true
+                    print("current user clicked")
+                }
             }, label: {
                 PersonCellView(post: post, isPostView: .constant(true))
             })
@@ -133,6 +145,17 @@ struct PostView: View {
         .navigationDestination(isPresented: $commentBtnClicked) {
             PostDetailView(post: post)
         }
+        .navigationDestination(isPresented: $userClicked) {
+                ProfileView()
+                .background(Color.whiteOrDark)
+        }
+        .navigationDestination(isPresented: $otherUserClicked) {
+            if let otherUser = otherUser {
+                if let user = user {
+                    OtherUserProfileView(otherUser: otherUser, user: user)
+                }
+            }
+        }
     }
     func addLikeToFirebase(postId: String) async {
         authViewModel.addUserIdToLikes(postId: postId) { addedLike in}
@@ -144,6 +167,11 @@ struct PostView: View {
         authViewModel.removeUserIdFromLikes(postId: postId) { removedLike in}
         authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
             tempPost = fetchedPost
+        }
+    }
+    func getOtherUserData(userId: String) {
+        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
+            otherUser = fetchedOtherUser
         }
     }
 }
