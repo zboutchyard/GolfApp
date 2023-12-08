@@ -48,7 +48,7 @@ struct SearchDetailView: View {
                                         Text("Pending approval")
                                     })
                                     .disabled(true)
-                                } else if ((user?.friendsList?.contains(otherUser.id)) != nil){
+                                } else if ((user?.friendsList?.contains(otherUser.id)) == true) {
                                     Button(action: {
                                     }, label: {
                                         Text("Friends")
