@@ -31,7 +31,7 @@ struct NewChatView: View {
                                 HStack {
                                     Text(message.text ?? "")
                                         .padding()
-                                        .background(received ? Color("Gray") : Color.blue)
+                                        .background(received ? Color("AppGray") : Color.blue)
                                         .clipShape(RoundedRectangle(cornerRadius: 30))
                                 }
                                 .frame(maxWidth: 300, alignment: received ? .leading : .trailing)
@@ -81,7 +81,7 @@ struct NewChatView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
-        .background(Color("Gray"))
+        .background(Color("AppGray"))
         .cornerRadius(50)
         .padding()
     }

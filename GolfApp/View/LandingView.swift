@@ -13,6 +13,10 @@ struct LandingView: View {
     @State private var searchText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
+    
+    init() {
+    UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
+    }
   
     var body: some View {
         VStack {
@@ -44,7 +48,6 @@ struct LandingView: View {
             .background(.whiteOrDark)
             Divider()
             TabView() {
-                Group {
                     HomeView()
                         .tabItem {
                             Label("Home", systemImage: "house.fill")
@@ -61,10 +64,9 @@ struct LandingView: View {
                         .tabItem {
                             Label("Profile", systemImage: "person.fill")
                         }
-                }
+                
                 .toolbar(.visible, for: .tabBar)
                 .toolbarBackground(Color.whiteOrDark, for: .tabBar)
-                
                 .background(Color.whiteOrDark)
             }
             .background(Color.whiteOrDark)

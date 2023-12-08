@@ -23,10 +23,6 @@ struct AlertView: View {
     
     
     var body: some View {
-        Group {
-            if isLoading {
-                ProgressView()
-            } else {
                 ScrollView {
                     if !otherUserPendingRequest.isEmpty {
                         ForEach(otherUserPendingRequest, id: \.id) { otherUser in
@@ -37,7 +33,7 @@ struct AlertView: View {
                                     .clipShape(Circle())
                                     .frame(width: 50, height: 50)
                                     .background {
-                                        Circle().fill(Color("Gray"))
+                                        Circle().fill(Color("AppGray"))
                                     }
                                 VStack {
                                     Text("\(otherUser.firstName) \(otherUser.lastName) sent you a friend request")
@@ -72,12 +68,7 @@ struct AlertView: View {
                             .padding()
                             Divider()
                         }
-                        .onAppear() {
-                            fetchUser()
-                        }
                     }
-                    
-                    
                     if let notifications = user?.notifications {
                         ForEach(notifications, id: \.self) { notification in
                             Button(action: {
@@ -90,7 +81,7 @@ struct AlertView: View {
                                         .clipShape(Circle())
                                         .frame(width: 50, height: 50)
                                         .background {
-                                            Circle().fill(Color("Gray"))
+                                            Circle().fill(Color("AppGray"))
                                         }
                                     
                                     VStack {
@@ -117,28 +108,23 @@ struct AlertView: View {
                             }
                             
                         }
-                        
-                        
-                        
                         Divider()
                     }
                 }
-            }
-        }
-        .onAppear {
-            Task {
-                fetchUser()
-                await fetchOtherUsersByRequest()
-                isLoading = false
-                print("here is user \(user)")
-            }
-        }
-        .toast(isPresenting: $isRequestAccepted) {
-            AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
-        }
-        .toast(isPresenting: $isRequestDeclined) {
-            AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
-        }
+                .background(.whiteOrDark)
+                .onAppear {
+                    Task {
+                        fetchUser()
+                        await fetchOtherUsersByRequest()
+                        isLoading = false
+                    }
+                }
+//        .toast(isPresenting: $isRequestAccepted) {
+//            AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
+//        }
+//        .toast(isPresenting: $isRequestDeclined) {
+//            AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
+//        }
     }
     
     func fetchUser() {
@@ -158,7 +144,6 @@ struct AlertView: View {
                         // Append the fetched user to the array
                         if let fetchedUser = fetchedOtherUser {
                             otherUserPendingRequest.append(fetchedUser)
-                            print("fetchedUser \(fetchedUser)")
                         }
                     }
                 }

@@ -36,7 +36,7 @@ struct AllChatCellView: View {
                                     .clipShape(Circle())
                                     .frame(width: 50, height: 50)
                                     .background {
-                                        Circle().fill(Color("Gray"))
+                                        Circle().fill(Color("AppGray"))
                                     }
                                 VStack {
                                     Text("\(otherUser.firstName) \(otherUser.lastName)")

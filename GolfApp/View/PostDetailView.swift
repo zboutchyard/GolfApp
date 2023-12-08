@@ -29,7 +29,7 @@ struct PostDetailView: View {
                                 .clipShape(Circle())
                                 .frame(width: 50, height: 50)
                                 .background {
-                                    Circle().fill(Color("Gray"))
+                                    Circle().fill(Color("AppGray"))
                                 }
                             VStack {
                                 if let otherUser = otherUsers[comment.userCommenting] {
@@ -94,7 +94,7 @@ struct PostDetailView: View {
                 .foregroundStyle(.black)
                 .padding(.horizontal)
                 .padding(.vertical, 6)
-                .background(Color("Gray"))
+                .background(Color("AppGray"))
                 .cornerRadius(50)
                 .padding()
             }

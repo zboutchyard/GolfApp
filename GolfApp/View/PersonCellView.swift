@@ -22,7 +22,7 @@ struct PersonCellView: View {
                         .clipShape(Circle())
                         .frame(width: 50, height: 50)
                         .background {
-                            Circle().fill(Color("Gray"))
+                            Circle().fill(Color("AppGray"))
                         }
                     VStack {
                         if let user = otherUser {
@@ -61,7 +61,7 @@ struct PersonCellView: View {
                         .clipShape(Circle())
                         .frame(width: 50, height: 50)
                         .background {
-                            Circle().fill(Color("Gray"))
+                            Circle().fill(Color("AppGray"))
                         }
                     VStack {
                         if let user = otherUser {

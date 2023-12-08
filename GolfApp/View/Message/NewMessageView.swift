@@ -42,7 +42,7 @@ struct NewMessageView: View {
                                         .clipShape(Circle())
                                         .frame(width: 50, height: 50)
                                         .background {
-                                            Circle().fill(Color("Gray"))
+                                            Circle().fill(Color("AppGray"))
                                         }
                                     VStack {
                                         Text("\(friend.firstName) \(friend.lastName)")

@@ -76,7 +76,7 @@ struct ProfileView: View {
                             }
                             if teeTimeBtnSelected {
                                 VStack {
-                                    Text("Some text about tee times...")
+                                    TeeTimeView()
                                 }
                             }
                             if friendsListBtnSelected {
@@ -107,7 +107,7 @@ struct ProfileView: View {
                                             .clipShape(Circle())
                                             .frame(width: 50, height: 50)
                                             .background {
-                                                Circle().fill(Color("Gray"))
+                                                Circle().fill(Color("AppGray"))
                                             }
                                         VStack {
                                             Button {

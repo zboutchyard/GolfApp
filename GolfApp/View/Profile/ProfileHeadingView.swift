@@ -19,7 +19,7 @@ struct ProfileHeadingView: View {
                     .clipShape(Circle())
                     .frame(width: 125, height: 125)
                     .background {
-                        Circle().fill(Color("Gray"))
+                        Circle().fill(Color("AppGray"))
                     }
                     .padding(22)
             }
