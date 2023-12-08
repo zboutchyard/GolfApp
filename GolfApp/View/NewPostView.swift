@@ -13,7 +13,7 @@ struct NewPostView: View {
     @State var user: User
     @Environment(\.presentationMode) var presentationMode
     var onPostSubmitted: (() -> Void)?
-
+    
     var body: some View {
         ScrollView {
             HStack {
@@ -42,9 +42,8 @@ struct NewPostView: View {
                 
             }
             .padding()
-            TextField("tell me something..", text: $postText)
-                .lineLimit(1, reservesSpace: false)
-                .padding()
+            TextField("tell me something..", text: $postText, axis: .vertical)
+                .lineLimit(12)
         }
     }
 }
