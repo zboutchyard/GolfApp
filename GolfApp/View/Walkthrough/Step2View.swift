@@ -21,6 +21,7 @@ struct Step2View: View {
     @State var handicap: Int = 0
     @State var homeCourse: String = ""
     @State var handicapSelection: [Int] = Array(-5...40)
+    @State var data: Data?
     var remainingCharacters: Int {
         if(characterLimit - bioText.count < 0){
             charLimitReached = true
@@ -81,7 +82,7 @@ struct Step2View: View {
             
         }
         .navigationDestination(isPresented: $isStepComplete) {
-            Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse)
+            Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse, data: data)
         }
         .overlay(
             Button(action: {

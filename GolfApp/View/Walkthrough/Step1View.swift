@@ -15,6 +15,7 @@ struct Step1View: View {
     @State var password: String
     @State var firstName: String
     @State var lastName: String
+    @State var data: Data?
     @State private var isStep1Complete: Bool = false
     var body: some View {
         NavigationStack {
@@ -26,12 +27,12 @@ struct Step1View: View {
                         }, label: {
                             Text("Skip")
                         })
-                        
                     }
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
-                    EditableCircularProfileImage(viewModel: authViewModel)
+                    EditableCircularProfileImage(viewModel: authViewModel, data: $data)
+                    
                     Text("Let's start by getting an image for your profile.")
                         .fontWeight(.semibold)
                         .kerning(1.2)
@@ -43,6 +44,7 @@ struct Step1View: View {
             .overlay(
                 Button(action: {
                     isStep1Complete = true
+                    print("here is data \(data)")
                 }, label: {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 20, weight: .semibold))
@@ -65,8 +67,9 @@ struct Step1View: View {
                 ,alignment: .bottom
             )
             .navigationDestination(isPresented: $isStep1Complete){
-                Step2View(email: email, password: password, firstName: firstName, lastName: lastName)
+                Step2View(email: email, password: password, firstName: firstName, lastName: lastName, data: data)
             }
+            
             .padding()
             .navigationBarBackButtonHidden()
         }

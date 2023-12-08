@@ -141,8 +141,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
             <Locations>
@@ -204,8 +204,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -220,8 +220,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -236,8 +236,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -252,8 +252,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -268,8 +268,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
             <Locations>

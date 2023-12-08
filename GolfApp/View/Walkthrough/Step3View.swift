@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseStorage
+
 
 struct Step3View: View {
     @StateObject var authViewModel = AuthViewModel()
@@ -22,6 +24,7 @@ struct Step3View: View {
     @State var bio: String?
     @State var handicap: Int?
     @State var homeCourse: String?
+    let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
     @State var interests: Array = [
         "baseball",
         "football",
@@ -31,6 +34,7 @@ struct Step3View: View {
         "volleyball",
         "softball"
     ]
+    @State var data: Data?
     var body: some View {
         NavigationStack {
             ZStack {
@@ -124,6 +128,11 @@ struct Step3View: View {
             if let error = error {
                 print(error)
             } else {
+                storageReference.putData(data!, metadata: nil) { (metadata, error) in
+                    guard let metadata = metadata else {
+                        return
+                    }
+                }
                 isStepComplete = true
             }
         }

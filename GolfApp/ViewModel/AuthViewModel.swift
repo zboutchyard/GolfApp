@@ -30,6 +30,8 @@ class AuthViewModel: ObservableObject {
         case failure(Error)
     }
     
+    
+    
     init() {
         fetchAllOtherUsersFromFirebase() { user in }
     }
@@ -119,6 +121,7 @@ class AuthViewModel: ObservableObject {
                    let email = data["email"] as? String
                 {
                     // Optional fields with default values
+                    let profilePic = data["profilePic"] as? String ?? ""
                     let chats = data["chats"] as? [String] ?? []
                     let friendsList = data["friendsList"] as? [String] ?? []
                     let bio = data["bio"] as? String ?? ""
@@ -159,7 +162,7 @@ class AuthViewModel: ObservableObject {
                         return nil
                     }
                     
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
+                    let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePic: profilePic, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
                     print("User model created successfully.")
                     completion(userModel)
                 } else {
@@ -172,6 +175,21 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    let storage = Storage.storage()
+    func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
+            let photoRef = storage.reference().child("\(photoId)")
+        
+
+            // Download the photo data
+            photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+                if let error = error {
+                    print("Error downloading photo:", error.localizedDescription)
+                    completion(nil)
+                } else {
+                    completion(data)
+                }
+            }
+        }
     
     
     

@@ -49,8 +49,28 @@ struct CircularProfileImage: View {
     }
 }
 
+extension AuthViewModel.ImageState: Equatable {
+    static func == (lhs: AuthViewModel.ImageState, rhs: AuthViewModel.ImageState) -> Bool {
+        switch (lhs, rhs) {
+        case (.empty, .empty):
+            return true
+        case (.loading, .loading):
+            return true
+        case (.success(let leftImage), .success(let rightImage)):
+            // Compare images or any other relevant data
+            return leftImage == rightImage
+        case (.failure, .failure):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 struct EditableCircularProfileImage: View {
     @ObservedObject var viewModel: AuthViewModel
+    var onDataUpdate: ((Data?) -> Void)?
+    @Binding var data: Data?
     
     var body: some View {
         CircularProfileImage(imageState: viewModel.imageState)
@@ -63,7 +83,45 @@ struct EditableCircularProfileImage: View {
                         .font(.system(size: 75))
                         .foregroundColor(.accentColor)
                 }
-                .buttonStyle(.borderless)
+            }.onChange(of: viewModel.imageSelection) { newValue in
+                guard let item = viewModel.imageSelection else {
+                    return
+                }
+                item.loadTransferable(type: Data.self) { result in
+                    switch result {
+                    case .success(let data):
+                        if let data = data {
+                            self.data = data
+                        }
+                    case .failure(let failure):
+                        print("Error: \(failure.localizedDescription)")
+                    }
+                }
             }
+            .buttonStyle(.borderless)
     }
 }
+
+private func uiImage(from image: Image) -> UIImage? {
+    let controller = UIHostingController(rootView: image)
+    
+    // Safely unwrap the view and avoid force unwrapping
+    guard let view = controller.view else {
+        return nil
+    }
+    
+    let renderer = UIGraphicsImageRenderer(bounds: view.bounds)
+    let uiImage = renderer.image { _ in
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    }
+    
+    guard uiImage.size.width > 0 && uiImage.size.height > 0 else {
+        return nil
+    }
+    
+    print("Converted UIImage: \(uiImage)")
+    return uiImage
+}
+
+
+

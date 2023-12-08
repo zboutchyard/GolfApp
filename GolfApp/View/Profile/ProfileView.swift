@@ -129,21 +129,20 @@ struct ProfileView: View {
                                     }
                                     Divider()
                                 }
+                                if isEditButtonClicked {
+                                    EditProfileView()
+                                }
                             }
                         }
                         
                     }
                 }
                 
+            } else {
+                LoadingView()
             }
             
-            if isLoading {
-                ProgressView()
-            }
-            
-            if isEditButtonClicked {
-                EditProfileView()
-            }
+           
         }
         .navigationDestination(isPresented: $isAddFriendClicked) {
             if let currentUser = user {
@@ -169,18 +168,20 @@ struct ProfileView: View {
             }
         }
         .onAppear(){
-            fetchData()
+            Task {
+                await fetchData()
+                isLoading = false
+            }
         }
         .onChange(of: searchText) {
             filterUsers()
         }
     }
     
-    func fetchData() {
+    func fetchData() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
         }
-        isLoading = false
     }
     
     func getOtherUserInfo(friendsList: [String]){

@@ -19,13 +19,65 @@ struct AlertView: View {
     @State var isRequestDeclined: Bool = false
     @State var otherUserNotification: OtherUser?
     @State private var otherUserNotifications: [String: OtherUser] = [:]
-
+    
     
     
     var body: some View {
-                ScrollView {
-                    if !otherUserPendingRequest.isEmpty {
-                        ForEach(otherUserPendingRequest, id: \.id) { otherUser in
+        ScrollView {
+            if !isLoading {
+                if !otherUserPendingRequest.isEmpty {
+                    ForEach(otherUserPendingRequest, id: \.id) { otherUser in
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .scaledToFill()
+                                .foregroundStyle(.whiteOrDark)
+                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                            VStack {
+                                Text("\(otherUser.firstName) \(otherUser.lastName) sent you a friend request")
+                                    .fontWeight(.medium)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                HStack {
+                                    Button(action: {
+                                        Task {
+                                            notificationViewModel.addFriend(userId: otherUser.id)
+                                            notificationViewModel.removePendingRequests(userId: otherUser.id)
+                                            otherUserPendingRequest.removeAll()
+                                            await fetchUser()
+                                            isRequestAccepted = true
+                                        }
+                                    }, label: {
+                                        Text("Accept")
+                                    })
+                                    .buttonStyle(.borderedProminent)
+                                    Button(action: {
+                                        Task {
+                                            notificationViewModel.removePendingRequests(userId: otherUser.id)
+                                            otherUserPendingRequest.removeAll()
+                                            await fetchUser()
+                                            isRequestDeclined = true
+                                        }
+                                        
+                                    }, label: {
+                                        Text("Decline")
+                                    })
+                                    .buttonStyle(.borderedProminent)
+                                }
+                            }
+                            .padding([.leading, .trailing])
+                        }
+                        .padding()
+                        Divider()
+                    }
+                }
+                if let notifications = user?.notifications {
+                    ForEach(notifications, id: \.self) { notification in
+                        Button(action: {
+                            
+                        }, label: {
                             HStack {
                                 Image(systemName: "person.fill")
                                     .scaledToFill()
@@ -35,99 +87,55 @@ struct AlertView: View {
                                     .background {
                                         Circle().fill(Color("AppGray"))
                                     }
+                                
                                 VStack {
-                                    Text("\(otherUser.firstName) \(otherUser.lastName) sent you a friend request")
+                                    Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
                                         .fontWeight(.medium)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                    HStack {
-                                        Button(action: {
-                                            Task {
-                                                notificationViewModel.addFriend(userId: otherUser.id)
-                                                notificationViewModel.removePendingRequests(userId: otherUser.id)
-                                                otherUserPendingRequest.removeAll()
-                                                fetchUser()
-                                                isRequestAccepted = true
-                                            }
-                                        }, label: {
-                                            Text("Accept")
-                                        })
-                                        .buttonStyle(.borderedProminent)
-                                        Button(action: {
-                                            notificationViewModel.removePendingRequests(userId: otherUser.id)
-                                            otherUserPendingRequest.removeAll()
-                                            fetchUser()
-                                            isRequestDeclined = true
-                                        }, label: {
-                                            Text("Decline")
-                                        })
-                                        .buttonStyle(.borderedProminent)
-                                    }
-                                }
-                                .padding([.leading, .trailing])
-                            }
-                            .padding()
-                            Divider()
-                        }
-                    }
-                    if let notifications = user?.notifications {
-                        ForEach(notifications, id: \.self) { notification in
-                            Button(action: {
-                
-                            }, label: {
-                                HStack {
-                                    Image(systemName: "person.fill")
-                                        .scaledToFill()
-                                        .foregroundStyle(.whiteOrDark)
-                                        .clipShape(Circle())
-                                        .frame(width: 50, height: 50)
-                                        .background {
-                                            Circle().fill(Color("AppGray"))
-                                        }
                                     
-                                    VStack {
-                                        Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
-                                            .fontWeight(.medium)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
-                                            .font(.caption2)
-                                            .fontWeight(.light)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
-                                    .padding()
+                                    Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
+                                        .font(.caption2)
+                                        .fontWeight(.light)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                .padding([.leading, .trailing])
-                            })
-                            .buttonStyle(.plain)
-                        }
-                        .onAppear {
-                            Task {
-                                for notification in notifications {
-                                    await fetchUserInfoById(userId: notification.userCommenting)
-                                }
+                                .padding()
                             }
-                            
+                            .padding([.leading, .trailing])
+                        })
+                        .buttonStyle(.plain)
+                    }
+                    .onAppear {
+                        Task {
+                            for notification in notifications {
+                                await fetchUserInfoById(userId: notification.userCommenting)
+                            }
                         }
-                        Divider()
                     }
                 }
-                .background(.whiteOrDark)
-                .onAppear {
-                    Task {
-                        fetchUser()
-                        await fetchOtherUsersByRequest()
-                        isLoading = false
-                    }
-                }
-//        .toast(isPresenting: $isRequestAccepted) {
-//            AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
-//        }
-//        .toast(isPresenting: $isRequestDeclined) {
-//            AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
-//        }
+                Divider()
+            } else {
+                LoadingView()
+            }
+        }
+        .background(.whiteOrDark)
+        .onAppear {
+            Task {
+                await fetchUser()
+                await fetchOtherUsersByRequest()
+                isLoading = false
+            }
+        }
+        .toast(isPresenting: $isRequestAccepted) {
+            AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
+        }
+        .toast(isPresenting: $isRequestDeclined) {
+            AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
+        }
+        
+        
     }
     
-    func fetchUser() {
+    func fetchUser() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
         }
