@@ -9,21 +9,20 @@ import SwiftUI
 
 struct TeeTimeView: View {
     var body: some View {
-        ScrollView {
-            VStack{
+            VStack(alignment: .center){
+                
                 Text("Currently Under Construction")
-                    .background(Color.yellow)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 250)
+                    .font(.largeTitle)
+                    .multilineTextAlignment(.center)
+                    .padding()
                     Image(systemName: "exclamationmark.triangle.fill")
                     .resizable()
-                    .frame(width: 150, height: 150)
+                    .padding(30)
+                    .scaledToFit()
             }
-            
-            
-            
-        }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.yellow)
+        .opacity(0.2)
     }
 }
 
