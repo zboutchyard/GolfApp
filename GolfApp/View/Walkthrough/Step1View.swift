@@ -44,7 +44,6 @@ struct Step1View: View {
             .overlay(
                 Button(action: {
                     isStep1Complete = true
-                    print("here is data \(data)")
                 }, label: {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 20, weight: .semibold))

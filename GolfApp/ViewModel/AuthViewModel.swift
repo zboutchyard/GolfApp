@@ -175,21 +175,24 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    
     let storage = Storage.storage()
     func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
-            let photoRef = storage.reference().child("\(photoId)")
+        let photoRef = storage.reference().child("\(photoId)")
         
-
-            // Download the photo data
-            photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-                if let error = error {
-                    print("Error downloading photo:", error.localizedDescription)
-                    completion(nil)
-                } else {
-                    completion(data)
-                }
+        
+        // Download the photo data
+        photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error downloading photo:", error.localizedDescription)
+                completion(nil)
+            } else {
+                completion(data)
             }
         }
+    }
     
     
     
@@ -485,7 +488,7 @@ class AuthViewModel: ObservableObject {
     
     
     
-    func registerUserWithFirebase(email: String, password: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
+    func registerUserWithFirebase(email: String, password: String, firstName: String, profilePic: String?, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 completion(error)
@@ -497,11 +500,11 @@ class AuthViewModel: ObservableObject {
                 return
             }
             
-            self.createFirestoreUserDocument(uid: uid, email: email, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, completion: completion)
+            self.createFirestoreUserDocument(uid: uid, email: email, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, completion: completion)
         }
     }
     
-    func createFirestoreUserDocument(uid: String, email: String, firstName: String, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
+    func createFirestoreUserDocument(uid: String, email: String, firstName: String,  profilePic: String?, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let usersCollection = db.collection("Users")
         
@@ -512,6 +515,9 @@ class AuthViewModel: ObservableObject {
         ]
         
         // Add optional fields if provided
+        if let profilePic = profilePic {
+            userData["profilePic"] = profilePic
+        }
         if let bio = bio {
             userData["bio"] = bio
         }
@@ -565,6 +571,9 @@ class AuthViewModel: ObservableObject {
                 //save the reference to the file in firestore db
             }
         }
+    }
+    
+    func addProfilePicToUserCollection(fileRef: String){
         
     }
     

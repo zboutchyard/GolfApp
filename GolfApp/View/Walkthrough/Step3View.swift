@@ -124,15 +124,18 @@ struct Step3View: View {
         isSelected.toggle()
     }
     func registerUser(interests: String) {
-        authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName, lastName: lastName, bio: bio ?? "", interests: interestsString, handicap: handicap, homeCourse: homeCourse) { error in
+        authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName,  profilePic: storageReference.name, lastName: lastName, bio: bio ?? "", interests: interestsString, handicap: handicap, homeCourse: homeCourse) { error in
             if let error = error {
                 print(error)
             } else {
-                storageReference.putData(data!, metadata: nil) { (metadata, error) in
-                    guard let metadata = metadata else {
-                        return
+                if let data = data {
+                    storageReference.putData(data, metadata: nil) { (metadata, error) in
+                        guard let metadata = metadata else {
+                            return
+                        }
                     }
                 }
+                
                 isStepComplete = true
             }
         }
