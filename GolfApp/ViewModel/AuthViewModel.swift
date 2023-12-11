@@ -236,12 +236,13 @@ class AuthViewModel: ObservableObject {
                     if let data = document.data() ?? nil,
                        let firstName = data["firstName"] as? String,
                        let lastName = data["lastName"] as? String {
+                        let profilePic = data["profilePic"] as? String
                         let bio = data["bio"] as? String ?? ""
                         let interests = data["interests"] as? String ?? ""
                         let handicap = data["handicap"] as? Int ?? 0
                         let homeCourse = data["homeCourse"] as? String ?? ""
                         let posts = data["posts"] as? [String] ?? []
-                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                        let otherUserModel = OtherUser(id: id, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
                         otherUsers.append(otherUserModel)
                         self.friendsList = otherUsers
                         completion(otherUsers)

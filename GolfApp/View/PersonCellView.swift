@@ -81,7 +81,6 @@ struct PersonCellView: View {
                             Circle().fill(Color("AppGray"))
                         }
                         .foregroundStyle(.whiteOrDark)
-                        .padding(.leading)
                 } else {
                     Image(systemName: "person.fill")
                         .scaledToFill()

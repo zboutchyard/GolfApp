@@ -16,30 +16,37 @@ struct AllChatCellView: View {
     @State private var otherUser: OtherUser?
     @State private var chatModel: Chat?
     @State private var isLoading: Bool = true
-    let randomColor = Color(UIColor(red: CGFloat.random(in: 0...1),
-                                    green: CGFloat.random(in: 0...1),
-                                    blue: CGFloat.random(in: 0...1),
-                                    alpha: 1.0))
+    @State var image: UIImage?
     let chatId: String
     @State var isMessageClicked = false
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                if !isLoading {
-                    if let otherUser = otherUser {
-                        NavigationStack {
+                VStack {
+                    NavigationStack {
+                        if let user = otherUser {
                             HStack {
-                                Image(systemName: "person.fill")
-                                    .foregroundStyle(.whiteOrDark)
-                                    .scaledToFill()
-                                    .clipShape(Circle())
-                                    .frame(width: 50, height: 50)
-                                    .background {
-                                        Circle().fill(Color("AppGray"))
-                                    }
+                                if let image = image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                }
                                 VStack {
-                                    Text("\(otherUser.firstName) \(otherUser.lastName)")
+                                    Text("\(user.firstName) \(user.lastName)")
                                         .font(.title3)
                                         .fontWeight(.bold)
                                         .multilineTextAlignment(.leading)
@@ -60,55 +67,47 @@ struct AllChatCellView: View {
                                 isMessageClicked = true
                             }
                             .padding()
+
                         }
+                       
                     }
+                    
+                    
+                    
+                    
                 }
-            }.onAppear() {
-                fetchData()
-            }
-            if isLoading {
-                ProgressView("Fetching your profile information")
-                    .progressViewStyle(.circular)
-                    .padding()
-            }
-        } .navigationDestination(isPresented: $isMessageClicked) {
-            if let otherUser = otherUser {
-                ChatView(chatId: chatId, otherUser: otherUser)
-                
-            }
-        }
+                .navigationDestination(isPresented: $isMessageClicked) {
+                    ChatView(chatId: chatId, otherUser: otherUser, image: image)
+               }
+               .onAppear() {
+                   Task {
+                    fetchData()
+                   }
+               }
     }
     
-    func generateRandomAccessibleColor() -> Color {
-        let minimumLuminance: CGFloat = 0.3
-        let maximumLuminance: CGFloat = 0.7
-
-        var red: CGFloat = 0.0
-        var green: CGFloat = 0.0
-        var blue: CGFloat = 0.0
-
-        repeat {
-            red = CGFloat.random(in: 0...1)
-            green = CGFloat.random(in: 0...1)
-            blue = CGFloat.random(in: 0...1)
-        } while !isColorAccessible(red: red, green: green, blue: blue, minimumLuminance: minimumLuminance, maximumLuminance: maximumLuminance)
-
-        return Color(red: red, green: green, blue: blue)
-    }
-
-    func isColorAccessible(red: CGFloat, green: CGFloat, blue: CGFloat, minimumLuminance: CGFloat, maximumLuminance: CGFloat) -> Bool {
-        let luminance = (0.2126 * red) + (0.7152 * green) + (0.0722 * blue)
-        return luminance >= minimumLuminance && luminance <= maximumLuminance
-    }
-
     
     func fetchData() {
         getAllConversations()
-        isLoading = false
-        selectedChatId = chatId
     }
     
-    func getAllConversations() {
+    func processImage(photoId: String) {
+        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
+            if photoId != "" {
+                if let data = fetchedData {
+                    print("Downloaded photo data:", data)
+                    image = UIImage(data: data)
+                } else {
+                    image = nil
+                }
+            } else {
+                image = nil
+            }
+            
+        }
+    }
+    
+    func getAllConversations()  {
         msgViewModel.fetchChat(chatId: self.chatId) { fetchedChat in
             chatModel = fetchedChat
             getParticipantName(chatModel: chatModel!)
@@ -123,6 +122,10 @@ struct AllChatCellView: View {
         if let otherUserId = otherParticipants.first {
             authViewModel.fetchOtherUserFromFirebase(id: otherUserId) { fetchedUser in
                 otherUser = fetchedUser
+                if let profilePic = otherUser?.profilePic {
+                        processImage(photoId: profilePic)
+                    
+                }
             }
         }
     }

@@ -121,7 +121,6 @@ struct AlertView: View {
         .onAppear {
             Task {
                 await fetchUser()
-                await fetchOtherUsersByRequest()
                 isLoading = false
             }
         }
@@ -138,10 +137,13 @@ struct AlertView: View {
     func fetchUser() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
+            if user?.receivedRequests != nil {
+                fetchOtherUsersByRequest()
+            }
         }
     }
     
-    func fetchOtherUsersByRequest() async {
+    func fetchOtherUsersByRequest() {
         if let receivedRequests = user?.receivedRequests {
             for request in receivedRequests {
                 authViewModel.fetchOtherUserFromFirebase(id: request.user) { fetchedOtherUser in

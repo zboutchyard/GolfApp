@@ -104,26 +104,26 @@ struct ProfileView: View {
                                 Divider()
                                 ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
                                     HStack {
-                                        if let image = image {
-                                            Image(uiImage: image)
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 50, height: 50)
-                                                .clipShape(Circle())
-                                                .background {
-                                                    Circle().fill(Color("AppGray"))
-                                                }
-                                                .foregroundStyle(.whiteOrDark)
-                                        } else {
-                                            Image(systemName: "person.fill")
-                                                .scaledToFill()
-                                                .clipShape(Circle())
-                                                .frame(width: 50, height: 50)
-                                                .background {
-                                                    Circle().fill(Color("AppGray"))
-                                                }
-                                                .foregroundStyle(.whiteOrDark)
-                                        }
+                                        if let profilePic = friend.profilePic {
+                                                   AsyncImage(photoId: profilePic)
+                                                       .frame(width: 50, height: 50)
+                                                       .clipShape(Circle())
+                                                       .background {
+                                                           Circle().fill(Color("AppGray"))
+                                                       }
+                                                       .foregroundStyle(.whiteOrDark)
+                                               } else {
+                                                   Image(systemName: "person.fill")
+                                                       .scaledToFill()
+                                                       .clipShape(Circle())
+                                                       .frame(width: 50, height: 50)
+                                                       .background {
+                                                           Circle().fill(Color("AppGray"))
+                                                       }
+                                                       .foregroundStyle(.whiteOrDark)
+                                               }
+
+                                        
                                         VStack {
                                             Button {
                                                 otherUser = friend
@@ -139,17 +139,14 @@ struct ProfileView: View {
                                             .padding()
                                             
                                         }
-                                        .onAppear() {
-                                            if let profilePic = friend.profilePic {
-                                                getProfilePic(photoId: profilePic)
-                                            }
-                                        }
                                         Spacer()
                                     }
                                     
                                     
+                                    
                                     Divider()
                                 }
+                               
                                 
                                 if isEditButtonClicked {
                                     EditProfileView()
@@ -206,24 +203,6 @@ struct ProfileView: View {
         }
     }
     
-    func getProfilePic(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if photoId != "" {
-                if let data = fetchedData {
-                    print("Downloaded photo data:", data)
-                    DispatchQueue.main.async {
-                        image = UIImage(data: data)
-                    }
-                } else {
-                    image = nil
-                }
-            } else {
-                image = nil
-            }
-            
-        }
-    }
-    
     func getOtherUserInfo(friendsList: [String]){
         authViewModel.fetchFriendsFromFirebase(ids: friendsList) { allFriends in
             friends = allFriends
@@ -240,6 +219,40 @@ struct ProfileView: View {
         }
     }
 }
+
+struct AsyncImage: View {
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    let photoId: String
+    @State private var image: UIImage?
+
+    var body: some View {
+        Group {
+            if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Image(systemName: "person.fill")
+                    .scaledToFill()
+            }
+        }
+        .onAppear {
+            Task {
+                let imageData = authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
+                    if let data = fetchedData {
+                        self.image = UIImage(data: data)
+                    }
+                }
+//                if let data = imageData {
+//                    DispatchQueue.main.async {
+//                        self.image = UIImage(data: data)
+//                    }
+//                }
+            }
+        }
+    }
+}
+
 
 #Preview {
     ProfileView()

@@ -17,6 +17,7 @@ struct AllChatsView: View {
     @State private var isLoading: Bool = true
     @State private var isAddMessageButtonClicked = false
     @State private var selectedChatId: String?
+    
     var body: some View {
             VStack {
                 HStack {
@@ -63,6 +64,8 @@ struct AllChatsView: View {
             user = fetchedUser
         }
     }
+    
+    
     
     func deleteItem(at offsets: IndexSet) {
         if selectedChatId != nil {
