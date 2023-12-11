@@ -23,6 +23,8 @@ struct ProfileView: View {
     @State private var filteredUsers: [OtherUser]?
     @State private var isOtherUserClicked: Bool = false
     @State var otherUser: OtherUser?
+    @State var image: UIImage?
+
     
     
     var body: some View {
@@ -102,16 +104,28 @@ struct ProfileView: View {
                                 Divider()
                                 ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
                                     HStack {
-                                        Image(systemName: "person.fill")
-                                            .scaledToFill()
-                                            .clipShape(Circle())
-                                            .frame(width: 50, height: 50)
-                                            .background {
-                                                Circle().fill(Color("AppGray"))
-                                            }
+                                        if let image = image {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 50, height: 50)
+                                                .clipShape(Circle())
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        } else {
+                                            Image(systemName: "person.fill")
+                                                .scaledToFill()
+                                                .clipShape(Circle())
+                                                .frame(width: 50, height: 50)
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        }
                                         VStack {
                                             Button {
-                                                print("here is friend \(friend)")
                                                 otherUser = friend
                                                 isOtherUserClicked = true
                                             } label: {
@@ -125,10 +139,18 @@ struct ProfileView: View {
                                             .padding()
                                             
                                         }
+                                        .onAppear() {
+                                            if let profilePic = friend.profilePic {
+                                                getProfilePic(photoId: profilePic)
+                                            }
+                                        }
                                         Spacer()
                                     }
+                                    
+                                    
                                     Divider()
                                 }
+                                
                                 if isEditButtonClicked {
                                     EditProfileView()
                                 }
@@ -181,6 +203,24 @@ struct ProfileView: View {
     func fetchData() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
+        }
+    }
+    
+    func getProfilePic(photoId: String) {
+        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
+            if photoId != "" {
+                if let data = fetchedData {
+                    print("Downloaded photo data:", data)
+                    DispatchQueue.main.async {
+                        image = UIImage(data: data)
+                    }
+                } else {
+                    image = nil
+                }
+            } else {
+                image = nil
+            }
+            
         }
     }
     

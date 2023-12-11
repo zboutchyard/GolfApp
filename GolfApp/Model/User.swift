@@ -37,6 +37,7 @@ struct Notification: Codable, Hashable {
 struct OtherUser: Codable, Hashable {
     var id: String
     var firstName: String
+    var profilePic: String?
     var lastName: String
     var bio: String?
     var interests: String?

@@ -13,7 +13,6 @@ import PhotosUI
 import FirebaseStorage
 
 class AuthViewModel: ObservableObject {
-    @Published var photo: UIImage?
     @Published var otherUsers: [OtherUser]?
     @Published var friends: [OtherUser]?
     @Published var friend: OtherUser?
@@ -206,12 +205,13 @@ class AuthViewModel: ObservableObject {
                    let lastName = data["lastName"] as? String
                     
                 {
+                    let profilePic = data["profilePic"] as? String
                     let bio = data["bio"] as? String ?? ""
                     let interests = data["interests"] as? String ?? ""
                     let handicap = data["handicap"] as? Int ?? 0
                     let homeCourse = data["homeCourse"] as? String ?? ""
                     let posts = data["posts"] as? [String] ?? []
-                    let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                    let otherUserModel = OtherUser(id: id, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
                     
                     //                    self.friends?.append(otherUserModel)
                     completion(otherUserModel)
@@ -554,7 +554,7 @@ class AuthViewModel: ObservableObject {
         let storageRef = Storage.storage().reference()
         
         //turn our image into data
-        let imageData = uiImage.jpegData(compressionQuality: 0.8)
+        let imageData = uiImage.jpegData(compressionQuality: 0.3)
         
         print("image data \(String(describing: imageData))")
         
@@ -571,14 +571,5 @@ class AuthViewModel: ObservableObject {
                 //save the reference to the file in firestore db
             }
         }
-    }
-    
-    func addProfilePicToUserCollection(fileRef: String){
-        
-    }
-    
-    func setPhoto(uiImage: UIImage) {
-        self.photo = uiImage
-        print("photo is set")
     }
 }

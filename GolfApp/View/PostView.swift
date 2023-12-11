@@ -32,10 +32,8 @@ struct PostView: View {
                         getOtherUserData(userId: post.user)
                     }
                     otherUserClicked = true
-                    print("other user clicked")
                 } else {
                     userClicked = true
-                    print("current user clicked")
                 }
             }, label: {
                 PersonCellView(post: post, isPostView: .constant(true))
