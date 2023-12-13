@@ -25,25 +25,25 @@ struct HomeView: View {
                     HStack {
                         HStack {
                             if let image = image {
-                                   Image(uiImage: image)
-                                       .resizable()
-                                       .scaledToFill()
-                                       .frame(width: 50, height: 50)
-                                       .clipShape(Circle())
-                                       .background {
-                                           Circle().fill(Color("AppGray"))
-                                       }
-                                       .foregroundStyle(.whiteOrDark)
-                               } else {
-                                   Image(systemName: "person.fill")
-                                       .scaledToFill()
-                                       .clipShape(Circle())
-                                       .frame(width: 50, height: 50)
-                                       .background {
-                                           Circle().fill(Color("AppGray"))
-                                       }
-                                       .foregroundStyle(.whiteOrDark)
-                               }
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            } else {
+                                Image(systemName: "person.fill")
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50)
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            }
                             Button(action: {
                                 isAddPostClicked = true
                             }, label: {
@@ -66,13 +66,12 @@ struct HomeView: View {
                     .background(.whiteOrDark)
                     Spacer().frame(height: 8)
                     VStack {
-                        if !isLoading {
-                            ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                if let user = user {
-                                    PostView(user: user, post: post)
-                                }
+                        ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
+                            if let user = user {
+                                PostView(user: user, post: post)
                             }
                         }
+                        
                         
                     }
                 }
@@ -94,12 +93,9 @@ struct HomeView: View {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
         .onAppear() {
-            Task {
-                fetchUser()
-                getProfilePic(photoId: user?.profilePic ?? "")
-                await fetchAllPosts()
-                isLoading = false
-           }
+            fetchUser()
+            fetchAllPosts()
+            isLoading = false
         }
     }
     func fetchUser() {
@@ -110,7 +106,7 @@ struct HomeView: View {
             }
         }
     }
-    func fetchAllPosts() async {
+    func fetchAllPosts() {
         authViewModel.fetchAllPostsFromFirebase()
     }
     func getProfilePic(photoId: String) {

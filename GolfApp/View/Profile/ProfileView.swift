@@ -7,6 +7,8 @@
 
 import SwiftUI
 import FirebaseDatabase
+import AlertToast
+
 
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -24,6 +26,7 @@ struct ProfileView: View {
     @State private var isOtherUserClicked: Bool = false
     @State var otherUser: OtherUser?
     @State var image: UIImage?
+    @State var isSubmitButtonPressed: Bool = false
 
     
     
@@ -148,21 +151,27 @@ struct ProfileView: View {
                                 }
                                
                                 
-                                if isEditButtonClicked {
-                                    EditProfileView()
-                                }
+                                
                             }
                         }
                         
                     }
                 }
-                
             } else {
                 LoadingView()
             }
             
            
         }
+        .toast(isPresenting: $isSubmitButtonPressed) {
+            AlertToast(displayMode: .banner(.pop), type: .complete(.green), title: "Profile updated successfully")
+        }
+        .navigationDestination(isPresented: $isEditButtonClicked, destination: {
+            if let user = user {
+                EditProfileView(user: user, isSubmitButtonPressed: $isSubmitButtonPressed)
+                    .navigationTitle("Update profile")
+            }
+        })
         .navigationDestination(isPresented: $isAddFriendClicked) {
             if let currentUser = user {
                 SearchDetailView(searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
@@ -189,7 +198,6 @@ struct ProfileView: View {
         .onAppear(){
             Task {
                 await fetchData()
-                isLoading = false
             }
         }
         .onChange(of: searchText) {
@@ -200,6 +208,7 @@ struct ProfileView: View {
     func fetchData() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
+            isLoading = false
         }
     }
     
