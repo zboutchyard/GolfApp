@@ -10,6 +10,9 @@ import SwiftUI
 struct OtherUserProfileView: View {
     @State var otherUser: OtherUser
     @State var user: User
+    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @State var isChatViewTriggered: Bool = false
+    @State var chatId: String?
     var body: some View {
         ScrollView {
             VStack (spacing: 0){
@@ -46,7 +49,9 @@ struct OtherUserProfileView: View {
                         Text("Friend")
                             .padding()
                     } else {
-                        Button(action: {}, label: {
+                        Button(action: {
+                            //TODO: implement add friend function here
+                        }, label: {
                             Text("Add friend")
                         })
                         .buttonStyle(.borderedProminent)
@@ -54,7 +59,19 @@ struct OtherUserProfileView: View {
                     }
                    
                     
-                    Button(action: {}, label: {
+                    Button(action: {
+                        if let chats = user.chats {
+                            for chat in chats {
+                                msgViewModel.fetchChat(chatId: chat) { fetchedChat in
+                                    if fetchedChat?.participants?.contains(otherUser.id) == true {
+                                        chatId = chat
+                                        isChatViewTriggered = true
+                                    }
+                                }
+                            }
+                            isChatViewTriggered = true
+                        }
+                    }, label: {
                         Text("Message")
                     })
                     .buttonStyle(.borderedProminent)
@@ -66,7 +83,13 @@ struct OtherUserProfileView: View {
             }
             .background(Color.whiteOrDark)
         }
-        
+        .navigationDestination(isPresented: $isChatViewTriggered) {
+            if let chatId = chatId {
+                ChatView(chatId: chatId, otherUser: otherUser)
+            } else {
+                NewChatView(otherUser: otherUser, isPresented: .constant(true))
+            }
+        }
     }
 }
 

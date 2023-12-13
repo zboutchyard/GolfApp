@@ -103,6 +103,7 @@ struct AlertView: View {
                             .padding([.leading, .trailing])
                         })
                         .buttonStyle(.plain)
+                        Divider()
                     }
                     .onAppear {
                         Task {
@@ -112,7 +113,6 @@ struct AlertView: View {
                         }
                     }
                 }
-                Divider()
             } else {
                 LoadingView()
             }
