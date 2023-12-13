@@ -79,12 +79,13 @@ struct EditProfileView: View {
                                 toggleInterest(interest: item)
                             }, label: {
                                 Text(item)
+                                    .foregroundStyle(interestArray.contains(item) ? Color.white : Color.black)                                    
                                     .frame(width: 80, height: 10)
                                     .padding()
                                     .background(
                                         RoundedRectangle(cornerRadius: 25)
                                             .stroke(interestArray.contains(item) ? Color.blue : Color.gray, lineWidth: 2)
-                                    )
+                                            .fill(interestArray.contains(item) ? Color.blue : Color.white))
                             })
                         }
                     }
@@ -167,7 +168,7 @@ struct EditProfileView: View {
         //        isSelected.toggle()
     }
 }
-//
-//#Preview {
-//    EditProfileView(user: User(firstName: "zack", lastName: "boutchyard", email: "zackboutchyard@gmail.com", bio: "hello there how are you", interests: "baseball, basketball, football, soccer", handicap: 3, homeCourse: "Asheboro Municipal"))
-//}
+
+#Preview {
+    EditProfileView(user: User(firstName: "zack", lastName: "boutchyard", email: "zackboutchyard@gmail.com", bio: "hello there how are you", interests: "baseball, basketball, football, soccer", handicap: 3, homeCourse: "Asheboro Municipal"), isSubmitButtonPressed: .constant(false))
+}

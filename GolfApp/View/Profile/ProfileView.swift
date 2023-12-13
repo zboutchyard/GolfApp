@@ -170,6 +170,7 @@ struct ProfileView: View {
             if let user = user {
                 EditProfileView(user: user, isSubmitButtonPressed: $isSubmitButtonPressed)
                     .navigationTitle("Update profile")
+                    .background(.whiteOrDark)
             }
         })
         .navigationDestination(isPresented: $isAddFriendClicked) {
