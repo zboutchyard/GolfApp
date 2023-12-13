@@ -21,53 +21,60 @@ struct PostDetailView: View {
                 PostView(post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused)
                 Divider()
                 if let comments = post.comments {
-                    ForEach(comments, id: \.self) { comment in
-                        HStack {
-                            Image(systemName: "person.fill")
-                                .scaledToFill()
-                                .foregroundStyle(.whiteOrDark)
-                                .clipShape(Circle())
-                                .frame(width: 50, height: 50)
-                                .background {
-                                    Circle().fill(Color("AppGray"))
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            ForEach(comments, id: \.self) { comment in
+                                HStack {
+                                    Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .foregroundStyle(.whiteOrDark)
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                    VStack {
+                                        if let otherUser = otherUsers[comment.userCommenting] {
+                                            Text("\(otherUser.firstName) \(otherUser.lastName)")
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            Text(comment.text)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        } else {
+                                            ProgressView()
+                                        }
+                                    }
+                                    .onAppear {
+                                        fetchOtherUserById(id: comment.userCommenting)
+                                    }
                                 }
-                            VStack {
-                                if let otherUser = otherUsers[comment.userCommenting] {
-                                    Text("\(otherUser.firstName) \(otherUser.lastName)")
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Text(comment.text)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                } else {
-                                    ProgressView()
-                                }
-                            }
-                            .onAppear {
-                                fetchOtherUserById(id: comment.userCommenting)
+                                .padding()
                             }
                         }
-                        .padding()
                     }
+                    
                     Divider()
                 }
             }
+            
+            
         }
         .onTapGesture {
             isTextFieldFocused = false
         }
         .background(.whiteOrDark)
-        .toolbar {
-            if let post = post {
-                MessageToolbar(post: post ,isTextFieldFocused: _isTextFieldFocused) {
-                    authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
-                        self.post = fetchedPost
-                    }
+        if let post = post {
+            MessageToolbar(post: post ,isTextFieldFocused: _isTextFieldFocused) {
+                authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
+                    self.post = fetchedPost
                 }
             }
-           
         }
+            
+           
+        
     }
     
-    struct MessageToolbar: ToolbarContent {
+    struct MessageToolbar: View {
         @State var post: Post
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
@@ -75,8 +82,7 @@ struct PostDetailView: View {
         @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
 
         
-        var body: some ToolbarContent {
-            ToolbarItem(placement: .bottomBar) {
+        var body: some View {
                 HStack {
                     CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
                     Button(action: {
@@ -97,7 +103,7 @@ struct PostDetailView: View {
                 .background(Color("AppGray"))
                 .cornerRadius(50)
                 .padding()
-            }
+            
         }
     }
     
