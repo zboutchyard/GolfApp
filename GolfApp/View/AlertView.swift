@@ -19,6 +19,8 @@ struct AlertView: View {
     @State var isRequestDeclined: Bool = false
     @State var otherUserNotification: OtherUser?
     @State private var otherUserNotifications: [String: OtherUser] = [:]
+    @State var isNotificationClicked: Bool = false
+    @State var selectedPost: Post?
     
     
     
@@ -76,7 +78,10 @@ struct AlertView: View {
                 if let notifications = user?.notifications {
                     ForEach(notifications, id: \.self) { notification in
                         Button(action: {
-                            
+                            authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
+                                selectedPost = fetchedPost
+                                isNotificationClicked = true
+                            }
                         }, label: {
                             HStack {
                                 Image(systemName: "person.fill")
@@ -130,7 +135,9 @@ struct AlertView: View {
         .toast(isPresenting: $isRequestDeclined) {
             AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
         }
-        
+        .navigationDestination(isPresented: $isNotificationClicked) {
+            PostDetailView(post: selectedPost)
+        }
         
     }
     

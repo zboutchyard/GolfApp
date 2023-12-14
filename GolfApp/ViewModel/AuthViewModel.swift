@@ -153,10 +153,11 @@ class AuthViewModel: ObservableObject {
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
                            let timeStamp = notificationData["timeStamp"] as? Timestamp,
-                           let userCommenting = notificationData["userCommenting"] as? String
+                           let userCommenting = notificationData["userCommenting"] as? String,
+                            let postId = notificationData["postId"] as? String
                         {
                             let timeStamp = timeStamp.dateValue()
-                            return Notification(text: text, timeStamp: timeStamp, userCommenting: userCommenting)
+                            return Notification(text: text, timeStamp: timeStamp, userCommenting: userCommenting, postId: postId)
                         }
                         return nil
                     }
@@ -347,9 +348,16 @@ class AuthViewModel: ObservableObject {
             "userCommenting": uid
         ]
         
+        let notificationData: [String: Any] = [
+            "text": text,
+            "timeStamp": Date.now,
+            "userCommenting": uid,
+            "postId": postId
+        ]
+        
         let notificationRef = Firestore.firestore().collection("Users").document(postOwner)
         notificationRef.updateData([
-            "notifications": FieldValue.arrayUnion([commentData])
+            "notifications": FieldValue.arrayUnion([notificationData])
         ]) { error in
             if let error = error {
                 print("Error adding notification: \(error.localizedDescription)")

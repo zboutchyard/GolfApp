@@ -32,6 +32,7 @@ struct Notification: Codable, Hashable {
     var text: String
     var timeStamp: Date
     var userCommenting: String
+    var postId: String
 }
 
 struct OtherUser: Codable, Hashable {

@@ -105,14 +105,14 @@
 		108C32962B1976FB008F59F9 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
-		108D36C32AF57C6A005DAD22 /* GolfApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GolfApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		108D36C32AF57C6A005DAD22 /* Par Pals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Par Pals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		108D36C62AF57C6A005DAD22 /* GolfAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppApp.swift; sourceTree = "<group>"; };
 		108D36C82AF57C6A005DAD22 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		108D36CA2AF57C6B005DAD22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		108D36CD2AF57C6B005DAD22 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		108D36D32AF57C6C005DAD22 /* GolfAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GolfAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		108D36D32AF57C6C005DAD22 /* Par PalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Par PalsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		108D36D72AF57C6C005DAD22 /* GolfAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppTests.swift; sourceTree = "<group>"; };
-		108D36DD2AF57C6C005DAD22 /* GolfAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GolfAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		108D36DD2AF57C6C005DAD22 /* Par PalsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Par PalsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		108D36E12AF57C6C005DAD22 /* GolfAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppUITests.swift; sourceTree = "<group>"; };
 		108D36E32AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		108D36F32AF57FB0005DAD22 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -218,9 +218,9 @@
 		108D36C42AF57C6A005DAD22 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				108D36C32AF57C6A005DAD22 /* GolfApp.app */,
-				108D36D32AF57C6C005DAD22 /* GolfAppTests.xctest */,
-				108D36DD2AF57C6C005DAD22 /* GolfAppUITests.xctest */,
+				108D36C32AF57C6A005DAD22 /* Par Pals.app */,
+				108D36D32AF57C6C005DAD22 /* Par PalsTests.xctest */,
+				108D36DD2AF57C6C005DAD22 /* Par PalsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -346,9 +346,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		108D36C22AF57C6A005DAD22 /* GolfApp */ = {
+		108D36C22AF57C6A005DAD22 /* Par Pals */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 108D36E72AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfApp" */;
+			buildConfigurationList = 108D36E72AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par Pals" */;
 			buildPhases = (
 				5FD45A917D156195D693F253 /* [CP] Check Pods Manifest.lock */,
 				108D36BF2AF57C6A005DAD22 /* Sources */,
@@ -360,7 +360,7 @@
 			);
 			dependencies = (
 			);
-			name = GolfApp;
+			name = "Par Pals";
 			packageProductDependencies = (
 				1032E9C12AF5868C00001048 /* FirebaseAuth */,
 				1032E9C32AF5869300001048 /* FirebaseFirestore */,
@@ -369,12 +369,12 @@
 				100634962B1303DA005CF4CB /* AlertToast */,
 			);
 			productName = GolfApp;
-			productReference = 108D36C32AF57C6A005DAD22 /* GolfApp.app */;
+			productReference = 108D36C32AF57C6A005DAD22 /* Par Pals.app */;
 			productType = "com.apple.product-type.application";
 		};
-		108D36D22AF57C6C005DAD22 /* GolfAppTests */ = {
+		108D36D22AF57C6C005DAD22 /* Par PalsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppTests" */;
+			buildConfigurationList = 108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsTests" */;
 			buildPhases = (
 				8E678A4ED5CFC1B26D9B138F /* [CP] Check Pods Manifest.lock */,
 				108D36CF2AF57C6C005DAD22 /* Sources */,
@@ -386,14 +386,14 @@
 			dependencies = (
 				108D36D52AF57C6C005DAD22 /* PBXTargetDependency */,
 			);
-			name = GolfAppTests;
+			name = "Par PalsTests";
 			productName = GolfAppTests;
-			productReference = 108D36D32AF57C6C005DAD22 /* GolfAppTests.xctest */;
+			productReference = 108D36D32AF57C6C005DAD22 /* Par PalsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		108D36DC2AF57C6C005DAD22 /* GolfAppUITests */ = {
+		108D36DC2AF57C6C005DAD22 /* Par PalsUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppUITests" */;
+			buildConfigurationList = 108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsUITests" */;
 			buildPhases = (
 				4094E8CE684FE5169610A214 /* [CP] Check Pods Manifest.lock */,
 				108D36D92AF57C6C005DAD22 /* Sources */,
@@ -406,9 +406,9 @@
 			dependencies = (
 				108D36DF2AF57C6C005DAD22 /* PBXTargetDependency */,
 			);
-			name = GolfAppUITests;
+			name = "Par PalsUITests";
 			productName = GolfAppUITests;
-			productReference = 108D36DD2AF57C6C005DAD22 /* GolfAppUITests.xctest */;
+			productReference = 108D36DD2AF57C6C005DAD22 /* Par PalsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -434,7 +434,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 108D36BE2AF57C6A005DAD22 /* Build configuration list for PBXProject "GolfApp" */;
+			buildConfigurationList = 108D36BE2AF57C6A005DAD22 /* Build configuration list for PBXProject "Par Pals" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -451,9 +451,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				108D36C22AF57C6A005DAD22 /* GolfApp */,
-				108D36D22AF57C6C005DAD22 /* GolfAppTests */,
-				108D36DC2AF57C6C005DAD22 /* GolfAppUITests */,
+				108D36C22AF57C6A005DAD22 /* Par Pals */,
+				108D36D22AF57C6C005DAD22 /* Par PalsTests */,
+				108D36DC2AF57C6C005DAD22 /* Par PalsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -657,12 +657,12 @@
 /* Begin PBXTargetDependency section */
 		108D36D52AF57C6C005DAD22 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 108D36C22AF57C6A005DAD22 /* GolfApp */;
+			target = 108D36C22AF57C6A005DAD22 /* Par Pals */;
 			targetProxy = 108D36D42AF57C6C005DAD22 /* PBXContainerItemProxy */;
 		};
 		108D36DF2AF57C6C005DAD22 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 108D36C22AF57C6A005DAD22 /* GolfApp */;
+			target = 108D36C22AF57C6A005DAD22 /* Par Pals */;
 			targetProxy = 108D36DE2AF57C6C005DAD22 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -866,7 +866,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GolfApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GolfApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Par Pals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Par Pals";
 			};
 			name = Debug;
 		};
@@ -887,7 +887,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GolfApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GolfApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Par Pals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Par Pals";
 			};
 			name = Release;
 		};
@@ -932,7 +932,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		108D36BE2AF57C6A005DAD22 /* Build configuration list for PBXProject "GolfApp" */ = {
+		108D36BE2AF57C6A005DAD22 /* Build configuration list for PBXProject "Par Pals" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				108D36E52AF57C6C005DAD22 /* Debug */,
@@ -941,7 +941,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		108D36E72AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfApp" */ = {
+		108D36E72AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par Pals" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				108D36E82AF57C6C005DAD22 /* Debug */,
@@ -950,7 +950,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppTests" */ = {
+		108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				108D36EB2AF57C6C005DAD22 /* Debug */,
@@ -959,7 +959,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "GolfAppUITests" */ = {
+		108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				108D36EE2AF57C6C005DAD22 /* Debug */,

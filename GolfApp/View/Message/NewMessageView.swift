@@ -13,8 +13,10 @@ struct NewMessageView: View {
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State var otherUsers: [OtherUser] = []
     @Binding var isPresented: Bool
-    @State var isUserClicked: Bool = false
+    @State var isChatViewTriggered: Bool = false
     @State var otherUser: OtherUser?
+    @State var chatId: String?
+
 
     var body: some View {
         NavigationStack {
@@ -53,16 +55,29 @@ struct NewMessageView: View {
                                     }
                                     Spacer()
                                 } .onTapGesture {
+                                    if let chats = user.chats {
+                                        for chat in chats {
+                                            msgViewModel.fetchChat(chatId: chat) { fetchedChat in
+                                                if fetchedChat?.participants?.contains(otherUser?.id ?? "") == true {
+                                                    chatId = chat
+                                                    isChatViewTriggered = true
+                                                }
+                                            }
+                                        }
+                                        isChatViewTriggered = true
+                                    }
                                     otherUser = friend
-                                    isUserClicked = true
+                                    isChatViewTriggered = true
                                 }
                                 Divider()
                                 
                         }
                 }
-                .navigationDestination(isPresented: $isUserClicked, destination: {
-                    if otherUser != nil {
-                        NewChatView(otherUser: otherUser!, isPresented: $isPresented)
+                .navigationDestination(isPresented: $isChatViewTriggered, destination: {
+                    if let chatId = chatId {
+                        ChatView(chatId: chatId, otherUser: otherUser)
+                    } else {
+                        NewChatView(otherUser: otherUser, isPresented: .constant(true))
                     }
                 })
             }
