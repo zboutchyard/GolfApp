@@ -19,45 +19,63 @@ struct AllChatsView: View {
     @State private var selectedChatId: String?
     
     var body: some View {
-            VStack {
-                HStack {
-                    Text("Messages")
-                        .font(.title)
-                        .frame(maxWidth: .infinity)
-                    Button(action: {
-                        isAddMessageButtonClicked = true
-                    }) {
-                        Image(systemName: "square.and.pencil")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                    } .padding(.trailing)
+        VStack {
+            HStack {
+                Text("Messages")
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
+                Button(action: {
+                    isAddMessageButtonClicked = true
+                }) {
+                    Image(systemName: "square.and.pencil")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                } .padding(.trailing)
+            }
+            Divider()
+            if let chats = user?.chats, chats.count > 0 {
+                List {
+                    
+                    ForEach((chats), id: \.self){  chat in
+                        AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .onDelete(perform: deleteItem)
                 }
-                Divider()
-                    List {
-                        if let chats = user?.chats {
-                                ForEach((chats), id: \.self){  chat in
-                                    AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
-                                        .frame(maxWidth: .infinity)
-                                }
-                                .onDelete(perform: deleteItem)
-                        }
-                    }
-                    .listStyle(.plain)
-                    .sheet(isPresented: $isAddMessageButtonClicked) {
-                        if let user = user {
-                            NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)
-                        }
-                    }
-            } 
-            .toolbar {
-                EditButton()
+                .listStyle(.plain)
+                
             }
-            .onAppear(){
-                getUserData()
+            else {
+                Spacer()
+                Image(systemName: "bubble.left.and.exclamationmark.bubble.right")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 200, maxHeight: 200)
+                Text("You don't have any messages")
+                Button(action: {
+                    isAddMessageButtonClicked = true
+                }, label: {
+                    Text("Start a conversation")
+                })
+                .buttonStyle(.borderedProminent)
+                Spacer()
             }
-            .onChange(of: isAddMessageButtonClicked) {
-                getUserData()
+            
+        }
+        .sheet(isPresented: $isAddMessageButtonClicked) {
+            if let user = user {
+                NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)
             }
+        }
+        .toolbar {
+            EditButton()
+        }
+        .onAppear(){
+            getUserData()
+        }
+        .onChange(of: isAddMessageButtonClicked) {
+            getUserData()
+        }
     }
     func getUserData() {
         authViewModel.fetchUserDataFromFirebase { fetchedUser in

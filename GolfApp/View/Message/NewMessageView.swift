@@ -16,6 +16,9 @@ struct NewMessageView: View {
     @State var isChatViewTriggered: Bool = false
     @State var otherUser: OtherUser?
     @State var chatId: String?
+    @State var isAddFriendClicked: Bool = false
+    @State private var searchText: String = ""
+
 
 
     var body: some View {
@@ -36,6 +39,7 @@ struct NewMessageView: View {
                 }
                 Divider()
                 ScrollView {
+                    if otherUsers.count > 0 {
                         ForEach(otherUsers, id: \.firstName){ friend in
                                 HStack {
                                     Image(systemName: "person.fill")
@@ -72,6 +76,37 @@ struct NewMessageView: View {
                                 Divider()
                                 
                         }
+                    } else {
+                        Spacer()
+                        Image(systemName: "person.crop.circle.badge.questionmark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 200, maxHeight: 200)
+                        Text("In order to start a chat, you'll need a friend. Click below to get started")
+                            .padding(.horizontal)
+                            .multilineTextAlignment(.center)
+                        Button(action: {
+                            isAddFriendClicked = true
+                        }, label: {
+                            Text("Search")
+                        })
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
+                    }
+                        
+                }
+                .navigationDestination(isPresented: $isAddFriendClicked) {
+                        SearchDetailView(searchText: $searchText, user: user, isAddFriendView: .constant(true))
+                            .toolbar(content: {
+                                ToolbarItem(placement: .principal) {
+                                    TextField("search users", text: $searchText)
+                                        .padding(.leading)
+                                        .padding(4)
+                                        .font(.system(size: 20))
+                                        .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
+                                }
+                            })
+                    
                 }
                 .navigationDestination(isPresented: $isChatViewTriggered, destination: {
                     if let chatId = chatId {
