@@ -22,6 +22,7 @@ struct Step2View: View {
     @State var homeCourse: String = ""
     @State var handicapSelection: [Int] = Array(-5...40)
     @State var data: Data?
+    @State var shouldHideButton: Bool = false
     var remainingCharacters: Int {
         if(characterLimit - bioText.count < 0){
             charLimitReached = true
@@ -38,7 +39,7 @@ struct Step2View: View {
                             .fontWeight(.semibold)
                             .kerning(1.2)
                             .multilineTextAlignment(.center)
-                            .padding(.top)
+                            .padding(.top, 80)
                         Text(remainingCharacters >= 0 ? "Remaining Characters: \(remainingCharacters)": "You have exceeded the character limit")
                             .foregroundColor(remainingCharacters > -1 ? .green : .red)
                             .font(.caption)
@@ -47,8 +48,12 @@ struct Step2View: View {
                             .padding()
                             .font(.system(size: 12))
                             .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                            .onTapGesture {
+                                shouldHideButton = true
+                            }
                         Divider()
-                            .padding(.top)
+                            .padding(.top, 40)
+                            .padding(.bottom, 40)
                         Spacer()
                         Text("What is your handicap?")
                             .fontWeight(.semibold)
@@ -63,28 +68,52 @@ struct Step2View: View {
                         .pickerStyle(.wheel)
                         .frame(height: 120)
                         Spacer()
+                            .onTapGesture {
+                                hideKeyboard()
+                                shouldHideButton = false
+                            }
                         Divider()
-                            .padding(.top)
+                            .padding(.top, 40)
+                            .padding(.bottom, 40)
+                            .onTapGesture {
+                                hideKeyboard()
+                                shouldHideButton = false
+                            }
                         Text("Where is your home course?")
                             .fontWeight(.semibold)
                             .kerning(1.2)
                             .multilineTextAlignment(.center)
                             .padding(.top)
-                            .padding(.bottom)
+                            .padding(.bottom, 40)
+                            .onTapGesture {
+                                hideKeyboard()
+                                shouldHideButton = false
+                            }
                         TextField("...Home course", text: $homeCourse)
                             .padding()
                             .font(.system(size: 12))
                             .background(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: .init(1.0)))
+                            .onTapGesture {
+                                shouldHideButton = true
+                            }
                         
                     }
-                
+                    .onTapGesture {
+                        hideKeyboard()
+                        shouldHideButton = false
+                    }
+            }
+            .onTapGesture {
+                hideKeyboard()
+                shouldHideButton = false
             }
             
         }
         .navigationDestination(isPresented: $isStepComplete) {
             Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse, data: data)
         }
-        .overlay(
+        Spacer()
+            .overlay( !shouldHideButton ?
             Button(action: {
                 isStepComplete = true
             }, label: {
@@ -105,12 +134,14 @@ struct Step2View: View {
                         }
                             .padding(-15)
                     ) .disabled(charLimitReached == true)
-            })
+            }) : nil
             ,alignment: .bottom
-        )
+                )
         
-        .padding()
     }
+    private func hideKeyboard() {
+           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+       }
 }
 
 #Preview {
