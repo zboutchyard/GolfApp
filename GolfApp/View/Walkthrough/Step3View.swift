@@ -50,20 +50,19 @@ struct Step3View: View {
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
-                    //some "interests" tiles that a user can click that will be added into an array and sent to firebase
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100, maximum: 120))], alignment: .center, spacing: 50) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 140, maximum: 120))], alignment: .center, spacing: 25) {
                         ForEach(interests, id: \.self) { item in
                             Button(action: {
                                 toggleInterest(interest: item)
-                                print(selectedInterests)
                             }, label: {
                                 Text(item)
+                                    .foregroundStyle(selectedInterests.contains(item) ? Color.white : Color.black)
                                     .frame(width: 80, height: 10)
                                     .padding()
                                     .background(
                                         RoundedRectangle(cornerRadius: 25)
                                             .stroke(selectedInterests.contains(item) ? Color.blue : Color.gray, lineWidth: 2)
-                                    )
+                                            .fill(selectedInterests.contains(item) ? Color.blue : Color.white))
                             })
                         }
                     }
@@ -71,7 +70,7 @@ struct Step3View: View {
                         .fontWeight(.semibold)
                         .kerning(1.2)
                         .multilineTextAlignment(.center)
-                        .padding(.top)
+                        .padding(.top, 60)
                     Spacer(minLength: 100)
                 }
             }

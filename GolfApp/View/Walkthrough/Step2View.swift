@@ -54,20 +54,21 @@ struct Step2View: View {
                         Divider()
                             .padding(.top, 40)
                             .padding(.bottom, 40)
-                        Spacer()
-                        Text("What is your handicap?")
-                            .fontWeight(.semibold)
-                            .kerning(1.2)
-                            .multilineTextAlignment(.center)
-                            .padding(.top)
-                        Picker(selection: $handicap, label: Text("Handicap")) {
-                            ForEach(handicapSelection, id: \.self) { value in
-                                Text("\(value)")
+                        HStack {
+                            Text("What is your handicap?")
+                                .fontWeight(.semibold)
+                                .kerning(1.2)
+                                .multilineTextAlignment(.center)
+                                .padding(.top)
+                            Picker(selection: $handicap, label: Text("Handicap")) {
+                                ForEach(handicapSelection, id: \.self) { value in
+                                    Text("\(value)")
+                                }
                             }
+                            .pickerStyle(.wheel)
+                            .frame(height: 80)
                         }
-                        .pickerStyle(.wheel)
-                        .frame(height: 120)
-                        Spacer()
+                        
                             .onTapGesture {
                                 hideKeyboard()
                                 shouldHideButton = false
@@ -107,13 +108,11 @@ struct Step2View: View {
                 hideKeyboard()
                 shouldHideButton = false
             }
-            
         }
         .navigationDestination(isPresented: $isStepComplete) {
             Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse, data: data)
         }
-        Spacer()
-            .overlay( !shouldHideButton ?
+        if !shouldHideButton {
             Button(action: {
                 isStepComplete = true
             }, label: {
@@ -134,9 +133,9 @@ struct Step2View: View {
                         }
                             .padding(-15)
                     ) .disabled(charLimitReached == true)
-            }) : nil
-            ,alignment: .bottom
-                )
+            })
+        }
+          
         
     }
     private func hideKeyboard() {
