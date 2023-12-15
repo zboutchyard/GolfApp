@@ -1,0 +1,6 @@
+framework module Pods_Par_Pals {
+  umbrella header "Pods-Par Pals-umbrella.h"
+
+  export *
+  module * { export * }
+}

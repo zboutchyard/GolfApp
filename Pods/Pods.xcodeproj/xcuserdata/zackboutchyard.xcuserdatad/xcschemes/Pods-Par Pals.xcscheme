@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CD263C8A66AA4F0FE1F2A1244F38FB39"
-               BuildableName = "Pods_GolfAppTests.framework"
-               BlueprintName = "Pods-GolfAppTests"
+               BlueprintIdentifier = "D40BC757693119AFF1DB65F78ABC5983"
+               BuildableName = "Pods_Par_Pals.framework"
+               BlueprintName = "Pods-Par Pals"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

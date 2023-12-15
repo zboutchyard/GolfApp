@@ -57,9 +57,7 @@
 		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
-		6B4E69A1B2E2663A4605B112 /* Pods_GolfAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */; };
-		A3FBD9BD1F77F7007A6A1CE9 /* Pods_GolfApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */; };
-		A4D3D401333A1DBA13E8B7AE /* Pods_GolfApp_GolfAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */; };
+		3AE4B546514D82AC8163CA3D /* Pods_Par_Pals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C03C9F9BBEDBEC750CD41F /* Pods_Par_Pals.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +78,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfAppTests.release.xcconfig"; path = "Target Support Files/Pods-GolfAppTests/Pods-GolfAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		100634982B1390FA005CF4CB /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		1006349A2B13EDA8005CF4CB /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1006349C2B16D3CD005CF4CB /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
@@ -127,13 +124,10 @@
 		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
-		112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp-GolfAppUITests.release.xcconfig"; path = "Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests.release.xcconfig"; sourceTree = "<group>"; };
-		121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfApp_GolfAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp-GolfAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfAppTests.debug.xcconfig"; path = "Target Support Files/Pods-GolfAppTests/Pods-GolfAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		55C03C9F9BBEDBEC750CD41F /* Pods_Par_Pals.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Par_Pals.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.release.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.release.xcconfig"; sourceTree = "<group>"; };
 		87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.debug.xcconfig"; sourceTree = "<group>"; };
-		E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA09D7336AA6011BA26F8649 /* Pods-Par Pals.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.debug.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.debug.xcconfig"; sourceTree = "<group>"; };
 		FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.release.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,7 +141,7 @@
 				1032E9C22AF5868C00001048 /* FirebaseAuth in Frameworks */,
 				100634972B1303DA005CF4CB /* AlertToast in Frameworks */,
 				1032E9C42AF5869300001048 /* FirebaseFirestore in Frameworks */,
-				A3FBD9BD1F77F7007A6A1CE9 /* Pods_GolfApp.framework in Frameworks */,
+				3AE4B546514D82AC8163CA3D /* Pods_Par_Pals.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +149,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B4E69A1B2E2663A4605B112 /* Pods_GolfAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +156,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4D3D401333A1DBA13E8B7AE /* Pods_GolfApp_GolfAppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,9 +165,7 @@
 		1032E9C02AF5868C00001048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F73A62D2BE4C9A03E17A697B /* Pods_GolfApp.framework */,
-				121104FE68CCECA3C0763633 /* Pods_GolfApp_GolfAppUITests.framework */,
-				E1A7766BAA2C48D4D0868E2F /* Pods_GolfAppTests.framework */,
+				55C03C9F9BBEDBEC750CD41F /* Pods_Par_Pals.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -335,10 +325,8 @@
 			children = (
 				87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */,
 				FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */,
-				19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */,
-				112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */,
-				74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */,
-				009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */,
+				AA09D7336AA6011BA26F8649 /* Pods-Par Pals.debug.xcconfig */,
+				7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -376,7 +364,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108D36EA2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsTests" */;
 			buildPhases = (
-				8E678A4ED5CFC1B26D9B138F /* [CP] Check Pods Manifest.lock */,
 				108D36CF2AF57C6C005DAD22 /* Sources */,
 				108D36D02AF57C6C005DAD22 /* Frameworks */,
 				108D36D12AF57C6C005DAD22 /* Resources */,
@@ -395,11 +382,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 108D36ED2AF57C6C005DAD22 /* Build configuration list for PBXNativeTarget "Par PalsUITests" */;
 			buildPhases = (
-				4094E8CE684FE5169610A214 /* [CP] Check Pods Manifest.lock */,
 				108D36D92AF57C6C005DAD22 /* Sources */,
 				108D36DA2AF57C6C005DAD22 /* Frameworks */,
 				108D36DB2AF57C6C005DAD22 /* Resources */,
-				B61D1FC2D096A20F1F3289D6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -494,37 +479,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Par Pals/Pods-Par Pals-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Par Pals/Pods-Par Pals-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GolfApp/Pods-GolfApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4094E8CE684FE5169610A214 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GolfApp-GolfAppUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Par Pals/Pods-Par Pals-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5FD45A917D156195D693F253 /* [CP] Check Pods Manifest.lock */ = {
@@ -542,50 +505,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GolfApp-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Par Pals-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8E678A4ED5CFC1B26D9B138F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GolfAppTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B61D1FC2D096A20F1F3289D6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GolfApp-GolfAppUITests/Pods-GolfApp-GolfAppUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -789,7 +713,7 @@
 		};
 		108D36E82AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */;
+			baseConfigurationReference = AA09D7336AA6011BA26F8649 /* Pods-Par Pals.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -820,7 +744,7 @@
 		};
 		108D36E92AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */;
+			baseConfigurationReference = 7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -851,7 +775,6 @@
 		};
 		108D36EB2AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 74DD4DCC2B404596FE3A190B /* Pods-GolfAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -872,7 +795,6 @@
 		};
 		108D36EC2AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 009A8C302EE876CD7468E03F /* Pods-GolfAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -893,7 +815,6 @@
 		};
 		108D36EE2AF57C6C005DAD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 19D4F2287DA7416A951F5812 /* Pods-GolfApp-GolfAppUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -912,7 +833,6 @@
 		};
 		108D36EF2AF57C6C005DAD22 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 112431B7865724B6EA82234F /* Pods-GolfApp-GolfAppUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
