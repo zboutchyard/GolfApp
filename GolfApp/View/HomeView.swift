@@ -93,20 +93,24 @@ struct HomeView: View {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
         .onAppear() {
-            fetchUser()
-            fetchAllPosts()
-            isLoading = false
+            Task {
+                await fetchUser()
+                await fetchAllPosts()
+            }
         }
     }
-    func fetchUser() {
+    func fetchUser() async {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             if let profilePic = user?.profilePic {
                 getProfilePic(photoId: profilePic)
+                isLoading = false
+            } else {
+                isLoading = false
             }
         }
     }
-    func fetchAllPosts() {
+    func fetchAllPosts() async {
         authViewModel.fetchAllPostsFromFirebase()
     }
     func getProfilePic(photoId: String) {

@@ -11,23 +11,19 @@ import FirebaseCore
 
 @main
 struct GolfAppApp: App {
-    @State private var isRegistered: Bool = false
-    @State private var uid: String = ""
-    
-    func fetchCurrentUser() {
-        if let user = Auth.auth().currentUser {
-            uid = user.uid
-        }
-    }
     
     init() {
         FirebaseApp.configure()
-        fetchCurrentUser()
     }
     var body: some Scene {
         WindowGroup {
-            RegisterView(isRegistered: false)
-            //TODO: set default font here
+            if Auth.auth().currentUser?.email != nil {
+                NavigationStack {
+                    LandingView()
+                }
+            }else {
+                RegisterView(isRegistered: false)
+            }
         }
     }
 }

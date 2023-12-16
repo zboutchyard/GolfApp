@@ -31,10 +31,7 @@ class AuthViewModel: ObservableObject {
     
     
     
-    init() {
-        fetchAllOtherUsersFromFirebase() { user in }
-    }
-    
+        
     
     
     
