@@ -220,15 +220,15 @@ struct ProfileInfoView: View {
             .onAppear(){
                 Task {
                     if let posts = otherUser?.posts {
-                        await fetchPosts(postIds: posts)
+                        fetchPosts(postIds: posts)
                     }
                 }
                 
             }
         }
     }
-    func fetchPosts(postIds: [String]) async {
-        await authViewModel.fetchAllPostsInUserObject(postIds: postIds)
+    func fetchPosts(postIds: [String]) {
+        authViewModel.fetchAllPostsInUserObject(postIds: postIds)
     }
 }
 

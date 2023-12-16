@@ -172,6 +172,7 @@ struct PostView: View {
             otherUser = fetchedOtherUser
         }
     }
+    
 }
 
 //#Preview {
