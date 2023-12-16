@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OtherUserProfileView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var otherUser: OtherUser
     @State var user: User
     @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
@@ -115,6 +115,8 @@ struct OtherUserProfileView: View {
             Task {
                 if let profilePic = otherUser.profilePic {
                         processOtherUserProfileImage(photoId: profilePic)
+                } else {
+                    isLoading = false
                 }
             }
         }

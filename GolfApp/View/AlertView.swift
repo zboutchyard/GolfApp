@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AlertToast
+import FirebaseAuth
 
 struct AlertView: View {
     @State private var user: User?
@@ -77,38 +78,40 @@ struct AlertView: View {
                 }
                 if let notifications = user?.notifications {
                     ForEach(notifications, id: \.self) { notification in
-                        Button(action: {
-                            authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
-                                selectedPost = fetchedPost
-                                isNotificationClicked = true
-                            }
-                        }, label: {
-                            HStack {
-                                Image(systemName: "person.fill")
-                                    .scaledToFill()
-                                    .foregroundStyle(.whiteOrDark)
-                                    .clipShape(Circle())
-                                    .frame(width: 50, height: 50)
-                                    .background {
-                                        Circle().fill(Color("AppGray"))
-                                    }
-                                
-                                VStack {
-                                    Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
-                                        .fontWeight(.medium)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
-                                        .font(.caption2)
-                                        .fontWeight(.light)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                        if notification.userCommenting != Auth.auth().currentUser?.uid {
+                            Button(action: {
+                                authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
+                                    selectedPost = fetchedPost
+                                    isNotificationClicked = true
                                 }
-                                .padding()
-                            }
-                            .padding([.leading, .trailing])
-                        })
-                        .buttonStyle(.plain)
-                        Divider()
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .foregroundStyle(.whiteOrDark)
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                    
+                                    VStack {
+                                        Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
+                                            .fontWeight(.medium)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                        Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
+                                            .font(.caption2)
+                                            .fontWeight(.light)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .padding()
+                                }
+                                .padding([.leading, .trailing])
+                            })
+                            .buttonStyle(.plain)
+                            Divider()
+                        }
                     }
                     .onAppear {
                         Task {

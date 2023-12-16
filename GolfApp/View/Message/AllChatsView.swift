@@ -17,7 +17,6 @@ struct AllChatsView: View {
     @State private var isLoading: Bool = true
     @State private var isAddMessageButtonClicked = false
     @State private var selectedChatId: String?
-    
     var body: some View {
         VStack {
             HStack {
