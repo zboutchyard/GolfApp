@@ -12,22 +12,21 @@ struct ProfileHeadingView: View {
     @Binding var isEditButtonClicked: Bool
     @Binding var isOtherViewTriggered: Bool
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @State var image: UIImage?
-
+    
     var body: some View {
         VStack (spacing: 0){
             VStack {
-                if let image = image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 125, height: 125)
-                        .clipShape(Circle())
-                        .background {
-                            Circle().fill(Color("AppGray"))
-                        }
-                        .padding(22)
-                }else {
+                if let data = user.profilePicData, let uiImage = UIImage(data: data) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 125, height: 125)
+                            .clipShape(Circle())
+                            .background {
+                                Circle().fill(Color("AppGray"))
+                            }
+                            .foregroundStyle(.whiteOrDark)
+                    }else {
                     ProfileImage(imageState: .empty)
                         .scaledToFill()
                         .clipShape(Circle())
@@ -73,26 +72,6 @@ struct ProfileHeadingView: View {
                 
             }
             .background(.gray)
-        }
-        .onAppear() {
-            if let profilePic = user.profilePic {
-                getProfilePic(photoId: profilePic)
-            }
-        }
-    }
-    func getProfilePic(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if photoId != "" {
-                if let data = fetchedData {
-                    print("Downloaded photo data:", data)
-                    image = UIImage(data: data)
-                } else {
-                    image = nil
-                }
-            } else {
-                image = nil
-            }
-            
         }
     }
 }

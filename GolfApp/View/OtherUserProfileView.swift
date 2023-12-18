@@ -14,24 +14,21 @@ struct OtherUserProfileView: View {
     @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
-    @State var image: UIImage?
-    @State var isLoading: Bool = true
     var body: some View {
         ScrollView {
-            if !isLoading {
                 VStack (spacing: 0){
                     VStack {
-                        if let image = image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 125, height: 125)
-                                .clipShape(Circle())
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
-                                .padding(22)
-                        }else {
+                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            }else {
                             ProfileImage(imageState: .empty)
                                 .scaledToFill()
                                 .clipShape(Circle())
@@ -99,9 +96,7 @@ struct OtherUserProfileView: View {
                    
                 }
                 .background(Color.whiteOrDark)
-            } else {
-                LoadingView()
-            }
+
             
         }
         .navigationDestination(isPresented: $isChatViewTriggered) {
@@ -111,33 +106,7 @@ struct OtherUserProfileView: View {
                 NewChatView(otherUser: otherUser, isPresented: .constant(true))
             }
         }
-        .onAppear() {
-            Task {
-                if let profilePic = otherUser.profilePic {
-                        processOtherUserProfileImage(photoId: profilePic)
-                } else {
-                    isLoading = false
-                }
-            }
-        }
-    }
-    func processOtherUserProfileImage(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if photoId != "" {
-                if let data = fetchedData {
-                    print("Downloaded photo data:", data)
-                    image = UIImage(data: data)
-                    isLoading = false
-                } else {
-                    image = nil
-                    isLoading = false
-                }
-            } else {
-                image = nil
-                isLoading = false
-            }
-            
-        }
+        .background(Color.whiteOrDark)
     }
 }
 

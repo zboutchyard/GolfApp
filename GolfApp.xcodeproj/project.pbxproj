@@ -35,6 +35,7 @@
 		1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */; };
 		1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EC2AFB1E5300001048 /* AllChatsView.swift */; };
 		10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10551A032B22BC0A00218E1D /* LoadingView.swift */; };
+		10696A2C2B2E1FDC0011FE9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */; };
 		108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32962B1976FB008F59F9 /* PostDetailView.swift */; };
 		108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */; };
 		108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */; };
@@ -99,6 +100,7 @@
 		1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		1032E9EC2AFB1E5300001048 /* AllChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatsView.swift; sourceTree = "<group>"; };
 		10551A032B22BC0A00218E1D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		108C32962B1976FB008F59F9 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				108C32962B1976FB008F59F9 /* PostDetailView.swift */,
 				108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */,
 				10551A032B22BC0A00218E1D /* LoadingView.swift */,
+				10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -556,6 +559,7 @@
 				108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */,
 				1032E9C82AF665BF00001048 /* User.swift in Sources */,
 				108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */,
+				10696A2C2B2E1FDC0011FE9B /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

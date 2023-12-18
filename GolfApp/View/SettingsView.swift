@@ -6,10 +6,29 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SettingsView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @State var isUserSignedOut: Bool = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Spacer()
+            Button(action: {
+                Task {
+                    authViewModel.signOut()
+                    isUserSignedOut = true
+                }
+            }, label: {
+                Text("Log out")
+            })
+            Spacer()
+        }
+        .navigationDestination(isPresented: $isUserSignedOut) {
+            LoginView(isLoggedIn: false)
+                .navigationBarBackButtonHidden()
+        }
+       
     }
 }
 

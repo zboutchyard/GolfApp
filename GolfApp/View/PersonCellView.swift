@@ -12,23 +12,22 @@ struct PersonCellView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var post: Post?
     @Binding var isPostView: Bool
-    @State var image: UIImage?
     
     var body: some View {
         if isPostView {
             if let post = post {
                 HStack {
-                    if let image = image {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .background {
-                                Circle().fill(Color("AppGray"))
-                            }
-                            .foregroundStyle(.whiteOrDark)
-                    } else {
+                    if let data = otherUser?.profilePicData, let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        } else {
                         Image(systemName: "person.fill")
                             .scaledToFill()
                             .clipShape(Circle())
@@ -58,10 +57,7 @@ struct PersonCellView: View {
                     
                 }
                 .onAppear() {
-                    Task {
-                        await getUser(userId: post.user)
-                    }
-                    
+                    getUser(userId: post.user)
                 }
                 .padding([.leading, .trailing, .top])
             }
@@ -71,17 +67,17 @@ struct PersonCellView: View {
         }
         if !isPostView {
             HStack {
-                if let image = image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        .background {
-                            Circle().fill(Color("AppGray"))
-                        }
-                        .foregroundStyle(.whiteOrDark)
-                } else {
+                if let data = otherUser?.profilePicData, let uiImage = UIImage(data: data) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                            .background {
+                                Circle().fill(Color("AppGray"))
+                            }
+                            .foregroundStyle(.whiteOrDark)
+                    } else {
                     Image(systemName: "person.fill")
                         .scaledToFill()
                         .clipShape(Circle())
@@ -91,18 +87,18 @@ struct PersonCellView: View {
                         }
                         .foregroundStyle(.whiteOrDark)
                 }
-                    if let user = otherUser {
-                        Text("\(user.firstName) \(user.lastName)")
-                            .fontWeight(.semibold)
-                            .kerning(1.2)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                if let user = otherUser {
+                    Text("\(user.firstName) \(user.lastName)")
+                        .fontWeight(.semibold)
+                        .kerning(1.2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 
             }
             .onAppear() {
-                    if let user = otherUser {
-                        getUser(userId: user.id)
-                    }
+                if let user = otherUser {
+                    getUser(userId: user.id)
+                }
                 
                 
             }
@@ -114,26 +110,6 @@ struct PersonCellView: View {
     func getUser(userId: String) {
         authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedUser in
             otherUser = fetchedUser
-            if let profilePic = otherUser?.profilePic {
-                getProfilePic(photoId: profilePic)
-                
-            }
-        }
-    }
-    
-    func getProfilePic(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if photoId != "" {
-                if let data = fetchedData {
-                    print("Downloaded photo data:", data)
-                    image = UIImage(data: data)
-                } else {
-                    image = nil
-                }
-            } else {
-                image = nil
-            }
-            
         }
     }
 }

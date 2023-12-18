@@ -15,8 +15,6 @@ struct HomeView: View {
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
     @State var isLoading: Bool = true
-    @State var isDoneProcessingImage = false
-    @State var image: UIImage?
     
     var body: some View {
         ScrollView {
@@ -24,17 +22,17 @@ struct HomeView: View {
                 VStack {
                     HStack {
                         HStack {
-                            if let image = image {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                                    .background {
-                                        Circle().fill(Color("AppGray"))
-                                    }
-                                    .foregroundStyle(.whiteOrDark)
-                            } else {
+                            if let data = user?.profilePicData, let uiImage = UIImage(data: data) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                } else {
                                 Image(systemName: "person.fill")
                                     .scaledToFill()
                                     .clipShape(Circle())
@@ -94,34 +92,19 @@ struct HomeView: View {
         })
         .onAppear() {
             Task {
-                await fetchUser()
-                await fetchAllPosts()
+                fetchAllPosts()
+                fetchUser()
+                isLoading = false
             }
         }
     }
-    func fetchUser() async {
+    func fetchUser() {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
-            if let profilePic = user?.profilePic {
-                getProfilePic(photoId: profilePic)
-                isLoading = false
-            } else {
-                isLoading = false
-            }
         }
     }
-    func fetchAllPosts() async {
+    func fetchAllPosts() {
         authViewModel.fetchAllPostsFromFirebase()
-    }
-    func getProfilePic(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if let data = fetchedData {
-                print("Downloaded photo data:", data)
-                image = UIImage(data: data)
-            } else {
-                print("Failed to download photo data")
-            }
-        }
     }
 }
 

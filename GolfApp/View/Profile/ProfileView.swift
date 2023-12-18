@@ -27,7 +27,7 @@ struct ProfileView: View {
     @State var otherUser: OtherUser?
     @State var image: UIImage?
     @State var isSubmitButtonPressed: Bool = false
-
+    
     
     
     var body: some View {
@@ -107,25 +107,27 @@ struct ProfileView: View {
                                 Divider()
                                 ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
                                     HStack {
-                                        if let profilePic = friend.profilePic {
-                                                   AsyncImage(photoId: profilePic)
-                                                       .frame(width: 50, height: 50)
-                                                       .clipShape(Circle())
-                                                       .background {
-                                                           Circle().fill(Color("AppGray"))
-                                                       }
-                                                       .foregroundStyle(.whiteOrDark)
-                                               } else {
-                                                   Image(systemName: "person.fill")
-                                                       .scaledToFill()
-                                                       .clipShape(Circle())
-                                                       .frame(width: 50, height: 50)
-                                                       .background {
-                                                           Circle().fill(Color("AppGray"))
-                                                       }
-                                                       .foregroundStyle(.whiteOrDark)
-                                               }
-
+                                        if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .background {
+                                                        Circle().fill(Color("AppGray"))
+                                                    }
+                                                    .foregroundStyle(.whiteOrDark)
+                                            } else {
+                                            Image(systemName: "person.fill")
+                                                .scaledToFill()
+                                                .clipShape(Circle())
+                                                .frame(width: 50, height: 50)
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        }
+                                        
                                         
                                         VStack {
                                             Button {
@@ -149,7 +151,7 @@ struct ProfileView: View {
                                     
                                     Divider()
                                 }
-                               
+                                
                                 
                                 
                             }
@@ -161,7 +163,7 @@ struct ProfileView: View {
                 LoadingView()
             }
             
-           
+            
         }
         .toast(isPresenting: $isSubmitButtonPressed) {
             AlertToast(displayMode: .banner(.pop), type: .complete(.green), title: "Profile updated successfully")
@@ -230,38 +232,6 @@ struct ProfileView: View {
     }
 }
 
-struct AsyncImage: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    let photoId: String
-    @State private var image: UIImage?
-
-    var body: some View {
-        Group {
-            if let image = image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Image(systemName: "person.fill")
-                    .scaledToFill()
-            }
-        }
-        .onAppear {
-            Task {
-                let imageData = authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-                    if let data = fetchedData {
-                        self.image = UIImage(data: data)
-                    }
-                }
-//                if let data = imageData {
-//                    DispatchQueue.main.async {
-//                        self.image = UIImage(data: data)
-//                    }
-//                }
-            }
-        }
-    }
-}
 
 
 #Preview {

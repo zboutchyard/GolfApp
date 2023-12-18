@@ -13,6 +13,8 @@ struct LandingView: View {
     @State private var searchText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
+    @State var isSettingsButtonClicked = false
+    @State var isProfileView = false
     
     init() {
     UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
@@ -26,6 +28,18 @@ struct LandingView: View {
                     .foregroundStyle(Color("Heading"))
                     .padding(.leading)
                 Spacer()
+                if isProfileView {
+                    Button(action: {
+                        Task {
+                            await fetchUser()
+                            isSettingsButtonClicked = true
+                        }
+                    }, label: {
+                        Image(systemName: "gear")
+                    })
+                    .font(.system(size: 25))
+                    .padding(.trailing)
+                }
                 Button(action: {
                     Task {
                         await fetchUser()
@@ -52,17 +66,29 @@ struct LandingView: View {
                         .tabItem {
                             Label("Home", systemImage: "house.fill")
                         }
+                        .onAppear() {
+                            isProfileView = false
+                        }
                     TeeTimeView()
                         .tabItem {
                             Label("Tee Time", systemImage: "figure.golf")
+                        }
+                        .onAppear() {
+                            isProfileView = false
                         }
                     AlertView()
                         .tabItem {
                             Label("Notifications", systemImage: "bell.fill")
                         }
+                        .onAppear() {
+                            isProfileView = false
+                        }
                     ProfileView()
                         .tabItem {
                             Label("Profile", systemImage: "person.fill")
+                        }
+                        .onAppear() {
+                            isProfileView = true
                         }
                 
                 .toolbar(.visible, for: .tabBar)
@@ -90,6 +116,10 @@ struct LandingView: View {
                         }
                     })
             }
+        }
+        .navigationDestination(isPresented: $isSettingsButtonClicked) {
+            SettingsView()
+                .navigationTitle("Settings")
         }
     }
     func fetchUser() async {

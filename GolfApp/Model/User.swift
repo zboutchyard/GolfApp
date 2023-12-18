@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct User: Codable, Hashable {
     var firstName: String
     var lastName: String
     var email: String
-    var profilePic: String?
+    var profilePicData: Data?
     var chats: [String]?
     var friendsList: [String]?
     var bio: String?
@@ -38,7 +39,7 @@ struct Notification: Codable, Hashable {
 struct OtherUser: Codable, Hashable {
     var id: String
     var firstName: String
-    var profilePic: String?
+    var profilePicData: Data?
     var lastName: String
     var bio: String?
     var interests: String?

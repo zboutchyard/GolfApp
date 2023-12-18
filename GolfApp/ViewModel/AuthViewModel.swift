@@ -21,23 +21,28 @@ class AuthViewModel: ObservableObject {
     @Published var posts: [Post] = []
     @Published var post: Post?
     @Published var userPosts: [Post] = []
+    @Published var isUserLoggedIn: Bool = false
     
+    init(){
+        if Auth.auth().currentUser != nil {
+            self.isUserLoggedIn = true
+        } else {
+            self.isUserLoggedIn = false
+        }
+        fetchAllPostsFromFirebase()
+    }
     enum ImageState {
         case empty
         case loading(Progress)
         case success(Image)
         case failure(Error)
     }
-    
-    
-    
-        
-    
-    
-    
+
     enum TransferError: Error {
         case importFailed
     }
+
+    
     
     struct ProfileImage: Transferable {
         let image: Image
@@ -97,6 +102,15 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func signOut() {
+        do {
+            try Auth.auth().signOut()
+            self.isUserLoggedIn = false            
+        } catch {
+            print("error signing out")
+        }
+    }
+    
     
     // ... (other properties and methods)
     
@@ -129,6 +143,7 @@ class AuthViewModel: ObservableObject {
                     let sentRequestsData = data["sentRequests"] as? [[String: Any]] ?? []
                     let receivedRequestsData = data["receivedRequests"] as? [[String: Any]] ?? []
                     
+
                     let sentRequests = sentRequestsData.compactMap { requestData in
                         if let user = requestData["user"] as? String
                         {
@@ -145,6 +160,8 @@ class AuthViewModel: ObservableObject {
                         return nil
                     }
                     
+                   
+                    
                     
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
@@ -158,10 +175,17 @@ class AuthViewModel: ObservableObject {
                         }
                         return nil
                     }
+                    if profilePic != "" {
+                        self.fetchPhotoData(photoId: profilePic) { fetchedPhoto in
+                            let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePicData: fetchedPhoto, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
+                            completion(userModel)
+                        }
+                    } else {
+                        let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
+                        print("User model created successfully.")
+                        completion(userModel)
+                    }
                     
-                    let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePic: profilePic, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
-                    print("User model created successfully.")
-                    completion(userModel)
                 } else {
                     print("User data not present or incomplete in Firestore document.")
                     completion(nil)
@@ -186,6 +210,7 @@ class AuthViewModel: ObservableObject {
                 print("Error downloading photo:", error.localizedDescription)
                 completion(nil)
             } else {
+                print("got photho data \(data)")
                 completion(data)
             }
         }
@@ -209,10 +234,20 @@ class AuthViewModel: ObservableObject {
                     let handicap = data["handicap"] as? Int ?? 0
                     let homeCourse = data["homeCourse"] as? String ?? ""
                     let posts = data["posts"] as? [String] ?? []
-                    let otherUserModel = OtherUser(id: id, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                    if profilePic != nil {
+                        fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
+                            let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            completion(otherUserModel)
+
+                        }
+                    } else {
+                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                        completion(otherUserModel)
+                    }
                     
-                    //                    self.friends?.append(otherUserModel)
-                    completion(otherUserModel)
+                        
+                   
+                
                 } else {
                     print(error?.localizedDescription ?? "")
                     completion(nil)
@@ -240,10 +275,20 @@ class AuthViewModel: ObservableObject {
                         let handicap = data["handicap"] as? Int ?? 0
                         let homeCourse = data["homeCourse"] as? String ?? ""
                         let posts = data["posts"] as? [String] ?? []
-                        let otherUserModel = OtherUser(id: id, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
-                        otherUsers.append(otherUserModel)
-                        self.friendsList = otherUsers
-                        completion(otherUsers)
+                        if profilePic != nil {
+                            fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
+                                let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                                otherUsers.append(otherUserModel)
+                                self.friendsList = otherUsers
+                                completion(otherUsers)
+
+                            }
+                        } else {
+                            let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            otherUsers.append(otherUserModel)
+                            self.friendsList = otherUsers
+                            completion(otherUsers)
+                        }
                     } else {
                         print(error?.localizedDescription ?? "")
                         completion(nil)
@@ -259,6 +304,7 @@ class AuthViewModel: ObservableObject {
     func fetchAllOtherUsersFromFirebase(completion: @escaping ([OtherUser]?) -> Void) {
         let db  = Firestore.firestore()
         let usersRef = db.collection("Users")
+
         
         usersRef.getDocuments { (documents, error) in
             if let documents = documents {
@@ -268,19 +314,35 @@ class AuthViewModel: ObservableObject {
                     if let data = document.data() ?? nil,
                        let firstName = data["firstName"] as? String,
                        let lastName = data["lastName"] as? String {
+                        let profilePic = data["profilePic"] as? String
                         let bio = data["bio"] as? String ?? ""
                         let interests = data["interests"] as? String ?? ""
                         let handicap = data["handicap"] as? Int ?? 0
                         let homeCourse = data["homeCourse"] as? String ?? ""
                         let posts = data["posts"] as? [String] ?? []
-                        let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
-                        if otherUserModel.id != Auth.auth().currentUser?.uid {
-                            otherUsers.append(otherUserModel)
+                        if profilePic != nil {
+                            self.fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
+                                let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                                if otherUserModel.id != Auth.auth().currentUser?.uid {
+                                    otherUsers.append(otherUserModel)
+                                }
+                                self.otherUsers = otherUsers
+                                completion(otherUsers)
+                            }
+                        } else {
+                            let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            if otherUserModel.id != Auth.auth().currentUser?.uid {
+                                otherUsers.append(otherUserModel)
+                            }
+                            self.otherUsers = otherUsers
+                            completion(otherUsers)
                         }
+                       
                     }
+                    self.otherUsers = otherUsers
+                    completion(otherUsers)
                 }
-                self.otherUsers = otherUsers
-                completion(otherUsers)
+              
             } else {
                 print(error?.localizedDescription ?? "")
                 completion(nil)
@@ -378,10 +440,6 @@ class AuthViewModel: ObservableObject {
     
     
     func fetchAllPostsFromFirebase() {
-        guard let user = Auth.auth().currentUser else {
-            return
-        }
-        
         Firestore.firestore().collection("Posts").getDocuments { (snapshot, error) in
             guard let snapshot = snapshot, error == nil else {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")

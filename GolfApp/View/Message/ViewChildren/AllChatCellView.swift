@@ -25,17 +25,17 @@ struct AllChatCellView: View {
                     NavigationStack {
                         if let user = otherUser {
                             HStack {
-                                if let image = image {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .background {
-                                            Circle().fill(Color("AppGray"))
-                                        }
-                                        .foregroundStyle(.whiteOrDark)
-                                } else {
+                                if let data = user.profilePicData, let uiImage = UIImage(data: data) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .background {
+                                                Circle().fill(Color("AppGray"))
+                                            }
+                                            .foregroundStyle(.whiteOrDark)
+                                    } else {
                                     Image(systemName: "person.fill")
                                         .scaledToFill()
                                         .clipShape(Circle())
@@ -91,22 +91,6 @@ struct AllChatCellView: View {
         getAllConversations()
     }
     
-    func processImage(photoId: String) {
-        authViewModel.fetchPhotoData(photoId: photoId) { fetchedData in
-            if photoId != "" {
-                if let data = fetchedData {
-                    print("Downloaded photo data:", data)
-                    image = UIImage(data: data)
-                } else {
-                    image = nil
-                }
-            } else {
-                image = nil
-            }
-            
-        }
-    }
-    
     func getAllConversations()  {
         msgViewModel.fetchChat(chatId: self.chatId) { fetchedChat in
             chatModel = fetchedChat
@@ -122,10 +106,6 @@ struct AllChatCellView: View {
         if let otherUserId = otherParticipants.first {
             authViewModel.fetchOtherUserFromFirebase(id: otherUserId) { fetchedUser in
                 otherUser = fetchedUser
-                if let profilePic = otherUser?.profilePic {
-                        processImage(photoId: profilePic)
-                    
-                }
             }
         }
     }

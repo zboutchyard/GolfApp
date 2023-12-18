@@ -11,19 +11,29 @@ import FirebaseCore
 
 @main
 struct GolfAppApp: App {
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     
     init() {
         FirebaseApp.configure()
     }
     var body: some Scene {
         WindowGroup {
-            if Auth.auth().currentUser?.email != nil {
-                NavigationStack {
-                    LandingView()
-                }
-            }else {
-                RegisterView(isRegistered: false)
+            NavigationStack {
+                ViewSwitcher()
             }
+        }
+        .environmentObject(authViewModel)
+    }
+}
+
+struct ViewSwitcher: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
+    var body: some View {
+        if (authViewModel.isUserLoggedIn) {
+                LandingView()
+        }else {
+            RegisterView(isRegistered: false)
         }
     }
 }
