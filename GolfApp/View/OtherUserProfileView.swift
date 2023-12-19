@@ -14,21 +14,23 @@ struct OtherUserProfileView: View {
     @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
+    @State var isLoading: Bool = true
     var body: some View {
         ScrollView {
-                VStack (spacing: 0){
+            VStack (spacing: 0){
+                if let data = otherUser.profilePicData {
                     VStack {
-                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 125, height: 125)
-                                    .clipShape(Circle())
-                                    .background {
-                                        Circle().fill(Color("AppGray"))
-                                    }
-                                    .foregroundStyle(.whiteOrDark)
-                            }else {
+                        if let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 125, height: 125)
+                                .clipShape(Circle())
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        }else {
                             ProfileImage(imageState: .empty)
                                 .scaledToFill()
                                 .clipShape(Circle())
@@ -39,6 +41,7 @@ struct OtherUserProfileView: View {
                                 .padding(22)
                         }
                     }
+                    
                     .frame(maxWidth: .infinity)
                     .background(Image("golf-background").resizable().ignoresSafeArea())
                     HStack {
@@ -70,7 +73,7 @@ struct OtherUserProfileView: View {
                             .buttonStyle(.borderedProminent)
                             .padding()
                         }
-                       
+                        
                         
                         Button(action: {
                             if let chats = user.chats {
@@ -91,11 +94,16 @@ struct OtherUserProfileView: View {
                         .padding()
                         Spacer()
                     }
-                        ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
-                            .background(Color.whiteOrDark)
-                   
+                    ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
+                        .background(Color.whiteOrDark)
+                    
                 }
-                .background(Color.whiteOrDark)
+                else {
+                    LoadingView()
+                }
+            }
+                    .background(Color.whiteOrDark)
+            
 
             
         }

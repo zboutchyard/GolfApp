@@ -12,9 +12,9 @@ import FirebaseAuth
 struct AlertView: View {
     @State private var user: User?
     @State private var otherUser: OtherUser?
-    @ObservedObject private var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject private var authViewModel: AuthViewModel = AuthViewModel()
     @State private var isLoading: Bool = true
-    @ObservedObject private var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @StateObject private var notificationViewModel: NotificationViewModel = NotificationViewModel()
     @State var otherUserPendingRequest: [OtherUser] = []
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
@@ -31,14 +31,26 @@ struct AlertView: View {
                 if !otherUserPendingRequest.isEmpty {
                     ForEach(otherUserPendingRequest, id: \.id) { otherUser in
                         HStack {
-                            Image(systemName: "person.fill")
-                                .scaledToFill()
-                                .foregroundStyle(.whiteOrDark)
-                                .clipShape(Circle())
-                                .frame(width: 50, height: 50)
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
+                            if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                } else {
+                                Image(systemName: "person.fill")
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50)
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            }
                             VStack {
                                 Text("\(otherUser.firstName) \(otherUser.lastName) sent you a friend request")
                                     .fontWeight(.medium)
@@ -86,14 +98,26 @@ struct AlertView: View {
                                 }
                             }, label: {
                                 HStack {
-                                    Image(systemName: "person.fill")
-                                        .scaledToFill()
-                                        .foregroundStyle(.whiteOrDark)
-                                        .clipShape(Circle())
-                                        .frame(width: 50, height: 50)
-                                        .background {
-                                            Circle().fill(Color("AppGray"))
-                                        }
+                                    if let data = otherUserNotifications[notification.userCommenting]?.profilePicData, let uiImage = UIImage(data: data) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 50, height: 50)
+                                                .clipShape(Circle())
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        } else {
+                                        Image(systemName: "person.fill")
+                                            .scaledToFill()
+                                            .clipShape(Circle())
+                                            .frame(width: 50, height: 50)
+                                            .background {
+                                                Circle().fill(Color("AppGray"))
+                                            }
+                                            .foregroundStyle(.whiteOrDark)
+                                    }
                                     
                                     VStack {
                                         Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
