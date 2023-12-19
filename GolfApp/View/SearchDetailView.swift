@@ -9,7 +9,7 @@ import SwiftUI
 import AlertToast
 
 struct SearchDetailView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @Binding var searchText: String
     @State var user: User?
     @State private var filteredUsers: [OtherUser]?
