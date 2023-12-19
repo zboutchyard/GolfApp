@@ -9,7 +9,7 @@ import SwiftUI
 import AlertToast
 
 struct HomeView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
     @State var user: User?
     @State var isAddPostClicked: Bool = false
@@ -18,72 +18,71 @@ struct HomeView: View {
     
     var body: some View {
         ScrollView {
-            if !isLoading {
-                VStack {
+            VStack {
+                HStack {
                     HStack {
-                        HStack {
-                            if let data = user?.profilePicData, let uiImage = UIImage(data: data) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .background {
-                                            Circle().fill(Color("AppGray"))
-                                        }
-                                        .foregroundStyle(.whiteOrDark)
-                                } else {
-                                Image(systemName: "person.fill")
-                                    .scaledToFill()
-                                    .clipShape(Circle())
-                                    .frame(width: 50, height: 50)
-                                    .background {
-                                        Circle().fill(Color("AppGray"))
-                                    }
-                                    .foregroundStyle(.whiteOrDark)
-                            }
-                            Button(action: {
-                                isAddPostClicked = true
-                            }, label: {
-                                Text("tell me something...")
-                            })
-                            .buttonStyle(.plain)
-                            .opacity(0.3)
+                        if let data = user?.profilePicData, let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding([.top, .leading, .bottom])
-                        Button(action: {}, label: {
-                            HStack {
-                                Image(systemName: "photo.on.rectangle.angled")
-                                    .padding(.trailing)
-                            }
+                        Button(action: {
+                            isAddPostClicked = true
+                        }, label: {
+                            Text("tell me something...")
                         })
                         .buttonStyle(.plain)
+                        .opacity(0.3)
                     }
-                    .ignoresSafeArea()
-                    .background(.whiteOrDark)
-                    Spacer().frame(height: 8)
-                    VStack {
-                        ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                            if let user = user {
-                                PostView(user: user, post: post)
-                            }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding([.top, .leading, .bottom])
+                    Button(action: {}, label: {
+                        HStack {
+                            Image(systemName: "photo.on.rectangle.angled")
+                                .padding(.trailing)
                         }
-                        
-                        
-                    }
+                    })
+                    .buttonStyle(.plain)
                 }
-                .sheet(isPresented: $isAddPostClicked, content: {
-                    if let user = user {
-                        NewPostView(user: user, onPostSubmitted: {
-                            authViewModel.fetchAllPostsFromFirebase()
-                            isPostSubmitted = true
-                        })
+                .ignoresSafeArea()
+                .background(.whiteOrDark)
+                Spacer().frame(height: 8)
+                VStack {
+                    ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
+                        if let user = user, !isLoading {
+                            PostView(user: user, post: post, isLoading: $isLoading)
+                        } else {
+                            LoadingView()
+                        }
                     }
-                })
-            } else {
-                LoadingView()
+                    
+                    
+                }
             }
+            .sheet(isPresented: $isAddPostClicked, content: {
+                if let user = user {
+                    NewPostView(user: user, onPostSubmitted: {
+                        authViewModel.fetchAllPostsFromFirebase()
+                        isPostSubmitted = true
+                    })
+                }
+            })
+            
         }
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)
@@ -91,16 +90,14 @@ struct HomeView: View {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
         .onAppear() {
-            Task {
-                fetchAllPosts()
-                fetchUser()
-                isLoading = false
-            }
+            fetchAllData()
         }
     }
-    func fetchUser() {
+    func fetchAllData() {
+        fetchAllPosts()
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
+            isLoading = false
         }
     }
     func fetchAllPosts() {

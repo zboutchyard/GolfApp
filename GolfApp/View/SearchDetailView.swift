@@ -18,6 +18,7 @@ struct SearchDetailView: View {
     @ObservedObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
     @State var selectedUser: OtherUser?
     @State var isUserSelected: Bool = false
+    @State var isLoading: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -37,7 +38,7 @@ struct SearchDetailView: View {
                                 selectedUser = otherUser
                                 isUserSelected = true
                             }, label: {
-                                PersonCellView(otherUser: otherUser, isPostView: .constant(false))
+                                PersonCellView(otherUser: otherUser, isPostView: .constant(false), isLoading: $isLoading)
                             })
                             .buttonStyle(.plain)
                             if isAddFriendView == true {

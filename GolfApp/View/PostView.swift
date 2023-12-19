@@ -16,12 +16,13 @@ struct PostView: View {
     @State var user: User?
     @State var post: Post
     @State var userId: String = Auth.auth().currentUser?.uid ?? ""
-    @State var isLoading: Bool = false
+    @Binding var isLoading: Bool
     @State var tempPost: Post?
     @State var isPostDetailView: Bool = false
     @FocusState var isTextFieldFocused: Bool
     @State var otherUser: OtherUser?
     @State var otherUserClicked: Bool = false
+    
     
     var body: some View {
         VStack {
@@ -36,7 +37,7 @@ struct PostView: View {
                     userClicked = true
                 }
             }, label: {
-                PersonCellView(post: post, isPostView: .constant(true))
+                PersonCellView(post: post, isPostView: .constant(true), isLoading: $isLoading)
             })
             .buttonStyle(.plain)
             Text(post.text)

@@ -22,7 +22,7 @@ struct OtherUserProfileView: View {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 50, height: 50)
+                                    .frame(width: 125, height: 125)
                                     .clipShape(Circle())
                                     .background {
                                         Circle().fill(Color("AppGray"))

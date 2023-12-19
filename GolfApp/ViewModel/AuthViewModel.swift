@@ -29,7 +29,6 @@ class AuthViewModel: ObservableObject {
         } else {
             self.isUserLoggedIn = false
         }
-        fetchAllPostsFromFirebase()
     }
     enum ImageState {
         case empty

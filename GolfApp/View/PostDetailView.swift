@@ -14,11 +14,12 @@ struct PostDetailView: View {
     @State var otherUsers: [String: OtherUser] = [:]
     @StateObject var authViewModel = AuthViewModel()
     @FocusState var isTextFieldFocused: Bool
+    @State var isLoading: Bool = false
     
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused)
+                PostView(post: post, isLoading: $isLoading, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { proxy in

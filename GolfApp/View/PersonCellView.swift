@@ -12,6 +12,7 @@ struct PersonCellView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var post: Post?
     @Binding var isPostView: Bool
+    @Binding var isLoading: Bool
     
     var body: some View {
         if isPostView {
@@ -48,21 +49,20 @@ struct PersonCellView: View {
                                 .fontWeight(.semibold)
                                 .kerning(1.2)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            
                             Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
-                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.caption)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
                     
                 }
                 .onAppear() {
                     getUser(userId: post.user)
+                    isLoading = false
                 }
                 .padding([.leading, .trailing, .top])
-            }
-            else {
-                ProgressView()
             }
         }
         if !isPostView {
@@ -98,6 +98,7 @@ struct PersonCellView: View {
             .onAppear() {
                 if let user = otherUser {
                     getUser(userId: user.id)
+                    isLoading = false
                 }
                 
                 
