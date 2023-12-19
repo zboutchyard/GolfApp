@@ -26,14 +26,30 @@ struct PostDetailView: View {
                         ScrollView {
                             ForEach(comments, id: \.self) { comment in
                                 HStack {
-                                    Image(systemName: "person.fill")
-                                        .scaledToFill()
-                                        .foregroundStyle(.whiteOrDark)
-                                        .clipShape(Circle())
-                                        .frame(width: 50, height: 50)
-                                        .background {
-                                            Circle().fill(Color("AppGray"))
+                                    if let otherUser = otherUsers[comment.userCommenting] {
+                                        
+                                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .background {
+                                                        Circle().fill(Color("AppGray"))
+                                                    }
+                                                    .foregroundStyle(.whiteOrDark)
+                                            } else {
+                                            Image(systemName: "person.fill")
+                                                .scaledToFill()
+                                                .clipShape(Circle())
+                                                .frame(width: 50, height: 50)
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
                                         }
+
+                                    }
                                     VStack {
                                         if let otherUser = otherUsers[comment.userCommenting] {
                                             Text("\(otherUser.firstName) \(otherUser.lastName)")
@@ -47,13 +63,14 @@ struct PostDetailView: View {
                                     .onAppear {
                                         fetchOtherUserById(id: comment.userCommenting)
                                     }
+
                                 }
                                 .padding()
+                                Divider()
                             }
                         }
                     }
                     
-                    Divider()
                 }
             }
             

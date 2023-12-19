@@ -18,9 +18,8 @@ struct OtherUserProfileView: View {
     var body: some View {
         ScrollView {
             VStack (spacing: 0){
-                if let data = otherUser.profilePicData {
                     VStack {
-                        if let uiImage = UIImage(data: data) {
+                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
@@ -97,10 +96,7 @@ struct OtherUserProfileView: View {
                     ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
                         .background(Color.whiteOrDark)
                     
-                }
-                else {
-                    LoadingView()
-                }
+               
             }
                     .background(Color.whiteOrDark)
             
