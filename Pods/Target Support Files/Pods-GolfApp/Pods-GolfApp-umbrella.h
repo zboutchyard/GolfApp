@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_Par_PalsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_Par_PalsVersionString[];
+FOUNDATION_EXPORT double Pods_GolfAppVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_GolfAppVersionString[];
 

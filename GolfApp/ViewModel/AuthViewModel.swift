@@ -11,6 +11,8 @@ import FirebaseAuth
 import SwiftUI
 import PhotosUI
 import FirebaseStorage
+import FirebaseMessaging
+
 
 class AuthViewModel: ObservableObject {
     @Published var otherUsers: [OtherUser]?
@@ -141,6 +143,7 @@ class AuthViewModel: ObservableObject {
                     let posts = data["posts"] as? [String] ?? []
                     let sentRequestsData = data["sentRequests"] as? [[String: Any]] ?? []
                     let receivedRequestsData = data["receivedRequests"] as? [[String: Any]] ?? []
+                    let fcmToken = data["fcmToken"] as? String
                     
 
                     let sentRequests = sentRequestsData.compactMap { requestData in
@@ -176,11 +179,11 @@ class AuthViewModel: ObservableObject {
                     }
                     if profilePic != "" {
                         self.fetchPhotoData(photoId: profilePic) { fetchedPhoto in
-                            let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePicData: fetchedPhoto, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
+                            let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePicData: fetchedPhoto, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
                             completion(userModel)
                         }
                     } else {
-                        let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications)
+                        let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
                         print("User model created successfully.")
                         completion(userModel)
                     }
@@ -597,6 +600,10 @@ class AuthViewModel: ObservableObject {
             userData["homeCourse"] = homeCourse
         }
         
+        if let fcmToken = Messaging.messaging().fcmToken {
+            userData["fcmToken"] = fcmToken
+        }
+        
         usersCollection.document(uid).setData(userData) { error in
             if let error = error {
                 completion(error)
@@ -606,6 +613,31 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func updateFcmToken() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("Current user not found")
+            return
+        }
+        
+        let fcmToken = Messaging.messaging().fcmToken
+        
+        guard let token = fcmToken else {
+            print("FCM token is not available")
+            return
+        }
+        
+        let db = Firestore.firestore()
+        
+        let userDoc = db.collection("Users").document(currentUserID)
+        
+        userDoc.updateData(["fcmToken": token]) { error in
+            if let error = error {
+                print("Error updating FCM token: \(error.localizedDescription)")
+            } else {
+                print("FCM token updated successfully.")
+            }
+        }
+    }
     
     func uploadPhoto(uiImage: UIImage ) {
         //make sure that the selected image is not nil

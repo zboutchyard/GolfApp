@@ -77,7 +77,9 @@ struct AllChatCellView: View {
                     
                 }
                 .navigationDestination(isPresented: $isMessageClicked) {
-                    ChatView(chatId: chatId, otherUser: otherUser, image: image)
+                    if let otherUser = otherUser {
+                        ChatView(chatId: chatId, otherUser: otherUser, image: image)
+                    }
                }
                .onAppear() {
                    Task {

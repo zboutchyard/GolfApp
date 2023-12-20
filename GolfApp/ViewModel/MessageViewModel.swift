@@ -39,13 +39,15 @@ class MessageViewModel: ObservableObject {
         }
     }
     
-    func sendMessage(chatId: String, text: String) {
+    func sendMessage(chatId: String, text: String, otherUser: OtherUser) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("Current user not found")
             return
         }
         
-        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date()] as [String : Any]
+        let otherUserName = otherUser.firstName
+        
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String : Any]
         let chatRef = db.collection("Chats").document(chatId)
         
         chatRef.updateData([
@@ -59,14 +61,15 @@ class MessageViewModel: ObservableObject {
         }
     }
     
-    func createChatAndSendMessage(text: String, otherUserId: String) {
+    func createChatAndSendMessage(text: String, otherUser: OtherUser) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("Current user not found")
             return
         }
-        let otherUserRef = db.collection("Users").document(otherUserId)
-        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date()] as [String : Any]
-        let participants = [currentUserID, otherUserId]
+        let otherUserRef = db.collection("Users").document(otherUser.id)
+        let otherUserName = otherUser.firstName
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String : Any]
+        let participants = [currentUserID, otherUser.id]
         let chatRef = db.collection("Chats").addDocument(data: ["messages": FieldValue.arrayUnion([newMessage])]) { error in
             if let error = error {
                 print("Error updating document: \(error.localizedDescription)")

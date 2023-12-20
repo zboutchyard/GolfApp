@@ -141,8 +141,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
             <Locations>
@@ -204,8 +204,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
             landmarkName = "fetchOtherUserFromFirebase(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -220,8 +220,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "fetchFriendsFromFirebase(ids:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -236,8 +236,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "fetchFriendsFromFirebase(ids:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -252,8 +252,8 @@
             filePath = "GolfApp/ViewModel/AuthViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "262"
-            endingLineNumber = "262"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
             landmarkName = "fetchFriendsFromFirebase(ids:completion:)"
             landmarkType = "7">
             <Locations>

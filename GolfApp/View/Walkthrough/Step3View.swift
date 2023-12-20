@@ -8,7 +8,6 @@
 import SwiftUI
 import FirebaseStorage
 
-
 struct Step3View: View {
     @StateObject var authViewModel = AuthViewModel()
     //    @StateObject var mockViewModel = MockAuthViewModel()

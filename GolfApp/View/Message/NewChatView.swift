@@ -62,7 +62,7 @@ struct NewChatView: View {
             CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $message)
             Button(action: {
                     if let otherUser {
-                        msgViewModel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)
+                        msgViewModel.createChatAndSendMessage(text: message, otherUser: otherUser)
                         msgViewModel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
                             
                         }

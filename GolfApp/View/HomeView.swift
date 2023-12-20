@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AlertToast
+import FirebaseMessaging
 
 struct HomeView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -98,6 +99,13 @@ struct HomeView: View {
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             isLoading = false
+            let token = Messaging.messaging().fcmToken
+            if let user = fetchedUser {
+                if (token != user.fcmToken) {
+                    authViewModel.updateFcmToken()
+                }
+            }
+            
         }
     }
     func fetchAllPosts() {

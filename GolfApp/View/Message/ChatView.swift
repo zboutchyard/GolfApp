@@ -12,13 +12,12 @@ struct ChatView: View {
     @Environment(\.colorScheme) var colorScheme
     @StateObject var msgViewModel = MessageViewModel()
     @State var chatId: String
-    @State var otherUser: OtherUser?
+    @State var otherUser: OtherUser
     @State var messages: [Message] = []
     @State var image: UIImage?
     
     var body: some View {
         VStack {
-            if let otherUser = otherUser {
                 VStack {
                     TopRow(otherUser: otherUser, image: image)
                         .onTapGesture {
@@ -56,9 +55,9 @@ struct ChatView: View {
                     .cornerRadius(30, corners: [.topLeft, .topRight])
                 }
                 .background(Color("Green").ignoresSafeArea())
-            }
+            
             Divider()
-                MessageField(chatId: chatId)
+                MessageField(chatId: chatId, otherUser: otherUser)
                     .environmentObject(msgViewModel)
         } .onAppear() {
             msgViewModel.fetchChat(chatId: chatId) { fetchedChat in

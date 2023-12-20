@@ -8,14 +8,13 @@
 import SwiftUI
 import Firebase
 import FirebaseCore
+import FirebaseMessaging
 
 @main
 struct GolfAppApp: App {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-    
-    init() {
-        FirebaseApp.configure()
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {
@@ -28,12 +27,16 @@ struct GolfAppApp: App {
 
 struct ViewSwitcher: View {
     @EnvironmentObject var authViewModel: AuthViewModel
-    
+    @State var fmcToken = Messaging.messaging().fcmToken
+    @State var deviceToken = Messaging.messaging().apnsToken
     var body: some View {
-        if (authViewModel.isUserLoggedIn) {
-                LandingView()
-        }else {
-            RegisterView(isRegistered: false)
-        }
-    }
-}
+           Group {
+               if authViewModel.isUserLoggedIn {
+                   LandingView()
+               } else {
+                   RegisterView(isRegistered: false)
+               }
+           }
+       }
+   }
+

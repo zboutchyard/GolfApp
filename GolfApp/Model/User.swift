@@ -23,6 +23,7 @@ struct User: Codable, Hashable {
     var sentRequests: [Request]?
     var receivedRequests: [Request]?
     var notifications: [Notification]?
+    var fcmToken: String?
 }
 
 struct Request: Codable, Hashable {

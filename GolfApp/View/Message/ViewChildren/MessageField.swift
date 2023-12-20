@@ -20,12 +20,15 @@ struct MessageField: View {
             Button(action: {
                 if !isNewMessage {
                     if let chatId = chatId {
-                        msgViewModel.sendMessage(chatId: chatId, text: message)
-                        message = ""
+                        if let otherUser = otherUser {
+                            msgViewModel.sendMessage(chatId: chatId, text: message, otherUser: otherUser)
+                            message = ""
+                        }
+                        
                     }
                 } else {
                     if let otherUser {
-                        messageViewmodel.createChatAndSendMessage(text: message, otherUserId: otherUser.id)
+                        messageViewmodel.createChatAndSendMessage(text: message, otherUser: otherUser)
                         messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
                             
                         }
