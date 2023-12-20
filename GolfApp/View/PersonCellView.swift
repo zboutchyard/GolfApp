@@ -9,26 +9,25 @@ import SwiftUI
 
 struct PersonCellView: View {
     @State var otherUser: OtherUser?
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var post: Post?
     @Binding var isPostView: Bool
-    @Binding var isLoading: Bool
     
     var body: some View {
         if isPostView {
             if let post = post {
                 HStack {
                     if let data = otherUser?.profilePicData, let uiImage = UIImage(data: data) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
-                                .foregroundStyle(.whiteOrDark)
-                        } else {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                            .background {
+                                Circle().fill(Color("AppGray"))
+                            }
+                            .foregroundStyle(.whiteOrDark)
+                    } else {
                         Image(systemName: "person.fill")
                             .scaledToFill()
                             .clipShape(Circle())
@@ -55,12 +54,8 @@ struct PersonCellView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-
                     
-                }
-                .onAppear() {
-                    getUser(userId: post.user)
-                    isLoading = false
+                    
                 }
                 .padding([.leading, .trailing, .top])
             }
@@ -68,16 +63,16 @@ struct PersonCellView: View {
         if !isPostView {
             HStack {
                 if let data = otherUser?.profilePicData, let uiImage = UIImage(data: data) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .background {
-                                Circle().fill(Color("AppGray"))
-                            }
-                            .foregroundStyle(.whiteOrDark)
-                    } else {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        .background {
+                            Circle().fill(Color("AppGray"))
+                        }
+                        .foregroundStyle(.whiteOrDark)
+                } else {
                     Image(systemName: "person.fill")
                         .scaledToFill()
                         .clipShape(Circle())
@@ -98,7 +93,6 @@ struct PersonCellView: View {
             .onAppear() {
                 if let user = otherUser {
                     getUser(userId: user.id)
-                    isLoading = false
                 }
                 
                 

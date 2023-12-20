@@ -14,50 +14,56 @@ struct AllChatsView: View {
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State private var user: User?
     @State private var prts: [String]?
-    @State private var isLoading: Bool = true
+    @State private var isLoading: Bool = false
     @State private var isAddMessageButtonClicked = false
     @State private var selectedChatId: String?
     var body: some View {
         VStack {
-            HStack {
-                Text("Messages")
-                    .font(.title)
-                    .frame(maxWidth: .infinity)
-                Button(action: {
-                    isAddMessageButtonClicked = true
-                }) {
-                    Image(systemName: "square.and.pencil")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                } .padding(.trailing)
-            }
-            Divider()
-            if let chats = user?.chats, chats.count > 0 {
-                List {
-                    
-                    ForEach((chats), id: \.self){  chat in
-                        AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
+            if isLoading {
+                LoadingView()
+            } else {
+                VStack {
+                    HStack {
+                        Text("Messages")
+                            .font(.title)
                             .frame(maxWidth: .infinity)
+                        Button(action: {
+                            isAddMessageButtonClicked = true
+                        }) {
+                            Image(systemName: "square.and.pencil")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                        } .padding(.trailing)
                     }
-                    .onDelete(perform: deleteItem)
+                    Divider()
+                    if let chats = user?.chats, chats.count > 0 {
+                        List {
+                            
+                            ForEach((chats), id: \.self){  chat in
+                                AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .onDelete(perform: deleteItem)
+                        }                        
+                    }
+                    else {
+                        Spacer()
+                        Image(systemName: "bubble.left.and.exclamationmark.bubble.right")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 200, maxHeight: 200)
+                        Text("You don't have any messages")
+                        Button(action: {
+                            isAddMessageButtonClicked = true
+                        }, label: {
+                            Text("Start a conversation")
+                        })
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
+                    }
+                    
                 }
-                .listStyle(.plain)
-                
-            }
-            else {
-                Spacer()
-                Image(systemName: "bubble.left.and.exclamationmark.bubble.right")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: 200, maxHeight: 200)
-                Text("You don't have any messages")
-                Button(action: {
-                    isAddMessageButtonClicked = true
-                }, label: {
-                    Text("Start a conversation")
-                })
-                .buttonStyle(.borderedProminent)
-                Spacer()
+               
             }
             
         }
@@ -75,10 +81,14 @@ struct AllChatsView: View {
         .onChange(of: isAddMessageButtonClicked) {
             getUserData()
         }
+       
+        
+        
     }
     func getUserData() {
         authViewModel.fetchUserDataFromFirebase { fetchedUser in
             user = fetchedUser
+            isLoading = false
         }
     }
     

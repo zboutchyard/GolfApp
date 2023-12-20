@@ -10,12 +10,11 @@ import AlertToast
 import FirebaseMessaging
 
 struct HomeView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
     @State var user: User?
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
-    @State var isLoading: Bool = true
     
     var body: some View {
         ScrollView {
@@ -65,10 +64,8 @@ struct HomeView: View {
                 Spacer().frame(height: 8)
                 VStack {
                     ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                        if let user = user, !isLoading {
-                            PostView(user: user, post: post, isLoading: $isLoading)
-                        } else {
-                            LoadingView()
+                        if let user = user {
+                                PostView(user: user, post: post)
                         }
                     }
                     
@@ -98,14 +95,12 @@ struct HomeView: View {
         fetchAllPosts()
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
-            isLoading = false
             let token = Messaging.messaging().fcmToken
             if let user = fetchedUser {
                 if (token != user.fcmToken) {
                     authViewModel.updateFcmToken()
                 }
             }
-            
         }
     }
     func fetchAllPosts() {
