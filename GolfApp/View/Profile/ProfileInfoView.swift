@@ -25,115 +25,110 @@ struct ProfileInfoView: View {
                                     .kerning(1.2)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
-                                    .padding()
                                     .padding(.top)
                                 Divider()
                             }
                             .background(Color.appGray)
-                           
-                                HStack(alignment: .top) {
-                                    Text("About me:")
-                                        .fontWeight(.regular)
-                                        .kerning(1.2)
-                                        .padding()
-                                        .padding(.leading)
-                                    Spacer()
-                                    if let bio = user?.bio {
-                                        Text(bio)
-                                            .fontWeight(.light)
-                                            .kerning(1.2)
-                                            .padding()
-                                            .padding(.trailing)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .multilineTextAlignment(.trailing)
-                                    }
-                                }
-                                HStack(alignment: .top) {
-                                    Text("Interests:")
-                                        .fontWeight(.regular)
-                                        .kerning(1.2)
-                                        .padding()
-                                        .padding(.leading)
-                                    Spacer()
-                                    if let interests = user?.interests {
-                                        Text(interests)
-                                            .fontWeight(.light)
-                                            .kerning(1.2)
-                                            .padding()
-                                            .padding(.trailing)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .multilineTextAlignment(.trailing)
-                                    }
-                                    
-                                }
-                                HStack(alignment: .top) {
-                                    Text("Handicap:")
-                                        .fontWeight(.regular)
-                                        .kerning(1.2)
-                                        .padding()
-                                        .padding(.leading)
-                                    Spacer()
-                                    if let handicap = user?.handicap {
-                                        Text(String(handicap))
-                                            .fontWeight(.light)
-                                            .kerning(1.2)
-                                            .padding()
-                                            .padding(.trailing)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .multilineTextAlignment(.trailing)
-                                    }
-                                }
-                                HStack(alignment: .top) {
-                                    Text("Home course:")
-                                        .fontWeight(.regular)
-                                        .kerning(1.2)
-                                        .padding()
-                                        .padding(.leading)
-                                    Spacer()
-                                    if let homeCourse = user?.homeCourse {
-                                        Text(homeCourse)
-                                            .fontWeight(.light)
-                                            .kerning(1.2)
-                                            .padding()
-                                            .padding(.trailing)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .multilineTextAlignment(.trailing)
-                                    }
-                        }
-                    
-                        }
-                        .background(.whiteOrDark)
-                        
                             
-                       
-                       
-                    
+                            
+                            
+                            HStack(alignment: .top) {
+                                Text("About me:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let bio = user?.bio {
+                                    Text(bio)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                            HStack(alignment: .top) {
+                                Text("Interests:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let interests = user?.interests {
+                                    Text(interests)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                                
+                            }
+                            HStack(alignment: .top) {
+                                Text("Handicap:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let handicap = user?.handicap {
+                                    Text(String(handicap))
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                            HStack(alignment: .top) {
+                                Text("Home course:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let homeCourse = user?.homeCourse {
+                                    Text(homeCourse)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                        }
+                        .background(Color.whiteOrDark)
+                        .padding(.top, 7.5)
+                        
+                        VStack {
                             VStack {
                                 Text("Posts")
                                     .fontWeight(.semibold)
                                     .kerning(1.2)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.leading)
-                                    .padding()
+                                    .padding(.top)
                                 Divider()
                             }
-                            .padding(.top)
                             .background(Color.appGray)
-                            
                             VStack {
                                 ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
                                     PostView(post: post)
-                                    Divider()
-                                        .padding(.bottom)
                                 }
+                                .padding(.bottom, 2)
                             }
                             .background(Color.whiteOrBlack)
                            
-                    }
-                .padding(.top)
-                .background(Color.whiteOrBlack)
+                        }
+                        .background(Color.whiteOrDark)
                         
-                    
+                    }
+                    .background(Color.whiteOrBlack)
                 } else {
                     LoadingView()
                 }
@@ -141,111 +136,118 @@ struct ProfileInfoView: View {
             }
             else {
                 if !isLoading {
-                    Divider()
-                    Text("Information")
-                        .fontWeight(.semibold)
-                        .kerning(1.2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading)
-                        .padding()
-                    Divider()
-                        .padding(.horizontal)
-                    Section {
-                        HStack(alignment: .top) {
-                            Text("About me:")
-                                .fontWeight(.regular)
-                                .kerning(1.2)
-                                .padding()
-                                .padding(.leading)
-                                .foregroundStyle(.white)
-                            Spacer()
-                            if let bio = otherUser?.bio {
-                                Text(bio)
-                                    .fontWeight(.light)
-                                    .kerning(1.2)
-                                    .padding()
-                                    .padding(.trailing)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                        }
-                        HStack(alignment: .top) {
-                            Text("Interests:")
-                                .fontWeight(.regular)
-                                .kerning(1.2)
-                                .padding()
-                                .padding(.leading)
-                            Spacer()
-                            if let interests = otherUser?.interests {
-                                Text(interests)
-                                    .fontWeight(.light)
-                                    .kerning(1.2)
-                                    .padding()
-                                    .padding(.trailing)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                            
-                        }
-                        HStack(alignment: .top) {
-                            Text("Handicap:")
-                                .fontWeight(.regular)
-                                .kerning(1.2)
-                                .padding()
-                                .padding(.leading)
-                            Spacer()
-                            if let handicap = otherUser?.handicap {
-                                Text(String(handicap))
-                                    .fontWeight(.light)
-                                    .kerning(1.2)
-                                    .padding()
-                                    .padding(.trailing)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                        }
-                        HStack(alignment: .top) {
-                            Text("Home course:")
-                                .fontWeight(.regular)
-                                .kerning(1.2)
-                                .padding()
-                                .padding(.leading)
-                            Spacer()
-                            if let homeCourse = otherUser?.homeCourse {
-                                Text(homeCourse)
-                                    .fontWeight(.light)
-                                    .kerning(1.2)
-                                    .padding()
-                                    .padding(.trailing)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .multilineTextAlignment(.trailing)
-                            }
-                            
-                        }
-                        Divider()
-                            .padding()
-                            .background(Color.whiteOrBlack)
+                    VStack {
                         VStack {
-                            Text("Posts")
-                                .fontWeight(.semibold)
-                                .kerning(1.2)
-                                .padding()
-                                .padding(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                                .padding(.bottom)
-                            Section {
+                            VStack {
+                                Text("Information")
+                                    .fontWeight(.semibold)
+                                    .kerning(1.2)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading)
+                                    .padding(.top)
+                                Divider()
+                            }
+                            .background(Color.appGray)
+                            
+                            
+                            
+                            HStack(alignment: .top) {
+                                Text("About me:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let bio = otherUser?.bio {
+                                    Text(bio)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                            HStack(alignment: .top) {
+                                Text("Interests:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let interests = otherUser?.interests {
+                                    Text(interests)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                                
+                            }
+                            HStack(alignment: .top) {
+                                Text("Handicap:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let handicap = otherUser?.handicap {
+                                    Text(String(handicap))
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                            HStack(alignment: .top) {
+                                Text("Home course:")
+                                    .fontWeight(.regular)
+                                    .kerning(1.2)
+                                    .padding()
+                                    .padding(.leading)
+                                Spacer()
+                                if let homeCourse = otherUser?.homeCourse {
+                                    Text(homeCourse)
+                                        .fontWeight(.light)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .padding(.trailing)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                        }
+                        .background(Color.whiteOrDark)
+                        .padding(.top, 7.5)
+
+                        VStack {
+                            VStack {
+                                Text("Posts")
+                                    .fontWeight(.semibold)
+                                    .kerning(1.2)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading)
+                                    .padding(.top)
+                                Divider()
+                            }
+                            .background(Color.appGray)
+                            VStack {
                                 ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
                                     PostView(post: post)
-                                    Divider()
-                                        .padding(.bottom)
                                 }
+                                .padding(.bottom, 2)
                             }
                             .background(Color.whiteOrBlack)
                            
-                            
                         }
+                        .background(Color.whiteOrDark)
+                        
                     }
+                    .background(Color.whiteOrBlack)
                 } else {
                     LoadingView()
                 }

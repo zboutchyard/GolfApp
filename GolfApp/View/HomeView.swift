@@ -10,7 +10,7 @@ import AlertToast
 import FirebaseMessaging
 
 struct HomeView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
     @State var user: User?
     @State var isAddPostClicked: Bool = false
