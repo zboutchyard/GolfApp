@@ -42,9 +42,12 @@ struct AllChatsView: View {
                             ForEach((chats), id: \.self){  chat in
                                 AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
                                     .frame(maxWidth: .infinity)
+                                
                             }
                             .onDelete(perform: deleteItem)
-                        }                        
+
+                        }
+
                     }
                     else {
                         Spacer()
@@ -95,9 +98,12 @@ struct AllChatsView: View {
     
     
     func deleteItem(at offsets: IndexSet) {
-        if selectedChatId != nil {
-            msgViewModel.deleteUserChat(chatId: selectedChatId!)
+        offsets.forEach { index in
+            guard let chatId = user?.chats?[index] else { return }
+            msgViewModel.deleteUserChat(chatId: chatId)
         }
+        // Update the local state to reflect the deletion
+        user?.chats?.remove(atOffsets: offsets)
     }
 }
 

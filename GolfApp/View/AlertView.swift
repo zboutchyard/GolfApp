@@ -137,13 +137,6 @@ struct AlertView: View {
                             Divider()
                         }
                     }
-                    .onAppear {
-                        Task {
-                            for notification in notifications {
-                                await fetchUserInfoById(userId: notification.userCommenting)
-                            }
-                        }
-                    }
                 }
             } else {
                 LoadingView()
@@ -153,7 +146,6 @@ struct AlertView: View {
         .onAppear {
             Task {
                 await fetchUser()
-                isLoading = false
             }
         }
         .toast(isPresenting: $isRequestAccepted) {
@@ -169,10 +161,20 @@ struct AlertView: View {
     }
     
     func fetchUser() async {
+        isLoading = true
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             if user?.receivedRequests != nil {
                 fetchOtherUsersByRequest()
+            }
+            if let notifications = user?.notifications {
+                isLoading = true
+                for notification in notifications {
+                    fetchUserInfoById(userId: notification.userCommenting)
+                }
+                isLoading = false
+            } else {
+                isLoading = false
             }
         }
     }
@@ -195,7 +197,7 @@ struct AlertView: View {
         }
     }
     
-    func fetchUserInfoById(userId: String) async {
+    func fetchUserInfoById(userId: String) {
         authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
             otherUserNotifications[userId] = fetchedOtherUser
         }

@@ -16,6 +16,7 @@ struct Post: Codable, Hashable {
     var timeStamp: Date
     var user: String
     var comments: [Comment]?
+    var imageData: Data?
 }
 
 struct Comment: Codable, Hashable {
