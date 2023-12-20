@@ -180,6 +180,7 @@ struct PostView: View {
         }
     }
     func getOtherUserData(userId: String) {
+        isLoading = true
         authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
             otherUser = fetchedOtherUser
             isLoading = false
