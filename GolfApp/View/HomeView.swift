@@ -19,11 +19,6 @@ struct HomeView: View {
     
     var body: some View {
         ScrollView {
-            if isLoading {
-                VStack {
-                    LoadingView()
-                }
-            } else {
                 VStack {
                     HStack {
                         HStack {
@@ -88,7 +83,7 @@ struct HomeView: View {
                         })
                     }
                 })
-            }
+            
             
             
         }

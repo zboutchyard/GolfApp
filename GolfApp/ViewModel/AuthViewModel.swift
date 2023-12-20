@@ -370,33 +370,38 @@ class AuthViewModel: ObservableObject {
             completion(nil)
             return
         }
-        
+
         let db = Firestore.firestore()
         let postRef = db.collection("Posts").document(postId)
-        
-        postRef.getDocument { (document, error) in
+
+        postRef.getDocument { [weak self] (document, error) in
             if let document = document, document.exists {
                 do {
-                    var documentData = try document.data(as: Post?.self)
-                    
-                    if var unwrappedDocumentData = documentData {
-                        unwrappedDocumentData.id = document.documentID
-                        self.post = unwrappedDocumentData
-                        completion(unwrappedDocumentData)
+                    var post = try document.data(as: Post.self)
+                    post.id = document.documentID
+
+                    // Check for an image reference
+                    if let imageRef = post.imageRef {
+                        self?.fetchPhotoData(photoId: imageRef) { imageData in
+                            post.imageData = imageData
+                            self?.post = post
+                            completion(post)
+                        }
                     } else {
-                        print("Error decoding document data as Post")
-                        completion(nil)
+                        self?.post = post
+                        completion(post)
                     }
                 } catch {
                     print("Error decoding document:", error.localizedDescription)
                     completion(nil)
                 }
             } else {
-                print(error?.localizedDescription ?? "")
+                print(error?.localizedDescription ?? "Document does not exist")
                 completion(nil)
             }
         }
     }
+
     
     func addComment(postId: String, text: String, postOwner: String) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
