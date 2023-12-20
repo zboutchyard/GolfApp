@@ -6,16 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseStorage
+
 
 struct NewPostView: View {
     @State var postText: String = ""
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
     @State private var inputImage: UIImage?
+    @State var data: Data?
     @Environment(\.presentationMode) var presentationMode
     var onPostSubmitted: (() -> Void)?
+    let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
+
     
     var body: some View {
         ScrollView {
@@ -34,10 +39,24 @@ struct NewPostView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Button(action: {
-                    authViewModel.addPost(text: postText, image: nil) {post in
-                        onPostSubmitted?()
-                        presentationMode.wrappedValue.dismiss()
+                    Task {
+                       
+                        authViewModel.addPost(text: postText, imageRef: storageReference.name) {post in
+                            if let data = data {
+                                storageReference.putData(data, metadata: nil) { (metadata, error) in
+                                    guard let metadata = metadata else {
+                                        return
+                                    }
+                                }
+                                onPostSubmitted?()
+                                presentationMode.wrappedValue.dismiss()
+                            } else {
+                                onPostSubmitted?()
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
                     }
+                   
                 }, label: {
                     Text("Post")
                 })                        .buttonStyle(.borderedProminent)
@@ -77,6 +96,7 @@ struct NewPostView: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         selectedImage = inputImage
+        data = selectedImage?.jpegData(compressionQuality: 0.2)
     }
 }
 

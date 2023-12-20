@@ -49,6 +49,13 @@ struct PostView: View {
                     .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.leading, .trailing])
+                if let imageData = post.imageData, let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.top)
+                }
                 HStack {
                     if let likes = post.likes {
                         if post.likes!.count > 0 {

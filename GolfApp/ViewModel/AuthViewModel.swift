@@ -441,30 +441,47 @@ class AuthViewModel: ObservableObject {
     
     
     
-    func fetchAllPostsFromFirebase() {
-        Firestore.firestore().collection("Posts").getDocuments { (snapshot, error) in
+    func fetchAllPostsFromFirebase(completion: @escaping () -> Void) {
+        Firestore.firestore().collection("Posts").getDocuments { [weak self] (snapshot, error) in
             guard let snapshot = snapshot, error == nil else {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
+                completion()
                 return
             }
-            self.posts = snapshot.documents.compactMap { documentSnapshot -> Post? in
+
+            let group = DispatchGroup()
+            var tempPosts: [Post] = []
+
+            for document in snapshot.documents {
+                group.enter()
                 do {
-                    var documentData = try documentSnapshot.data(as: Post.self)
-                    documentData.id = documentSnapshot.documentID
-                    return documentData
+                    var post = try document.data(as: Post.self)
+                    post.id = document.documentID
+
+                    if let imageRef = post.imageRef {
+                        self?.fetchPhotoData(photoId: imageRef) { data in
+                            post.imageData = data
+                            tempPosts.append(post)
+                            group.leave()
+                        }
+                    } else {
+                        tempPosts.append(post)
+                        group.leave()
+                    }
                 } catch {
                     print("Error decoding document:", error.localizedDescription)
-                    return nil
+                    group.leave()
                 }
             }
-            
-            if self.posts.isEmpty {
-                print("No valid posts found.")
-            } else {
-                print("Fetched posts successfully:")
+
+            group.notify(queue: .main) {
+                self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
+                print("Fetched posts successfully")
+                completion()
             }
         }
     }
+
     
     func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
@@ -509,7 +526,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func addPost(text: String, image: String?, completion: @escaping (Error?) -> Void) {
+    func addPost(text: String, imageRef: String?, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         var newPost: [String: Any] = [:]
         
@@ -518,12 +535,12 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        if image != nil {
+        if imageRef != nil {
             newPost = [
                 "text": text,
                 "timeStamp": Date.now,
                 "user": currentUserID,
-                "image": image as Any
+                "imageRef": imageRef as Any
             ]
         } else {
             newPost = [
