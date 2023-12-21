@@ -11,7 +11,7 @@ import AlertToast
 
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
     @State private var teeTimeBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true

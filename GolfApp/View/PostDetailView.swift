@@ -12,14 +12,18 @@ struct PostDetailView: View {
     @State var post: Post?
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
-    @StateObject var authViewModel = AuthViewModel()
+    @ObservedObject var authViewModel = AuthViewModel()
     @FocusState var isTextFieldFocused: Bool
     @State var isLoading: Bool = false
+    @State var user: User?
+    @State var otherUser: OtherUser?
+    var onBack: (() -> Void)?
+    @State var selectedTab: Int?
     
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused)
+                PostView(selectedTab: $selectedTab, user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser, onBack: onBack!)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { proxy in
@@ -74,10 +78,13 @@ struct PostDetailView: View {
                 }
             }
             
-            
+               
         }
         .onTapGesture {
             isTextFieldFocused = false
+        }
+        .onDisappear {
+            onBack!()
         }
         .background(.whiteOrDark)
         if let post = post {
@@ -154,6 +161,6 @@ struct PostDetailView: View {
 }
 
 
-#Preview {
-    PostDetailView()
-}
+//#Preview {
+//    PostDetailView()
+//}
