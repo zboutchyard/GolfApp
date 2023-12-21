@@ -18,7 +18,6 @@ struct HomeView: View {
     @State var posts: [Post]?
     @State var otherUser: OtherUser?
     @State var otherUsers: [String: OtherUser] = [:]
-    @Binding var selectedTab: Int?
     var onBack: () -> Void
 
 
@@ -76,7 +75,7 @@ struct HomeView: View {
                         if let posts = posts {
                             ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.self) { post in
                                 if let user = user {
-                                    PostView(selectedTab: $selectedTab, user: user, post: post, otherUser: otherUsers[post.user] ,onBack: onBack)
+                                    PostView(user: user, post: post, otherUser: otherUsers[post.user], onBack: onBack)
                                 }
                             }
                         } else {

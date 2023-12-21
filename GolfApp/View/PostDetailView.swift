@@ -23,7 +23,7 @@ struct PostDetailView: View {
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(selectedTab: $selectedTab, user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser, onBack: onBack!)
+                PostView(user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser, onBack: onBack!)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { proxy in

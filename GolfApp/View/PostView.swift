@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseAuth
 
 struct PostView: View {
-    @Binding var selectedTab: Int?
     @State private var likeBtnClicked: Bool = false
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
@@ -245,8 +244,10 @@ struct PostView: View {
             PostDetailView(post: post, authViewModel: authViewModel, user: user, otherUser: otherUser, onBack: onBack)
         }
         .navigationDestination(isPresented: $userClicked) {
-                ProfileView(user: user)
+            if let user = user {
+                ProfileView(authViewModel: authViewModel, user: user)
                 .background(Color.whiteOrDark)
+            }
         }
         .navigationDestination(isPresented: $otherUserClicked) {
             if let otherUser = otherUser {

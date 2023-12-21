@@ -21,7 +21,7 @@ struct LandingView: View {
     @State var posts: [Post]?
     @State var otherUsers: [String: OtherUser] = [:]
     @State var shouldReloadData: Bool = true
-    @State var selectedTab: Int? = 0
+    @State private var selectedTab: Int = 0
 
     
     init() {
@@ -72,7 +72,7 @@ struct LandingView: View {
                     ProgressView()
                 } else {
                     if let user = user, let posts = posts, !otherUsers.isEmpty {
-                        HomeView(user: user, posts: posts, otherUsers: otherUsers, selectedTab: $selectedTab, onBack: fetchAllData)
+                        HomeView(user: user, posts: posts, otherUsers: otherUsers, onBack: fetchAllData)
                                 .tabItem {
                                     Label("Home", systemImage: "house.fill")
                                 }

@@ -13,7 +13,6 @@ struct ProfileInfoView: View {
     @State var otherUser: OtherUser?
     @State var isOtherUserProfile: Bool = false
     @State var isLoading: Bool = true
-    @State var selectedTab: Int?
     var body: some View {
         VStack {
             if !isOtherUserProfile {
@@ -119,7 +118,7 @@ struct ProfileInfoView: View {
                             .background(Color.appGray)
                             VStack {
                                 ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                    PostView(selectedTab: $selectedTab, user: user, post: post)
+                                    PostView(user: user, post: post)
                                 }
                                 .padding(.bottom, 2)
                             }
@@ -237,7 +236,7 @@ struct ProfileInfoView: View {
                                 .background(Color.appGray)
                                 VStack {
                                     ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                        PostView(selectedTab: $selectedTab, post: post, otherUser: otherUser)
+                                        PostView(post: post, otherUser: otherUser)
                                     }
                                     .padding(.bottom, 2)
                                 }
