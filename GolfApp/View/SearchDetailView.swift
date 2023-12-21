@@ -15,7 +15,7 @@ struct SearchDetailView: View {
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
-    @ObservedObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @StateObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
     @State var selectedUser: OtherUser?
     @State var isUserSelected: Bool = false
     @State var isLoading: Bool = false

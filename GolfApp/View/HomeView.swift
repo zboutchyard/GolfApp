@@ -96,11 +96,7 @@ struct HomeView: View {
                         })
                     }
                 })
-            }
-                
-            
-            
-            
+            }    
         }
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)

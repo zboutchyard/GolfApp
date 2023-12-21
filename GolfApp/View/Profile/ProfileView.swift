@@ -74,7 +74,7 @@ struct ProfileView: View {
                             
                             if profileBtnSelected {
                                 if let user = user {
-                                    ProfileInfoView(user: user)
+                                    ProfileInfoView(authViewModel: authViewModel, user: user, isOtherUserProfile: false)
                                 }
                             }
                             if teeTimeBtnSelected {

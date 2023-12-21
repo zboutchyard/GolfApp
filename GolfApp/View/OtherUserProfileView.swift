@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct OtherUserProfileView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var otherUser: OtherUser
     @State var user: User
-    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
     @State var isLoading: Bool = true

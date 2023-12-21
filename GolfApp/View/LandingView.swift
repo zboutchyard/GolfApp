@@ -13,13 +13,14 @@ struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
     @State var isLoading: Bool = false
     @State var posts: [Post]?
     @State var otherUsers: [String: OtherUser] = [:]
+    @State var shouldReloadData: Bool = true
 
     
     init() {
@@ -91,7 +92,7 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                        ProfileView(user: user)
+                        ProfileView(authViewModel: authViewModel, user: user)
                                 .tabItem {
                                     Label("Profile", systemImage: "person.fill")
                                 }
@@ -134,13 +135,20 @@ struct LandingView: View {
                 .navigationTitle("Settings")
         }
         .onAppear() {
-            isLoading = true
-            fetchAllData()
+            if shouldReloadData {
+                fetchAllData()
+            }
+            
+            shouldReloadData = false
+            
         }
+    }
+    func fetchPosts(postIds: [String]) {
+        authViewModel.fetchAllPostsInUserObject(postIds: postIds)
     }
     
     func fetchAllData() {
-        fetchAllPostsAndUserData()
+        isLoading = true
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
             let token = Messaging.messaging().fcmToken
@@ -149,8 +157,11 @@ struct LandingView: View {
                     authViewModel.updateFcmToken()
                 }
             }
+            fetchAllPostsAndUserData()
+            if let userPosts = user?.posts {
+                fetchPosts(postIds: userPosts)
+            }
         }
-        print("here are the other users \(otherUsers)")
     }
     
     func fetchAllPostsAndUserData() {

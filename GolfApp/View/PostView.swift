@@ -79,6 +79,52 @@ struct PostView: View {
                             .padding([.leading, .trailing, .top])
                         }
 
+                    } else {
+                        if let user = user {
+                            if let post = post {
+                                HStack {
+                                    if let data = user.profilePicData, let uiImage = UIImage(data: data) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .background {
+                                                Circle().fill(Color("AppGray"))
+                                            }
+                                            .foregroundStyle(.whiteOrDark)
+                                    } else {
+                                        Image(systemName: "person.fill")
+                                            .scaledToFill()
+                                            .clipShape(Circle())
+                                            .frame(width: 50, height: 50)
+                                            .background {
+                                                Circle().fill(Color("AppGray"))
+                                            }
+                                            .foregroundStyle(.whiteOrDark)
+                                    }
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    VStack {
+                                            Text("\(user.firstName) \(user.lastName)")
+                                                .fontWeight(.semibold)
+                                                .kerning(1.2)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
+                                                .font(.caption)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    
+                                }
+                                .padding([.leading, .trailing, .top])
+                            }
+                        }
                     }
                 })
                 .buttonStyle(.plain)
@@ -196,7 +242,7 @@ struct PostView: View {
             PostDetailView(post: post)
         }
         .navigationDestination(isPresented: $userClicked) {
-                ProfileView()
+                ProfileView(user: user)
                 .background(Color.whiteOrDark)
         }
         .navigationDestination(isPresented: $otherUserClicked) {

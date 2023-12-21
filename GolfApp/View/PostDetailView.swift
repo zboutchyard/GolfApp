@@ -97,7 +97,7 @@ struct PostDetailView: View {
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
         var onCommentAdded: () -> Void
-        @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+        @StateObject var authViewModel: AuthViewModel = AuthViewModel()
 
         
         var body: some View {
