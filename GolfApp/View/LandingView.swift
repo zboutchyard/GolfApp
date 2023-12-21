@@ -21,6 +21,7 @@ struct LandingView: View {
     @State var posts: [Post]?
     @State var otherUsers: [String: OtherUser] = [:]
     @State var shouldReloadData: Bool = true
+    @State private var selectedTab: Int = 0
 
     
     init() {
@@ -66,15 +67,16 @@ struct LandingView: View {
             .padding(.bottom, 15)
             .background(.whiteOrDark)
             Divider()
-            TabView() {
+            TabView(selection: $selectedTab) {
                 if isLoading {
-                    LoadingView()
+                    ProgressView()
                 } else {
                     if let user = user, let posts = posts, !otherUsers.isEmpty {
                         HomeView(user: user, posts: posts, otherUsers: otherUsers)
                                 .tabItem {
                                     Label("Home", systemImage: "house.fill")
                                 }
+                                .tag(0)
                                 .onAppear() {
                                     isProfileView = false
                                 }
@@ -82,6 +84,7 @@ struct LandingView: View {
                                 .tabItem {
                                     Label("Tee Time", systemImage: "figure.golf")
                                 }
+                                .tag(1)
                                 .onAppear() {
                                     isProfileView = false
                                 }
@@ -89,6 +92,7 @@ struct LandingView: View {
                                 .tabItem {
                                     Label("Notifications", systemImage: "bell.fill")
                                 }
+                                .tag(2)
                                 .onAppear() {
                                     isProfileView = false
                                 }
@@ -96,6 +100,7 @@ struct LandingView: View {
                                 .tabItem {
                                     Label("Profile", systemImage: "person.fill")
                                 }
+                                .tag(3)
                                 .onAppear() {
                                     isProfileView = true
                                 }
@@ -134,12 +139,17 @@ struct LandingView: View {
             SettingsView()
                 .navigationTitle("Settings")
         }
+        .refreshable {
+            fetchAllData()
+            selectedTab = selectedTab
+        }
         .onAppear() {
             if shouldReloadData {
                 fetchAllData()
             }
             
             shouldReloadData = false
+            selectedTab = selectedTab
             
         }
     }
