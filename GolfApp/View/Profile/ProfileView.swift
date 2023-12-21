@@ -12,11 +12,10 @@ import AlertToast
 
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @State private var user: User?
+    @State var user: User?
     @State private var teeTimeBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
     @State private var friendsListBtnSelected: Bool = false
-    @State private var isLoading: Bool = true
     @State private var isEditButtonClicked = false
     @State private var isOtherViewClicked = false
     @State private var isAddFriendClicked = false
@@ -32,7 +31,6 @@ struct ProfileView: View {
     
     var body: some View {
         ScrollView {
-            if !isLoading {
                 if user != nil {
                     ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
                     
@@ -159,9 +157,7 @@ struct ProfileView: View {
                         
                     }
                 }
-            } else {
-                LoadingView()
-            }
+           
             
             
         }
@@ -198,20 +194,8 @@ struct ProfileView: View {
                 }
             }
         }
-        .onAppear(){
-            Task {
-                await fetchData()
-            }
-        }
         .onChange(of: searchText) {
             filterUsers()
-        }
-    }
-    
-    func fetchData() async {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            isLoading = false
         }
     }
     

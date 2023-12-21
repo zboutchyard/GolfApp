@@ -40,17 +40,25 @@ struct NewPostView: View {
                 
                 Button(action: {
                     Task {
-                       
-                        authViewModel.addPost(text: postText, imageRef: storageReference.name) {post in
-                            if let data = data {
-                                storageReference.putData(data, metadata: nil) { (metadata, error) in
-                                    guard let metadata = metadata else {
-                                        return
-                                    }
+                        // Check if there is image data to upload
+                        if let data = data {
+                            // Upload the image to Firebase Storage
+                            storageReference.putData(data, metadata: nil) { metadata, error in
+                                guard metadata != nil else {
+                                    // Handle the error if image upload fails
+                                    print("Error uploading image: \(error?.localizedDescription ?? "Unknown error")")
+                                    return
                                 }
-                                onPostSubmitted?()
-                                presentationMode.wrappedValue.dismiss()
-                            } else {
+
+                                // After successful upload, add the post referencing the image
+                                authViewModel.addPost(text: postText, imageRef: storageReference.name) { post in
+                                    onPostSubmitted?()
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }
+                        } else {
+                            // If there is no image, just add the post without an image reference
+                            authViewModel.addPost(text: postText, imageRef: nil) { post in
                                 onPostSubmitted?()
                                 presentationMode.wrappedValue.dismiss()
                             }

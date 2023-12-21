@@ -446,11 +446,11 @@ class AuthViewModel: ObservableObject {
     
     
     
-    func fetchAllPostsFromFirebase(completion: @escaping () -> Void) {
+    func fetchAllPostsFromFirebase(completion: @escaping ([Post]) -> Void) {
         Firestore.firestore().collection("Posts").getDocuments { [weak self] (snapshot, error) in
             guard let snapshot = snapshot, error == nil else {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
-                completion()
+                completion([])
                 return
             }
 
@@ -482,7 +482,7 @@ class AuthViewModel: ObservableObject {
             group.notify(queue: .main) {
                 self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
                 print("Fetched posts successfully")
-                completion()
+                completion(tempPosts)
             }
         }
     }

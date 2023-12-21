@@ -6,15 +6,21 @@
 //
 
 import SwiftUI
+import FirebaseMessaging
+
 
 struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
+    @State var isLoading: Bool = false
+    @State var posts: [Post]?
+    @State var otherUsers: [String: OtherUser] = [:]
+
     
     init() {
     UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
@@ -31,7 +37,6 @@ struct LandingView: View {
                 if isProfileView {
                     Button(action: {
                         Task {
-                            await fetchUser()
                             isSettingsButtonClicked = true
                         }
                     }, label: {
@@ -42,7 +47,6 @@ struct LandingView: View {
                 }
                 Button(action: {
                     Task {
-                        await fetchUser()
                         isSearchBtnClicked = true
                     }
                 }, label: {
@@ -62,38 +66,46 @@ struct LandingView: View {
             .background(.whiteOrDark)
             Divider()
             TabView() {
-                    HomeView()
-                        .tabItem {
-                            Label("Home", systemImage: "house.fill")
-                        }
-                        .onAppear() {
-                            isProfileView = false
-                        }
-                    TeeTimeView()
-                        .tabItem {
-                            Label("Tee Time", systemImage: "figure.golf")
-                        }
-                        .onAppear() {
-                            isProfileView = false
-                        }
-                    AlertView()
-                        .tabItem {
-                            Label("Notifications", systemImage: "bell.fill")
-                        }
-                        .onAppear() {
-                            isProfileView = false
-                        }
-                    ProfileView()
-                        .tabItem {
-                            Label("Profile", systemImage: "person.fill")
-                        }
-                        .onAppear() {
-                            isProfileView = true
-                        }
+                if isLoading {
+                    LoadingView()
+                } else {
+                    if let user = user, let posts = posts, !otherUsers.isEmpty {
+                        HomeView(user: user, posts: posts, otherUsers: otherUsers)
+                                .tabItem {
+                                    Label("Home", systemImage: "house.fill")
+                                }
+                                .onAppear() {
+                                    isProfileView = false
+                                }
+                            TeeTimeView()
+                                .tabItem {
+                                    Label("Tee Time", systemImage: "figure.golf")
+                                }
+                                .onAppear() {
+                                    isProfileView = false
+                                }
+                            AlertView()
+                                .tabItem {
+                                    Label("Notifications", systemImage: "bell.fill")
+                                }
+                                .onAppear() {
+                                    isProfileView = false
+                                }
+                        ProfileView(user: user)
+                                .tabItem {
+                                    Label("Profile", systemImage: "person.fill")
+                                }
+                                .onAppear() {
+                                    isProfileView = true
+                                }
+                        
+                        .toolbar(.visible, for: .tabBar)
+                        .toolbarBackground(Color.whiteOrDark, for: .tabBar)
+                        .background(Color.whiteOrDark)
+                    }
+                }
                 
-                .toolbar(.visible, for: .tabBar)
-                .toolbarBackground(Color.whiteOrDark, for: .tabBar)
-                .background(Color.whiteOrDark)
+                
             }
             .background(Color.whiteOrDark)
             .padding(.top, 0)
@@ -121,10 +133,49 @@ struct LandingView: View {
             SettingsView()
                 .navigationTitle("Settings")
         }
+        .onAppear() {
+            isLoading = true
+            fetchAllData()
+        }
     }
-    func fetchUser() async {
-        authViewModel.fetchUserDataFromFirebase { fetchedUser in
+    
+    func fetchAllData() {
+        fetchAllPostsAndUserData()
+        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
             user = fetchedUser
+            let token = Messaging.messaging().fcmToken
+            if let user = fetchedUser {
+                if (token != user.fcmToken) {
+                    authViewModel.updateFcmToken()
+                }
+            }
+        }
+        print("here are the other users \(otherUsers)")
+    }
+    
+    func fetchAllPostsAndUserData() {
+        authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
+            self.posts = fetchedPosts
+
+            let group = DispatchGroup()
+            for post in fetchedPosts {
+                group.enter()
+                self.getOtherUserData(userId: post.user) {
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) {
+                // Now all user data is fetched, update the state to render HomeView
+                self.isLoading = false
+            }
+        }
+    }
+
+    func getOtherUserData(userId: String, completion: @escaping () -> Void) {
+        authViewModel.fetchOtherUserFromFirebase(id: userId) {  fetchedOtherUser in
+            otherUsers[userId] = fetchedOtherUser
+            completion()
         }
     }
 }

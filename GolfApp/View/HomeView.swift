@@ -7,7 +7,6 @@
 
 import SwiftUI
 import AlertToast
-import FirebaseMessaging
 
 struct HomeView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -16,9 +15,16 @@ struct HomeView: View {
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
     @State var isLoading: Bool = false
+    @State var posts: [Post]?
+    @State var otherUser: OtherUser?
+    @State var otherUsers: [String: OtherUser] = [:]
+
     
     var body: some View {
         ScrollView {
+            if isLoading {
+                LoadingView()
+            } else {
                 VStack {
                     HStack {
                         HStack {
@@ -64,11 +70,16 @@ struct HomeView: View {
                     .background(.whiteOrDark)
                     Spacer().frame(height: 8)
                     VStack {
-                        ForEach(authViewModel.posts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                            if let user = user {
-                                    PostView(user: user, post: post)
+                        if let posts = posts {
+                            ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.self) { post in
+                                if let user = user {
+                                    PostView(user: user, post: post, otherUser: otherUsers[post.user])
+                                }
                             }
+                        } else {
+                            LoadingView()
                         }
+                        
                         
                         
                     }
@@ -76,13 +87,17 @@ struct HomeView: View {
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = user {
                         NewPostView(user: user, onPostSubmitted: {
-                            authViewModel.fetchAllPostsFromFirebase() {
-                                
+                            isLoading = true
+                            authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
+                                posts = fetchedPosts
+                                isLoading = false
                             }
                             isPostSubmitted = true
                         })
                     }
                 })
+            }
+                
             
             
             
@@ -92,29 +107,6 @@ struct HomeView: View {
         .toast(isPresenting: $isPostSubmitted, alert: {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
-        .onAppear() {
-            fetchAllData()
-        }
-    }
-    func fetchAllData() {
-        isLoading = true
-        fetchAllPosts()
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            let token = Messaging.messaging().fcmToken
-            if let user = fetchedUser {
-                if (token != user.fcmToken) {
-                    authViewModel.updateFcmToken()
-                }
-            }
-            isLoading = false
-        }
-    }
-    func fetchAllPosts() {
-        isLoading = true
-        authViewModel.fetchAllPostsFromFirebase() {
-            isLoading = false
-        }
     }
 }
 

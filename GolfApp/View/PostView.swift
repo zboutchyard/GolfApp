@@ -14,7 +14,7 @@ struct PostView: View {
     @State private var userClicked: Bool = false
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
-    @State var post: Post
+    @State var post: Post?
     @State var userId: String = Auth.auth().currentUser?.uid ?? ""
     @State var isLoading: Bool = true
     @State var tempPost: Post?
@@ -26,30 +26,72 @@ struct PostView: View {
     
     var body: some View {
         VStack {
-            if isLoading {
-                LoadingView()
-            } else {
                 Button(action: {
-                   
-                    if userId != post.user {
+                    if userId != post?.user {
                         otherUserClicked = true
                     } else {
                         userClicked = true
                     }
                 }, label: {
                     if let otherUsr = otherUser {
-                        PersonCellView(otherUser: otherUsr, post: post, isPostView: .constant(true))
+                        if let post = post {
+                            HStack {
+                                if let data = otherUsr.profilePicData, let uiImage = UIImage(data: data) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                }
+                                
+                                
+                                
+                                
+                                
+                                VStack {
+                                    if let user = otherUser {
+                                        Text("\(user.firstName) \(user.lastName)")
+                                            .fontWeight(.semibold)
+                                            .kerning(1.2)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
+                                            .font(.caption)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                
+                            }
+                            .padding([.leading, .trailing, .top])
+                        }
 
                     }
                 })
                 .buttonStyle(.plain)
-                Text(post.text)
+            if let text = post?.text {
+                Text(text)
                     .fontWeight(.light)
                     .kerning(1.2)
                     .font(.subheadline)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding([.leading, .trailing])
-                if let imageData = post.imageData, let uiImage = UIImage(data: imageData) {
+            }
+               
+                if let imageData = post?.imageData, let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
@@ -57,8 +99,8 @@ struct PostView: View {
                         .padding(.top)
                 }
                 HStack {
-                    if let likes = post.likes {
-                        if post.likes!.count > 0 {
+                    if let likes = post?.likes {
+                        if likes.count > 0 {
                             Image(systemName: "hand.thumbsup.fill")
                                 .background(Circle().fill(.blue).frame(width: 20, height: 20))
                                 .foregroundStyle(.whiteOrDark)
@@ -68,7 +110,7 @@ struct PostView: View {
                     }
                     Spacer()
                     if !isPostDetailView {
-                        if let comments = post.comments {
+                        if let comments = post?.comments {
                             Button(action: {
                                 commentBtnClicked = true
                             }, label: {
@@ -90,16 +132,16 @@ struct PostView: View {
                             likeBtnClicked.toggle()
                             
                             if likeBtnClicked {
-                                if let id = post.id {
+                                if let id = post?.id {
                                     await addLikeToFirebase(postId: id)
                                 }
                             } else {
-                                if let id = post.id {
+                                if let id = post?.id {
                                     await removeLikeFromFirebase(postId: id)
                                     
                                 }
                             }
-                            authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
+                            authViewModel.fetchPostFromFirebase(postId: post?.id ?? "") { fetchedPost in
                                 if let reloadedPost = fetchedPost {
                                     post = reloadedPost
                                 }
@@ -115,7 +157,6 @@ struct PostView: View {
                                 .kerning(1.2)
                         }
                     })
-                    .disabled(isLoading)
                     .buttonStyle(.plain)
                     .foregroundStyle(likeBtnClicked ? .blue : .primary)
                     .padding(.leading, 50)
@@ -141,12 +182,11 @@ struct PostView: View {
                     .buttonStyle(.plain)
                 }
                 .padding(.bottom)
-            }
+            
         }
         .background(.whiteOrDark)
         .onAppear() {
-            getOtherUserData(userId: post.user)
-            if let likes = post.likes {
+            if let likes = post?.likes {
                 if ((likes.contains(userId))) {
                     likeBtnClicked = true
                 }
@@ -177,13 +217,6 @@ struct PostView: View {
         authViewModel.removeUserIdFromLikes(postId: postId) { removedLike in}
         authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
             tempPost = fetchedPost
-        }
-    }
-    func getOtherUserData(userId: String) {
-        isLoading = true
-        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
-            otherUser = fetchedOtherUser
-            isLoading = false
         }
     }
     
