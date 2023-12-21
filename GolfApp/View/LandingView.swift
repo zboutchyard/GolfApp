@@ -88,7 +88,7 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                            AlertView()
+                        AlertView(authViewModel: authViewModel)
                                 .tabItem {
                                     Label("Notifications", systemImage: "bell.fill")
                                 }

@@ -40,6 +40,7 @@ struct NewPostView: View {
                 
                 Button(action: {
                     Task {
+                        onPostSubmitted?()
                         // Check if there is image data to upload
                         if let data = data {
                             // Upload the image to Firebase Storage
@@ -52,7 +53,6 @@ struct NewPostView: View {
 
                                 // After successful upload, add the post referencing the image
                                 authViewModel.addPost(text: postText, imageRef: storageReference.name) { post in
-                                    onPostSubmitted?()
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }

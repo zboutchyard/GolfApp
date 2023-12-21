@@ -23,7 +23,7 @@ struct PostDetailView: View {
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser, onBack: onBack!)
+                PostView(user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser, onBack: onBack)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { proxy in
@@ -84,7 +84,9 @@ struct PostDetailView: View {
             isTextFieldFocused = false
         }
         .onDisappear {
-            onBack!()
+            if let onBack = onBack {
+                onBack()
+            }
         }
         .background(.whiteOrDark)
         if let post = post {
