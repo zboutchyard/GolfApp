@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseStorage
+import AlertToast
 
 
 struct NewPostView: View {
@@ -40,9 +41,8 @@ struct NewPostView: View {
                 
                 Button(action: {
                     Task {
-                        onPostSubmitted?()
-                        // Check if there is image data to upload
                         if let data = data {
+                            onPostSubmitted?()
                             // Upload the image to Firebase Storage
                             storageReference.putData(data, metadata: nil) { metadata, error in
                                 guard metadata != nil else {
@@ -57,17 +57,20 @@ struct NewPostView: View {
                                 }
                             }
                         } else {
-                            // If there is no image, just add the post without an image reference
-                            authViewModel.addPost(text: postText, imageRef: nil) { post in
-                                onPostSubmitted?()
-                                presentationMode.wrappedValue.dismiss()
-                            }
+                                authViewModel.addPost(text: postText, imageRef: nil) { post in
+                                    onPostSubmitted?()
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            
+                           
                         }
                     }
                    
                 }, label: {
                     Text("Post")
-                })                        .buttonStyle(.borderedProminent)
+                })                       
+                .buttonStyle(.borderedProminent)
+                .disabled((data == nil) && postText.isEmpty)
                 
                 
             }
