@@ -245,7 +245,7 @@ struct PostView: View {
         }
         .navigationDestination(isPresented: $userClicked) {
             if let user = user {
-                ProfileView(authViewModel: authViewModel, user: user)
+                ProfileView(authViewModel: authViewModel, user: user, otherUser: otherUser)
                 .background(Color.whiteOrDark)
             }
         }

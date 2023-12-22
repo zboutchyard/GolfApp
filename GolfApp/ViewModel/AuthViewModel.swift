@@ -422,15 +422,18 @@ class AuthViewModel: ObservableObject {
         ]
         
         let notificationRef = Firestore.firestore().collection("Users").document(postOwner)
-        notificationRef.updateData([
-            "notifications": FieldValue.arrayUnion([notificationData])
-        ]) { error in
-            if let error = error {
-                print("Error adding notification: \(error.localizedDescription)")
-            } else {
-                print("notification added successfully")
+        if uid != postOwner {
+            notificationRef.updateData([
+                "notifications": FieldValue.arrayUnion([notificationData])
+            ]) { error in
+                if let error = error {
+                    print("Error adding notification: \(error.localizedDescription)")
+                } else {
+                    print("notification added successfully")
+                }
             }
         }
+       
         
         postRef.updateData([
             "comments": FieldValue.arrayUnion([commentData])
