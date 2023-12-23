@@ -13,7 +13,7 @@ import AlertToast
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
-    @State private var teeTimeBtnSelected: Bool = false
+    @State private var badgeViewBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
     @State private var friendsListBtnSelected: Bool = false
     @State private var isEditButtonClicked = false
@@ -41,7 +41,7 @@ struct ProfileView: View {
                                 Button(action: {
                                     isOtherViewClicked = false
                                     profileBtnSelected = true
-                                    teeTimeBtnSelected = false
+                                    badgeViewBtnSelected = false
                                     friendsListBtnSelected = false
                                 }, label: {
                                     Text("Profile")
@@ -49,17 +49,17 @@ struct ProfileView: View {
                                 .buttonStyle(.bordered)
                                 .tint(profileBtnSelected ? .blue : nil)
                                 Button(action: {
-                                    teeTimeBtnSelected = true
+                                    badgeViewBtnSelected = true
                                     profileBtnSelected = false
                                     friendsListBtnSelected = false
                                     isOtherViewClicked = true
                                 }, label: {
-                                    Text("Tee Time")
+                                    Text("Badges")
                                 })
                                 .buttonStyle(.bordered)
-                                .tint(teeTimeBtnSelected ? .blue : nil)
+                                .tint(badgeViewBtnSelected ? .blue : nil)
                                 Button(action: {
-                                    teeTimeBtnSelected = false
+                                    badgeViewBtnSelected = false
                                     profileBtnSelected = false
                                     friendsListBtnSelected = true
                                     isOtherViewClicked = true
@@ -77,9 +77,9 @@ struct ProfileView: View {
                                     ProfileInfoView(authViewModel: authViewModel, user: user, isOtherUserProfile: false)
                                 }
                             }
-                            if teeTimeBtnSelected {
+                            if badgeViewBtnSelected {
                                 VStack {
-                                    ScoreCardView()
+                                    Text("Under Construction")
                                 }
                             }
                             if friendsListBtnSelected {

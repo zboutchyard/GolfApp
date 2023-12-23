@@ -26,7 +26,7 @@ struct AlertView: View {
     
     
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             if isLoading {
                 LoadingView()
             } else {
