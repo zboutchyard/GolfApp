@@ -13,6 +13,8 @@ struct ScoreCardView: View {
     @State private var selectedHoles: Int? // Add this state to track selected holes
     @State var isShareRoundSelected: Bool = false
     @State var isPopoverActivated: Bool = false
+    @State private var isExpanded: Bool = false
+    @State var postText: String = ""
     
     var body: some View {
         VStack {
@@ -51,6 +53,7 @@ struct ScoreCardView: View {
                                                 } label: {
                                                     Text("9")
                                                 }
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                                                 .foregroundColor(selectedHoles == 9 ? .white : .blue)
                                             }
                                         RoundedCorner(radius: 20, corners: [.topRight, .bottomRight])
@@ -62,6 +65,7 @@ struct ScoreCardView: View {
                                                 } label: {
                                                     Text("18")
                                                 }
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                                                 .foregroundColor(selectedHoles == 18 ? .white : .blue)
                                             }
                                     }
@@ -72,30 +76,47 @@ struct ScoreCardView: View {
                             }
                         }
                         .background(.whiteOrDark)
-                        HStack {
-                            Button {
-                                isPopoverActivated = true
-                            } label: {
-                                Image(systemName: "questionmark.circle.fill")
+                        VStack {
+                            HStack {
+                                Button {
+                                    isPopoverActivated = true
+                                } label: {
+                                    Image(systemName: "questionmark.circle.fill")
+                                }
+                                
+                                Toggle(
+                                    "Start live round",
+                                    isOn: $isShareRoundSelected
+                                )
+                                .onChange(of: isShareRoundSelected) {
+                                    withAnimation {
+                                        isExpanded.toggle()
+                                    }
+                                }
+                            }
+                            .padding()
+                            if isExpanded {
+                                Divider()
+                                VStack {
+                                    TextField("...What do you want to say?", text: $postText)
+                                        .scrollContentBackground(.hidden)
+                                        .frame(height: 400, alignment: .top)
+                                        .background(Color.whiteOrDark)
+                                        .transition(.slide)
+                                        .animation(.easeInOut, value: isExpanded)
+                                }
+                                .background(.whiteOrDark)
                             }
                             
-                            Toggle(
-                                "Start live round",
-                                isOn: $isShareRoundSelected
-                            )
-                            
                         }
-                        .padding()
                         .background(.whiteOrDark)
-                        
                     }
                 }
             }
-            .background(.whiteOrBlack)
             Spacer()
             VStack {
                 RoundedCorner(radius: 50, corners: .allCorners)
-                    .fill(.green.opacity(0.4))
+                    .fill(.green)
                     .frame(height: 50)
                     .overlay {
                         Button {
@@ -103,6 +124,7 @@ struct ScoreCardView: View {
                         } label: {
                             Text("Start round")
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .foregroundStyle(.white)
                         
                     }
