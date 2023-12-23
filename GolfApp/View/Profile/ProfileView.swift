@@ -79,7 +79,7 @@ struct ProfileView: View {
                             }
                             if teeTimeBtnSelected {
                                 VStack {
-                                    TeeTimeView()
+                                    ScoreCardView()
                                 }
                             }
                             if friendsListBtnSelected {

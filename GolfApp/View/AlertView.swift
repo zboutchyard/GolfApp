@@ -99,8 +99,11 @@ struct AlertView: View {
                                             })
                                             .buttonStyle(.borderedProminent)
                                         }
+                                        .background(.whiteOrDark)
+                                        
+
                                     }
-                                    .padding([.leading, .trailing])
+                                    .padding()
                                 }
                                 .padding()
                                 Divider()
@@ -140,7 +143,7 @@ struct AlertView: View {
                                             
                                             VStack {
                                                 Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
-                                                    .fontWeight(.medium)
+                                                    .fontWeight(.semibold)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
                                                 
                                                 Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
@@ -150,8 +153,9 @@ struct AlertView: View {
                                             }
                                             .padding()
                                         }
-                                        .padding([.leading, .trailing])
+                                        .background(.whiteOrDark)
                                     })
+                                    .frame(maxWidth: .infinity)
                                     .buttonStyle(.plain)
                                     Divider()
                                 
@@ -163,7 +167,7 @@ struct AlertView: View {
             
         }
         
-        .background(.whiteOrDark)
+        .background(.whiteOrBlack)
         .onAppear {
             isLoading = true
             fetchUser()

@@ -80,9 +80,9 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                            TeeTimeView()
+                            ScoreCardView()
                                 .tabItem {
-                                    Label("Tee Time", systemImage: "figure.golf")
+                                    Label("Score Card", systemImage: "figure.golf")
                                 }
                                 .tag(1)
                                 .onAppear() {
