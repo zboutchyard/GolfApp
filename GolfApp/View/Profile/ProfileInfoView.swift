@@ -131,9 +131,6 @@ struct ProfileInfoView: View {
                     
                 }
                 .background(Color.whiteOrBlack)
-                .onAppear() {
-                    authViewModel.fetchAllPostsInUserObject(postIds: user?.posts ?? [])
-                }
             }
             
             else {

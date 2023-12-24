@@ -70,8 +70,8 @@ struct HomeView: View {
                     VStack {
                         if let posts = authViewModel.posts {
                             ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.id) { post in
-                                if let user = authViewModel.user {
-                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: authViewModel.postOtherUsers?[post.user], onBack: onBack)
+                                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user], onBack: onBack)
                                 }
                             }
                         } else {

@@ -23,13 +23,13 @@ struct ScoreCardView: View {
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-
-
-
+    @StateObject var searchModel = CourseSearchViewModel()
+    @State var shouldCloseSearch: Bool = false
+    @State var courseSearchText: String = ""
     
     var body: some View {
         VStack {
-            VStack {
+            ZStack {
                 VStack {
                     ScrollView {
                         HStack {
@@ -61,17 +61,58 @@ struct ScoreCardView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                         .padding(.bottom)
-
-
+                        
+                        
                         VStack {
-                            TextField("Course name", text: $courseName, prompt: Text("Where are you playing?"))
+                            TextField("Course name", text: $courseSearchText, prompt: Text("Where are you playing?"))
                                 .fontWeight(.medium)
                                 .font(.title2)
                                 .kerning(0.8)
                                 .padding(20)
                                 .cornerRadius(50, corners: .allCorners)
+                                .onChange(of: courseSearchText) {
+                                    if !courseSearchText.isEmpty {
+                                        searchModel.completer.queryFragment = courseSearchText
+                                    }
+                                    
+                                }
+                                .onTapGesture {
+                                    shouldCloseSearch = false
+                                }
+                            if  !courseSearchText.isEmpty {
+                                if !shouldCloseSearch {
+                                    ZStack {
+                                        Color.clear
+                                            .frame(height: 300)
+                                            .overlay() {
+                                                Group {
+                                                    List(searchModel.locationResult, id: \.self) { result in
+                                                        Button {
+                                                            courseSearchText = result.title
+                                                            shouldCloseSearch = true
+                                                            hideKeyboard()
+                                                        } label: {
+                                                            Text("\(result.title)")
+                                                        }
+                                                        .padding()
+
+                                                    }
+                                                    .background(Color.white)
+                                                    .cornerRadius(10)
+                                                    .shadow(radius: 5)
+                                                }
+                                            }
+                                        
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(Color.black.opacity(0.5)) // Semi-transparent background
+                                    .edgesIgnoringSafeArea(.all)
+                                }
+                                        }
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(.whiteOrDark)
+                        .edgesIgnoringSafeArea(.all)
                         VStack {
                             Button {
                                 isTeeSelectorClicked = true
@@ -86,12 +127,12 @@ struct ScoreCardView: View {
                                         .foregroundStyle(.white)
                                         .font(.title2)
                                         .kerning(0.8)
-
+                                    
                                 }
                                 .padding()
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+                            
                         }
                         .background(.whiteOrDark)
                         VStack {
@@ -193,11 +234,11 @@ struct ScoreCardView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .foregroundStyle(.white)
-
+                        
                         
                     }
                     .frame(maxWidth: .infinity)
-
+                
             }
             .padding(.horizontal)
             .padding(.bottom)
@@ -213,9 +254,9 @@ struct ScoreCardView: View {
             })
         }
         .padding(.top)
-        .onTapGesture {
-            hideKeyboard()
-        }
+//        .onTapGesture {
+//                hideKeyboard()
+//        }
         .sheet(isPresented: $isAddPlayerClicked) {
             VStack {
                 TextField("search friends", text: $searchText)
@@ -277,7 +318,7 @@ struct ScoreCardView: View {
             .padding(.horizontal)
             .frame(maxHeight: .infinity, alignment: .top)
             .presentationDetents([.height(400)])
-
+            
         }
         
         .sheet(isPresented: $isTeeSelectorClicked) {
@@ -384,11 +425,11 @@ struct ScoreCardView: View {
             .presentationDetents([.height(400)])
             .presentationDragIndicator(.visible)
         }
-    
-
-
         
-       
+        
+        
+        
+        
     }
     private func filterUsers() {
         if searchText != "" {
@@ -401,8 +442,8 @@ struct ScoreCardView: View {
     }
     
     private func hideKeyboard() {
-           UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-       }
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
     
 }
 

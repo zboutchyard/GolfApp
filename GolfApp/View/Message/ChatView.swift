@@ -14,12 +14,11 @@ struct ChatView: View {
     @State var chatId: String
     @State var otherUser: OtherUser
     @State var messages: [Message] = []
-    @State var image: UIImage?
     
     var body: some View {
         VStack {
                 VStack {
-                    TopRow(otherUser: otherUser, image: image)
+                    TopRow(otherUser: otherUser)
                         .onTapGesture {
                             hideKeyboard()
                         }

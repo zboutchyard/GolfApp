@@ -23,8 +23,8 @@ struct TopRow: View {
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .trailing)
-            if let image = image {
-                Image(uiImage: image)
+            if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 50, height: 50)

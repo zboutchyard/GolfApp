@@ -10,9 +10,8 @@ import FirebaseDatabase
 import Firebase
 
 struct AllChatsView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-    @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
-    @State var user: User?
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State private var prts: [String]?
     @State private var isLoading: Bool = false
     @State private var isAddMessageButtonClicked = false
@@ -36,18 +35,18 @@ struct AllChatsView: View {
                         } .padding(.trailing)
                     }
                     Divider()
-                    if let chats = user?.chats, chats.count > 0 {
+                    if let chats = authViewModel.user?.chats, chats.count > 0 {
                         List {
-                            
                             ForEach((chats), id: \.self){  chat in
                                 AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
                                     .frame(maxWidth: .infinity)
                                 
+                                
                             }
                             .onDelete(perform: deleteItem)
+                            
 
                         }
-
                     }
                     else {
                         Spacer()
@@ -71,7 +70,7 @@ struct AllChatsView: View {
             
         }
         .sheet(isPresented: $isAddMessageButtonClicked) {
-            if let user = user {
+            if let user = authViewModel.user {
                 NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)
             }
         }
@@ -85,11 +84,11 @@ struct AllChatsView: View {
     
     func deleteItem(at offsets: IndexSet) {
         offsets.forEach { index in
-            guard let chatId = user?.chats?[index] else { return }
+            guard let chatId = authViewModel.user?.chats?[index] else { return }
             msgViewModel.deleteUserChat(chatId: chatId)
         }
         // Update the local state to reflect the deletion
-        user?.chats?.remove(atOffsets: offsets)
+        authViewModel.user?.chats?.remove(atOffsets: offsets)
     }
 }
 

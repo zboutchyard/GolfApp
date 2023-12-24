@@ -121,7 +121,7 @@ struct LandingView: View {
         .padding(.top, 0)
         .navigationDestination(isPresented: $isMessageBtnClicked) {
             if let user = authViewModel.user {
-                AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel, user: user)
+                AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel)
 
             }
         }
