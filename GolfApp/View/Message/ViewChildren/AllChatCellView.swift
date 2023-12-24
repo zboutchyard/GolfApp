@@ -14,7 +14,6 @@ struct AllChatCellView: View {
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
     @Binding var selectedChatId: String?
     @State private var otherUser: OtherUser?
-    @State private var chatModel: Chat?
     @State private var isLoading: Bool = true
     @State var image: UIImage?
     let chatId: String
@@ -52,8 +51,8 @@ struct AllChatCellView: View {
                                         .multilineTextAlignment(.leading)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     HStack {
-                                        if let message = chatModel?.messages?.last {
-                                            Text(message.text!)
+                                        if let message = msgViewModel.lastMessage {
+                                            Text(message.text ?? "")
                                                 .lineLimit(1)
                                                 .multilineTextAlignment(.leading)
                                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -95,8 +94,9 @@ struct AllChatCellView: View {
     
     func getAllConversations()  {
         msgViewModel.fetchChat(chatId: self.chatId) { fetchedChat in
-            chatModel = fetchedChat
-            getParticipantName(chatModel: chatModel!)
+            if let chat = msgViewModel.chat {
+                getParticipantName(chatModel: chat)
+            }
         }
     }
     

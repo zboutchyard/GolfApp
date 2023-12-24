@@ -12,7 +12,7 @@ import AlertToast
 
 struct NewPostView: View {
     @State var postText: String = ""
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?

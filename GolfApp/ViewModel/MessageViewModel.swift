@@ -14,7 +14,8 @@ import FirebaseStorage
 
 class MessageViewModel: ObservableObject {
     @Published private(set) var messages: [Message] = []
-    @Published private(set) var lastMessage = ""
+    @Published var lastMessage: Message?
+    @Published var chat: Chat?
     @Published private(set) var chatId = ""
     
     let db = Firestore.firestore()
@@ -28,9 +29,10 @@ class MessageViewModel: ObservableObject {
             do {
                 let chat = try document.data(as: Chat.self)
                 self.messages = chat.messages ?? []
-                if let text = self.messages.last?.text {
+                if let text = self.messages.last {
                     self.lastMessage = text
                 }
+                self.chat = chat
                 completion(chat)
             } catch {
                 print("error decoding document into chat \(error)")

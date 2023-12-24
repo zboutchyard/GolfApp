@@ -9,7 +9,7 @@ import SwiftUI
 import AlertToast
 
 struct SearchDetailView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @Binding var searchText: String
     @State var user: User?
     @State private var filteredUsers: [OtherUser]?
@@ -31,8 +31,7 @@ struct SearchDetailView: View {
                     .padding()
                 Divider()
                 
-                if let users = filteredUsers, !users.isEmpty {
-                    ForEach(users, id: \.id) { otherUser in
+                    ForEach(filteredUsers ?? authViewModel.otherUsers ?? [], id: \.id) { otherUser in
                         HStack {
                             Button(action: {
                                 selectedUser = otherUser
@@ -58,7 +57,6 @@ struct SearchDetailView: View {
                                 } else {
                                     Button(action: {
                                         notificationViewModel.sendRequest(userId: otherUser.id)
-                                        fetchCurrentUser()
                                         isAddFriendSelected = true
                                     }, label: {
                                         Text("Add")
@@ -72,9 +70,6 @@ struct SearchDetailView: View {
                         }
                         
                     }
-                } else {
-                    ProgressView()
-                }
             }
         }
         .navigationDestination(isPresented: $isUserSelected, destination: {
@@ -83,30 +78,12 @@ struct SearchDetailView: View {
                     OtherUserProfileView(otherUser: selectedUser, user: user)
                 }
             }
-            
         })
         .toast(isPresenting: $isAddFriendSelected, alert: {
             AlertToast(displayMode: .banner(.pop), type: .complete(.mint), title: "Request sent")
         })
-        .onAppear() {
-            fetchOtherUsers()
-        }
         .onChange(of: searchText) {
             filterUsers()
-        }
-    }
-    
-    private func fetchOtherUsers() {
-        authViewModel.fetchAllOtherUsersFromFirebase() { users in
-            if let users = users {
-                filteredUsers = users
-            }
-        }
-    }
-    
-    private func fetchCurrentUser() {
-        authViewModel.fetchUserDataFromFirebase { fetchedUser in
-            user = fetchedUser
         }
     }
     

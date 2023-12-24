@@ -63,8 +63,6 @@ struct ProfileView: View {
                                     profileBtnSelected = false
                                     friendsListBtnSelected = true
                                     isOtherViewClicked = true
-                                    friends = nil
-                                    getOtherUserInfo(friendsList: user?.friendsList ?? [])
                                 }, label: {
                                     Text("Friends")
                                 })
@@ -103,7 +101,7 @@ struct ProfileView: View {
                                     .font(.system(size: 20))
                                     .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
                                 Divider()
-                                ForEach(filteredUsers ?? friends ?? [], id: \.id){ friend in
+                                ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id){ friend in
                                     HStack {
                                         if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
                                                 Image(uiImage: uiImage)
@@ -196,12 +194,6 @@ struct ProfileView: View {
         }
         .onChange(of: searchText) {
             filterUsers()
-        }
-    }
-    
-    func getOtherUserInfo(friendsList: [String]){
-        authViewModel.fetchFriendsFromFirebase(ids: friendsList) { allFriends in
-            friends = allFriends
         }
     }
     

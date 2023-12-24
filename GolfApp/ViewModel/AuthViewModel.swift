@@ -17,13 +17,15 @@ import FirebaseMessaging
 class AuthViewModel: ObservableObject {
     @Published var otherUsers: [OtherUser]?
     @Published var friends: [OtherUser]?
+    @Published var postOtherUsers: [String: OtherUser]? = [:]
     @Published var friend: OtherUser?
     @State var friendId: String?
     @Published var friendsList: [OtherUser]?
-    @Published var posts: [Post] = []
+    @Published var posts: [Post]?
     @Published var post: Post?
     @Published var userPosts: [Post] = []
     @Published var isUserLoggedIn: Bool = false
+    @Published var user: User?
     
     init(){
         if Auth.auth().currentUser != nil {
@@ -180,11 +182,13 @@ class AuthViewModel: ObservableObject {
                     if profilePic != "" {
                         self.fetchPhotoData(photoId: profilePic) { fetchedPhoto in
                             let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePicData: fetchedPhoto, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
+                            self.user = userModel
                             completion(userModel)
                         }
                     } else {
                         let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
                         print("User model created successfully.")
+                        self.user = userModel
                         completion(userModel)
                     }
                     
@@ -239,11 +243,13 @@ class AuthViewModel: ObservableObject {
                     if profilePic != nil {
                         fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
                             let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            self.postOtherUsers?[id] = otherUserModel
                             completion(otherUserModel)
 
                         }
                     } else {
                         let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                        self.postOtherUsers?[id] = otherUserModel
                         completion(otherUserModel)
                     }
                     
@@ -341,8 +347,6 @@ class AuthViewModel: ObservableObject {
                         }
                        
                     }
-                    self.otherUsers = otherUsers
-                    completion(otherUsers)
                 }
               
             } else {

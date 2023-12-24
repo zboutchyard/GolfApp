@@ -12,7 +12,7 @@ import Firebase
 struct AllChatsView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
-    @State private var user: User?
+    @State var user: User?
     @State private var prts: [String]?
     @State private var isLoading: Bool = false
     @State private var isAddMessageButtonClicked = false
@@ -78,24 +78,10 @@ struct AllChatsView: View {
         .toolbar {
             EditButton()
         }
-        .onAppear(){
-            getUserData()
-        }
-        .onChange(of: isAddMessageButtonClicked) {
-            getUserData()
-        }
        
         
         
     }
-    func getUserData() {
-        authViewModel.fetchUserDataFromFirebase { fetchedUser in
-            user = fetchedUser
-            isLoading = false
-        }
-    }
-    
-    
     
     func deleteItem(at offsets: IndexSet) {
         offsets.forEach { index in

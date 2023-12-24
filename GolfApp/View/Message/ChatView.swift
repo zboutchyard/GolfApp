@@ -39,7 +39,7 @@ struct ChatView: View {
                             }
                         }
                         .onChange(of: msgViewModel.lastMessage){
-                            if msgViewModel.lastMessage == messages.last?.text{
+                            if msgViewModel.lastMessage?.text == messages.last?.text{
                                 withAnimation {
                                     proxy.scrollTo(messages.last?.text, anchor: .bottom)
                                 }

@@ -10,12 +10,22 @@ import SwiftUI
 struct ScoreCardView: View {
     @State var user: User?
     @State var courseName: String = ""
-    @State private var selectedHoles: Int? // Add this state to track selected holes
+    @State private var selectedHoles: Int = 18 // Add this state to track selected holes
     @State var isShareRoundSelected: Bool = false
     @State var isPopoverActivated: Bool = false
     @State private var isExpanded: Bool = false
     @State var postText: String = ""
     @State var isTeeSelectorClicked: Bool = false
+    @State var isAddPlayerClicked: Bool = false
+    @State var choosePlayerClicked: Bool = false
+    @State var otherUser: OtherUser?
+    @State var friends: [OtherUser]?
+    @State var searchText: String = ""
+    @State private var filteredUsers: [OtherUser]?
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+
+
+
     
     var body: some View {
         VStack {
@@ -41,7 +51,7 @@ struct ScoreCardView: View {
                         .padding(.leading, 5)
                         
                         Button {
-                            //add player
+                            isAddPlayerClicked = true
                         } label: {
                             HStack {
                                 Image(systemName: "person.badge.plus")
@@ -73,16 +83,17 @@ struct ScoreCardView: View {
                                     Text("Blue")
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .fontWeight(.medium)
+                                        .foregroundStyle(.white)
                                         .font(.title2)
                                         .kerning(0.8)
+
                                 }
                                 .padding()
                             }
-                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                         }
                         .background(.whiteOrDark)
-
                         VStack {
                             HStack {
                                 Text("How many holes?")
@@ -161,7 +172,6 @@ struct ScoreCardView: View {
                                 }
                                 .background(.whiteOrDark)
                             }
-                            
                         }
                         .background(.whiteOrDark)
                     }
@@ -180,11 +190,14 @@ struct ScoreCardView: View {
                                 .fontWeight(.medium)
                                 .font(.title2)
                                 .kerning(0.8)
+                                .frame(maxWidth: .infinity)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .foregroundStyle(.white)
+
                         
                     }
+                    .frame(maxWidth: .infinity)
+
             }
             .padding(.horizontal)
             .padding(.bottom)
@@ -203,6 +216,70 @@ struct ScoreCardView: View {
         .onTapGesture {
             hideKeyboard()
         }
+        .sheet(isPresented: $isAddPlayerClicked) {
+            VStack {
+                TextField("search friends", text: $searchText)
+                    .padding(4)
+                    .font(.system(size: 20))
+                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
+                Divider()
+                ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id){ friend in
+                    HStack {
+                        if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        }
+                        
+                        
+                        VStack {
+                            Button {
+                                otherUser = friend
+                                choosePlayerClicked = true
+                            } label: {
+                                Text("\(friend.firstName) \(friend.lastName)")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .buttonStyle(.plain)
+                            .padding()
+                            
+                        }
+                        Spacer()
+                    }
+                    
+                    
+                    
+                    Divider()
+                }
+            }
+            .onChange(of: searchText) {
+                filterUsers()
+            }
+            .padding(.top)
+            .padding(.horizontal)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .presentationDetents([.height(400)])
+
+        }
+        
         .sheet(isPresented: $isTeeSelectorClicked) {
             VStack {
                 HStack {
@@ -313,6 +390,16 @@ struct ScoreCardView: View {
         
        
     }
+    private func filterUsers() {
+        if searchText != "" {
+            if let allUsers = authViewModel.friendsList {
+                filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
+            }
+        } else {
+            filteredUsers = authViewModel.friendsList
+        }
+    }
+    
     private func hideKeyboard() {
            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
        }

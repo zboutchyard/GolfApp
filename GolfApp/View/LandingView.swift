@@ -14,12 +14,10 @@ struct LandingView: View {
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @State var user: User?
+    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
     @State var isLoading: Bool = false
-    @State var posts: [Post]?
-    @State var otherUsers: [String: OtherUser] = [:]
     @State var shouldReloadData: Bool = true
     @State private var selectedTab: Int = 0
 
@@ -71,8 +69,8 @@ struct LandingView: View {
                 if isLoading {
                     ProgressView()
                 } else {
-                    if let user = user, let posts = posts, !otherUsers.isEmpty {
-                        HomeView(user: user, posts: posts, otherUsers: otherUsers, onBack: fetchAllData)
+                    if let user = authViewModel.user, let posts = authViewModel.posts, let otherUsers = authViewModel.postOtherUsers {
+                        HomeView(authViewModel: authViewModel, onBack: fetchAllData)
                                 .tabItem {
                                     Label("Home", systemImage: "house.fill")
                                 }
@@ -80,7 +78,7 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                            ScoreCardView()
+                            ScoreCardView(authViewModel: authViewModel)
                                 .tabItem {
                                     Label("Score Card", systemImage: "figure.golf")
                                 }
@@ -119,11 +117,14 @@ struct LandingView: View {
         .background(Color.whiteOrDark)
         .padding(.top, 0)
         .navigationDestination(isPresented: $isMessageBtnClicked) {
-            AllChatsView()
+            if let user = authViewModel.user {
+                AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel, user: user)
+
+            }
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
-            if let currentUser = user {
-                SearchDetailView(searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+            if let currentUser = authViewModel.user {
+                SearchDetailView(authViewModel: authViewModel ,searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
                     .toolbar(content: {
                         ToolbarItem(placement: .principal) {
                             TextField("search users", text: $searchText)
@@ -153,6 +154,7 @@ struct LandingView: View {
             
         }
     }
+    
     func fetchPosts(postIds: [String]) {
         authViewModel.fetchAllPostsInUserObject(postIds: postIds)
     }
@@ -160,24 +162,36 @@ struct LandingView: View {
     func fetchAllData() {
         isLoading = true
         authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
             let token = Messaging.messaging().fcmToken
             if let user = fetchedUser {
                 if (token != user.fcmToken) {
                     authViewModel.updateFcmToken()
                 }
             }
+            if let friends = authViewModel.user?.friendsList {
+                getFriendsList(friendsList: friends)
+
+            }
+            fetchOtherUsers()
             fetchAllPostsAndUserData()
-            if let userPosts = user?.posts {
+            if let userPosts = authViewModel.user?.posts {
                 fetchPosts(postIds: userPosts)
             }
         }
     }
     
+    private func fetchOtherUsers() {
+        authViewModel.fetchAllOtherUsersFromFirebase() { users in
+        }
+    }
+    
+    func getFriendsList(friendsList: [String]){
+        authViewModel.fetchFriendsFromFirebase(ids: friendsList) { allFriends in
+        }
+    }
+    
     func fetchAllPostsAndUserData() {
         authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
-            self.posts = fetchedPosts
-
             let group = DispatchGroup()
             for post in fetchedPosts {
                 group.enter()
@@ -195,7 +209,6 @@ struct LandingView: View {
 
     func getOtherUserData(userId: String, completion: @escaping () -> Void) {
         authViewModel.fetchOtherUserFromFirebase(id: userId) {  fetchedOtherUser in
-            otherUsers[userId] = fetchedOtherUser
             completion()
         }
     }

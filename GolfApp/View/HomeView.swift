@@ -11,13 +11,9 @@ import AlertToast
 struct HomeView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
-    @State var user: User?
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
     @State var isLoading: Bool = false
-    @State var posts: [Post]?
-    @State var otherUser: OtherUser?
-    @State var otherUsers: [String: OtherUser] = [:]
     var onBack: () -> Void
 
 
@@ -30,7 +26,7 @@ struct HomeView: View {
                 VStack {
                     HStack {
                         HStack {
-                            if let data = user?.profilePicData, let uiImage = UIImage(data: data) {
+                            if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
@@ -72,10 +68,10 @@ struct HomeView: View {
                     .background(.whiteOrDark)
                     Spacer().frame(height: 8)
                     VStack {
-                        if let posts = posts {
-                            ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.self) { post in
-                                if let user = user {
-                                    PostView(user: user, post: post, otherUser: otherUsers[post.user], onBack: onBack)
+                        if let posts = authViewModel.posts {
+                            ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.id) { post in
+                                if let user = authViewModel.user {
+                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: authViewModel.postOtherUsers?[post.user], onBack: onBack)
                                 }
                             }
                         } else {
@@ -87,11 +83,10 @@ struct HomeView: View {
                     }
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
-                    if let user = user {
-                        NewPostView(user: user, onPostSubmitted: {
+                    if let user = authViewModel.user {
+                        NewPostView(authViewModel: authViewModel, user: user, onPostSubmitted: {
                             isLoading = true
                             authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
-                                posts = fetchedPosts
                                 isLoading = false
                             }
                             isPostSubmitted = true
