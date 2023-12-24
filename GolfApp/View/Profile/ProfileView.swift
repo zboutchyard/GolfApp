@@ -171,7 +171,7 @@ struct ProfileView: View {
         })
         .navigationDestination(isPresented: $isAddFriendClicked) {
             if let currentUser = user {
-                SearchDetailView(searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                SearchDetailView(authViewModel: authViewModel, searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
                     .toolbar(content: {
                         ToolbarItem(placement: .principal) {
                             TextField("search users", text: $searchText)
