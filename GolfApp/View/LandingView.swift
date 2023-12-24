@@ -20,6 +20,9 @@ struct LandingView: View {
     @State var isLoading: Bool = false
     @State var shouldReloadData: Bool = true
     @State private var selectedTab: Int = 0
+    @State private var otherUserNotifications: [String: OtherUser] = [:]
+    @State var otherUserPendingRequest: [OtherUser] = []
+
 
     
     init() {
@@ -86,7 +89,7 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                        AlertView(authViewModel: authViewModel)
+                        AlertView(authViewModel: authViewModel, otherUserPendingRequest: otherUserPendingRequest, otherUserNotifications: otherUserNotifications)
                                 .tabItem {
                                     Label("Notifications", systemImage: "bell.fill")
                                 }
@@ -168,6 +171,16 @@ struct LandingView: View {
                     authViewModel.updateFcmToken()
                 }
             }
+            if fetchedUser?.receivedRequests != nil {
+                fetchOtherUsersByRequest()
+            }
+            if let notifications = fetchedUser?.notifications {
+                isLoading = true
+                for notification in notifications {
+                    fetchUserInfoById(userId: notification.userCommenting)
+                }
+                isLoading = false
+            }
             if let friends = authViewModel.user?.friendsList {
                 getFriendsList(friendsList: friends)
 
@@ -176,6 +189,32 @@ struct LandingView: View {
             fetchAllPostsAndUserData()
             if let userPosts = authViewModel.user?.posts {
                 fetchPosts(postIds: userPosts)
+            }
+        }
+    }
+    
+    func fetchUserInfoById(userId: String) {
+        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
+            otherUserNotifications[userId] = fetchedOtherUser
+        }
+    }
+    
+    func fetchOtherUsersByRequest() {
+        if let user = authViewModel.user {
+            if let receivedRequests = user.receivedRequests {
+                for request in receivedRequests {
+                    authViewModel.fetchOtherUserFromFirebase(id: request.user) { fetchedOtherUser in
+                        // Check if the fetched user is not already in the array
+                        if !otherUserPendingRequest.contains(where: { user in
+                            return user.id == fetchedOtherUser?.id // Update with the actual property used for comparison
+                        }) {
+                            // Append the fetched user to the array
+                            if let fetchedUser = fetchedOtherUser {
+                                otherUserPendingRequest.append(fetchedUser)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

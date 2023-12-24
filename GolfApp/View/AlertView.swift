@@ -10,27 +10,22 @@ import AlertToast
 import FirebaseAuth
 
 struct AlertView: View {
-    @State private var user: User?
     @State private var otherUser: OtherUser?
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @State private var isLoading: Bool = true
     @ObservedObject private var notificationViewModel: NotificationViewModel = NotificationViewModel()
-    @State var otherUserPendingRequest: [OtherUser] = []
+    @State var otherUserPendingRequest: [OtherUser]
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
     @State var otherUserNotification: OtherUser?
-    @State private var otherUserNotifications: [String: OtherUser] = [:]
+    @State var otherUserNotifications: [String: OtherUser]
     @State var isNotificationClicked: Bool = false
     @State var selectedPost: Post?
     
     
     
     var body: some View {
-        VStack (spacing: 0) {
-            if isLoading {
-                LoadingView()
-            } else {
-                if otherUserPendingRequest.isEmpty && ((user?.notifications == nil)) {
+        VStack {
+            if otherUserPendingRequest.isEmpty && ((authViewModel.user?.notifications == nil)) {
                     VStack {
                         Spacer()
                         Image(systemName: "bell.slash.fill")
@@ -79,7 +74,6 @@ struct AlertView: View {
                                                     notificationViewModel.addFriend(userId: otherUser.id)
                                                     notificationViewModel.removePendingRequests(userId: otherUser.id)
                                                     otherUserPendingRequest.removeAll()
-                                                    fetchUser()
                                                     isRequestAccepted = true
                                                 }
                                             }, label: {
@@ -90,7 +84,6 @@ struct AlertView: View {
                                                 Task {
                                                     notificationViewModel.removePendingRequests(userId: otherUser.id)
                                                     otherUserPendingRequest.removeAll()
-                                                    fetchUser()
                                                     isRequestDeclined = true
                                                 }
                                                 
@@ -111,7 +104,8 @@ struct AlertView: View {
                             
                             
                         }
-                        if let notifications = user?.notifications {
+                        if let notifications = authViewModel.user?.notifications {
+                            VStack (spacing: 3) {
                             ForEach(notifications, id: \.self) { notification in
                                     Button(action: {
                                         authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
@@ -153,25 +147,21 @@ struct AlertView: View {
                                             }
                                             .padding()
                                         }
+                                        .padding(3)
                                         .background(.whiteOrDark)
                                     })
                                     .frame(maxWidth: .infinity)
                                     .buttonStyle(.plain)
-                                    Divider()
-                                
+                                }
                             }
                         }
                     }
                 }
-            }
+            
             
         }
         
         .background(.whiteOrBlack)
-        .onAppear {
-            isLoading = true
-            fetchUser()
-        }
         .toast(isPresenting: $isRequestAccepted) {
             AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
         }
@@ -179,57 +169,17 @@ struct AlertView: View {
             AlertToast(displayMode: .banner(.slide), type: .systemImage("x", Color("Green")), title: "Request declined")
         }
         .navigationDestination(isPresented: $isNotificationClicked) {
-            PostDetailView(post: selectedPost, user: user, otherUser: otherUser)
+            if let user = authViewModel.user {
+                PostDetailView(post: selectedPost, user: user, otherUser: otherUser)
+
+            }
         }
         
     }
-    
-    func fetchUser() {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            user = fetchedUser
-            if user?.receivedRequests != nil {
-                fetchOtherUsersByRequest()
-            }
-            if let notifications = user?.notifications {
-                isLoading = true
-                for notification in notifications {
-                    fetchUserInfoById(userId: notification.userCommenting)
-                }
-                isLoading = false
-            } else {
-                isLoading = false
-            }
-        }
-    }
-    
-    func fetchOtherUsersByRequest() {
-        if let receivedRequests = user?.receivedRequests {
-            for request in receivedRequests {
-                authViewModel.fetchOtherUserFromFirebase(id: request.user) { fetchedOtherUser in
-                    // Check if the fetched user is not already in the array
-                    if !otherUserPendingRequest.contains(where: { user in
-                        return user.id == fetchedOtherUser?.id // Update with the actual property used for comparison
-                    }) {
-                        // Append the fetched user to the array
-                        if let fetchedUser = fetchedOtherUser {
-                            otherUserPendingRequest.append(fetchedUser)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func fetchUserInfoById(userId: String) {
-        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
-            otherUserNotifications[userId] = fetchedOtherUser
-        }
-    }
-    
 }
-#Preview {
-    AlertView()
-}
+//#Preview {
+//    AlertView()
+//}
 
 
 
