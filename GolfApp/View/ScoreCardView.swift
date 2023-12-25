@@ -25,7 +25,10 @@ struct ScoreCardView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @StateObject var searchModel = CourseSearchViewModel()
     @State var shouldCloseSearch: Bool = false
-    @State var courseSearchText: String = ""
+    @State var selectedCourseName: String = ""
+    @State var isCourseSheetPresented: Bool = false
+    @State private var showCourseList = false
+    
     
     var body: some View {
         VStack {
@@ -64,55 +67,30 @@ struct ScoreCardView: View {
                         
                         
                         VStack {
-                            TextField("Course name", text: $courseSearchText, prompt: Text("Where are you playing?"))
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                                .padding(20)
-                                .cornerRadius(50, corners: .allCorners)
-                                .onChange(of: courseSearchText) {
-                                    if !courseSearchText.isEmpty {
-                                        searchModel.completer.queryFragment = courseSearchText
-                                    }
-                                    
-                                }
-                                .onTapGesture {
-                                    shouldCloseSearch = false
-                                }
-                            if  !courseSearchText.isEmpty {
-                                if !shouldCloseSearch {
-                                    ZStack {
-                                        Color.clear
-                                            .frame(height: 300)
-                                            .overlay() {
-                                                Group {
-                                                    List(searchModel.locationResult, id: \.self) { result in
-                                                        Button {
-                                                            courseSearchText = result.title
-                                                            shouldCloseSearch = true
-                                                            hideKeyboard()
-                                                        } label: {
-                                                            Text("\(result.title)")
-                                                        }
-                                                        .padding()
-
-                                                    }
-                                                    .background(Color.white)
-                                                    .cornerRadius(10)
-                                                    .shadow(radius: 5)
-                                                }
-                                            }
+                            if let location = searchModel.currentLocation {
+                                Button(action: {
+                                    searchModel.searchForGolfCourses(near: location)
+                                    showCourseList.toggle()
+                                }) {
+                                    Text(selectedCourseName.isEmpty ? "Choose a course" : selectedCourseName)
+                                        .opacity(selectedCourseName.isEmpty ? 0.8 : 1.0)
+                                        .font(.title2)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                         
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(Color.black.opacity(0.5)) // Semi-transparent background
-                                    .edgesIgnoringSafeArea(.all)
                                 }
-                                        }
+                                .buttonStyle(.plain)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            } else {
+                                Text("Determining your location...")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(.whiteOrDark)
                         .edgesIgnoringSafeArea(.all)
+                        
+                        
                         VStack {
                             Button {
                                 isTeeSelectorClicked = true
@@ -252,186 +230,212 @@ struct ScoreCardView: View {
                     .presentationCompactAdaptation(.automatic)
                 
             })
-        }
-        .padding(.top)
-//        .onTapGesture {
-//                hideKeyboard()
-//        }
-        .sheet(isPresented: $isAddPlayerClicked) {
-            VStack {
-                TextField("search friends", text: $searchText)
-                    .padding(4)
-                    .font(.system(size: 20))
-                    .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
-                Divider()
-                ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id){ friend in
-                    HStack {
-                        if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
-                                .foregroundStyle(.whiteOrDark)
-                        } else {
-                            Image(systemName: "person.fill")
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 50, height: 50)
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
-                                .foregroundStyle(.whiteOrDark)
-                        }
-                        
-                        
-                        VStack {
-                            Button {
-                                otherUser = friend
-                                choosePlayerClicked = true
-                            } label: {
-                                Text("\(friend.firstName) \(friend.lastName)")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .multilineTextAlignment(.leading)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .buttonStyle(.plain)
-                            .padding()
-                            
-                        }
-                        Spacer()
-                    }
-                    
-                    
-                    
-                    Divider()
-                }
-            }
-            .onChange(of: searchText) {
-                filterUsers()
-            }
+            
             .padding(.top)
-            .padding(.horizontal)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .presentationDetents([.height(400)])
+            //        .onTapGesture {
+            //                hideKeyboard()
+            //        }
+            .sheet(isPresented: $isAddPlayerClicked) {
+                VStack {
+                    TextField("search friends", text: $searchText)
+                        .padding(4)
+                        .font(.system(size: 20))
+                        .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
+                    Divider()
+                    ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id){ friend in
+                        HStack {
+                            if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            } else {
+                                Image(systemName: "person.fill")
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50)
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            }
+                            
+                            
+                            VStack {
+                                Button {
+                                    otherUser = friend
+                                    choosePlayerClicked = true
+                                } label: {
+                                    Text("\(friend.firstName) \(friend.lastName)")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .multilineTextAlignment(.leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(.plain)
+                                .padding()
+                                
+                            }
+                            Spacer()
+                        }
+                        
+                        
+                        
+                        Divider()
+                    }
+                }
+                .onChange(of: searchText) {
+                    filterUsers()
+                }
+                .padding(.top)
+                .padding(.horizontal)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .presentationDetents([.height(400)])
+                
+            }
+            
+            .sheet(isPresented: $showCourseList) {
+                VStack {
+                    if searchModel.locationResult.isEmpty {
+                        Text("Fetching nearby golf courses...")
+                    } else {
+                        VStack {
+                            List(searchModel.locationResult, id: \.self) { completion in
+                                Button {
+                                    selectedCourseName = completion.title
+                                    showCourseList = false
+                                } label: {
+                                    Text(completion.title)
+                                }
+                                .buttonStyle(.plain)
+
+                                // When you select a course, you can perform further actions here
+                            }
+                        }
+                    }
+                }
+                
+            }
+            
+            .sheet(isPresented: $isTeeSelectorClicked) {
+                VStack {
+                    HStack {
+                        Button {
+                            //
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.black)
+                                Text("Black")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.medium)
+                                    .font(.title2)
+                                    .kerning(0.8)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .background(.whiteOrDark)
+                    HStack {
+                        Button {
+                            //
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.blue)
+                                Text("Blue")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.medium)
+                                    .font(.title2)
+                                    .kerning(0.8)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .background(.whiteOrDark)
+                    HStack {
+                        Button {
+                            //
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.white)
+                                Text("White")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.medium)
+                                    .font(.title2)
+                                    .kerning(0.8)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .background(.whiteOrDark)
+                    HStack {
+                        Button {
+                            //
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.yellow)
+                                Text("Yellow")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.medium)
+                                    .font(.title2)
+                                    .kerning(0.8)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .background(.whiteOrDark)
+                    HStack {
+                        Button {
+                            //
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundStyle(.red)
+                                Text("Red")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.medium)
+                                    .font(.title2)
+                                    .kerning(0.8)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .background(.whiteOrDark)
+                }
+                .padding(.top)
+                .padding(.horizontal)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .presentationDetents([.height(400)])
+                .presentationDragIndicator(.visible)
+            }
+            
+            
+            
+            
             
         }
         
-        .sheet(isPresented: $isTeeSelectorClicked) {
-            VStack {
-                HStack {
-                    Button {
-                        //
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.black)
-                            Text("Black")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                }
-                .background(.whiteOrDark)
-                HStack {
-                    Button {
-                        //
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.blue)
-                            Text("Blue")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                }
-                .background(.whiteOrDark)
-                HStack {
-                    Button {
-                        //
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.white)
-                            Text("White")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                }
-                .background(.whiteOrDark)
-                HStack {
-                    Button {
-                        //
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.yellow)
-                            Text("Yellow")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                }
-                .background(.whiteOrDark)
-                HStack {
-                    Button {
-                        //
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(.red)
-                            Text("Red")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                }
-                .background(.whiteOrDark)
-            }
-            .padding(.top)
-            .padding(.horizontal)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .presentationDetents([.height(400)])
-            .presentationDragIndicator(.visible)
-        }
-        
-        
-        
-        
         
     }
-    private func filterUsers() {
+    func filterUsers() {
         if searchText != "" {
             if let allUsers = authViewModel.friendsList {
                 filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
@@ -441,7 +445,7 @@ struct ScoreCardView: View {
         }
     }
     
-    private func hideKeyboard() {
+    func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     

@@ -74,6 +74,10 @@ struct LandingView: View {
                 } else {
                     if let user = authViewModel.user, let posts = authViewModel.posts, let otherUsers = authViewModel.postOtherUsers {
                         HomeView(authViewModel: authViewModel, onBack: fetchAllData)
+                                .refreshable {
+                                    fetchAllData()
+                                    selectedTab = selectedTab
+                                }
                                 .tabItem {
                                     Label("Home", systemImage: "house.fill")
                                 }
@@ -90,6 +94,10 @@ struct LandingView: View {
                                     isProfileView = false
                                 }
                         AlertView(authViewModel: authViewModel, otherUserPendingRequest: otherUserPendingRequest, otherUserNotifications: otherUserNotifications)
+                                .refreshable {
+                                    fetchAllData()
+                                    selectedTab = selectedTab
+                                }
                                 .tabItem {
                                     Label("Notifications", systemImage: "bell.fill")
                                 }
@@ -98,6 +106,10 @@ struct LandingView: View {
                                     isProfileView = false
                                 }
                         ProfileView(authViewModel: authViewModel, user: user)
+                                .refreshable {
+                                    fetchAllData()
+                                    selectedTab = selectedTab
+                                }
                                 .tabItem {
                                     Label("Profile", systemImage: "person.fill")
                                 }
@@ -142,10 +154,6 @@ struct LandingView: View {
         .navigationDestination(isPresented: $isSettingsButtonClicked) {
             SettingsView()
                 .navigationTitle("Settings")
-        }
-        .refreshable {
-            fetchAllData()
-            selectedTab = selectedTab
         }
         .onAppear() {
             if shouldReloadData {
