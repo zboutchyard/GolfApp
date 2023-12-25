@@ -20,6 +20,7 @@ struct ScoreCardView: View {
     @State var choosePlayerClicked: Bool = false
     @State var otherUser: OtherUser?
     @State var friends: [OtherUser]?
+    @State var otherUsers: [OtherUser] = []
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -35,35 +36,95 @@ struct ScoreCardView: View {
             ZStack {
                 VStack {
                     ScrollView {
-                        HStack {
-                            Image(systemName: "person.fill")
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 50, height: 50)
-                                .background {
-                                    Circle().fill(Color("AppGray"))
-                                }
-                                .foregroundStyle(.whiteOrDark)
-                            Text("Zack Boutchyard")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.bottom, 3)
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                        }
-                        .padding(.leading, 5)
-                        
-                        Button {
-                            isAddPlayerClicked = true
-                        } label: {
+                        VStack {
                             HStack {
-                                Image(systemName: "person.badge.plus")
-                                Text("Add player")
+                                if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .clipShape(Circle())
+                                        .frame(width: 50, height: 50)
+                                        .background {
+                                            Circle().fill(Color("AppGray"))
+                                        }
+                                        .foregroundStyle(.whiteOrDark)
+                                }
+                                if let user = authViewModel.user {
+                                    Text("\(user.firstName) \(user.lastName)")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.bottom, 3)
+                                        .fontWeight(.medium)
+                                        .font(.title2)
+                                        .kerning(0.8)
+                                }
                             }
+                            .padding(.leading, 5)
+                            .padding(.top)
+                            if !otherUsers.isEmpty {
+                                ForEach(otherUsers, id: \.self) { otherUser in
+                                    HStack {
+                                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                                            Image(uiImage: uiImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .clipShape(Circle())
+                                                .frame(width: 50, height: 50)
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        } else {
+                                            Image(systemName: "person.fill")
+                                                .scaledToFill()
+                                                .clipShape(Circle())
+                                                .frame(width: 50, height: 50)
+                                                .background {
+                                                    Circle().fill(Color("AppGray"))
+                                                }
+                                                .foregroundStyle(.whiteOrDark)
+                                        }
+                                            Text("\(otherUser.firstName) \(otherUser.lastName)")
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .padding(.bottom, 3)
+                                                .fontWeight(.medium)
+                                                .font(.title2)
+                                                .kerning(0.8)
+                                        Button {
+                                            otherUsers.removeAll { $0.id == otherUser.id }
+                                        } label: {
+                                            Image(systemName: "minus.circle")
+                                        }
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .padding(.trailing)
+
+                                        
+                                    }
+                                    .padding(.leading, 5)
+                                }
+                            }
+                            
+                            Button {
+                                isAddPlayerClicked = true
+                            } label: {
+                                HStack {
+                                    Image(systemName: "person.badge.plus")
+                                    Text("Add player")
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                            .padding(.bottom)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        .padding(.bottom)
+                        .background(.whiteOrDark)
                         
                         
                         VStack {
@@ -268,8 +329,9 @@ struct ScoreCardView: View {
                             
                             VStack {
                                 Button {
-                                    otherUser = friend
+                                    otherUsers.append(friend)
                                     choosePlayerClicked = true
+                                    isAddPlayerClicked.toggle()
                                 } label: {
                                     Text("\(friend.firstName) \(friend.lastName)")
                                         .font(.title3)
