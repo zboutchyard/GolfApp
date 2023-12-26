@@ -325,8 +325,6 @@ struct ScoreCardView: View {
                                     }
                                     .foregroundStyle(.whiteOrDark)
                             }
-                            
-                            
                             VStack {
                                 Button {
                                     otherUsers.append(friend)
@@ -339,15 +337,13 @@ struct ScoreCardView: View {
                                         .multilineTextAlignment(.leading)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
+                                .disabled(otherUsers.contains { $0.id == friend.id })
                                 .buttonStyle(.plain)
                                 .padding()
                                 
                             }
                             Spacer()
                         }
-                        
-                        
-                        
                         Divider()
                     }
                 }
@@ -367,21 +363,29 @@ struct ScoreCardView: View {
                         Text("Fetching nearby golf courses...")
                     } else {
                         VStack {
-                            List(searchModel.locationResult, id: \.self) { completion in
-                                Button {
-                                    selectedCourseName = completion.title
-                                    showCourseList = false
-                                } label: {
-                                    Text(completion.title)
+                            ForEach(searchModel.locationResult, id: \.self) { completion in
+                                VStack {
+                                    Button {
+                                        selectedCourseName = completion.title
+                                        showCourseList = false
+                                    } label: {
+                                        Text(completion.title)
+                                    }
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .buttonStyle(.plain)
+                                    .padding()
                                 }
-                                .buttonStyle(.plain)
-
-                                // When you select a course, you can perform further actions here
+                                Divider()
                             }
                         }
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top)
                     }
                 }
-                
+                .presentationDetents([.height(400)])
             }
             
             .sheet(isPresented: $isTeeSelectorClicked) {
@@ -404,7 +408,8 @@ struct ScoreCardView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .background(.whiteOrDark)
+                    Divider()
+
                     HStack {
                         Button {
                             //
@@ -423,7 +428,8 @@ struct ScoreCardView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .background(.whiteOrDark)
+                    Divider()
+
                     HStack {
                         Button {
                             //
@@ -442,7 +448,8 @@ struct ScoreCardView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .background(.whiteOrDark)
+                    Divider()
+
                     HStack {
                         Button {
                             //
@@ -461,7 +468,7 @@ struct ScoreCardView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .background(.whiteOrDark)
+                    Divider()
                     HStack {
                         Button {
                             //
@@ -480,8 +487,8 @@ struct ScoreCardView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .background(.whiteOrDark)
                 }
+                
                 .padding(.top)
                 .padding(.horizontal)
                 .frame(maxHeight: .infinity, alignment: .top)
