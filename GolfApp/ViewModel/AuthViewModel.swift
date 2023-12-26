@@ -405,6 +405,41 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func saveUserData(user: User, completion: @escaping (Bool, Error?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(false, nil)
+            return
+        }
+
+        let db = Firestore.firestore()
+        let usersRef = db.collection("Users").document(uid)
+
+        // Prepare the data dictionary
+        var data: [String: Any] = [
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            "email": user.email,
+        ]
+
+        // Optional fields
+        if let bio = user.bio { data["bio"] = bio }
+        if let interests = user.interests { data["interests"] = interests }
+        if let handicap = user.handicap { data["handicap"] = handicap }
+        if let homeCourse = user.homeCourse { data["homeCourse"] = homeCourse }
+
+        usersRef.setData(data, merge: true) { error in
+            if let error = error {
+                print("Error updating user: \(error)")
+                completion(false, error)
+            } else {
+                print("User successfully updated.")
+                completion(true, nil)
+            }
+        }
+        
+    }
+
 
     
     func addComment(postId: String, text: String, postOwner: String) {

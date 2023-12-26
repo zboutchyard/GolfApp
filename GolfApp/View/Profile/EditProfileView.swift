@@ -9,8 +9,13 @@ import SwiftUI
 
 struct EditProfileView: View {
     @State var user: User
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State var interestArray: [String] = []
+    @StateObject var searchModel = CourseSearchViewModel()
+    @State private var showCourseList = false
+    @State var selectedCourseName: String = ""
+    
     @State var interests: [String] = [
         "baseball",
         "football",
@@ -24,17 +29,9 @@ struct EditProfileView: View {
     @State var handicapSelection: [Int] = Array(-5...40)
     var body: some View {
         ScrollView {
-            Text("Information")
-                .fontWeight(.semibold)
-                .kerning(1.2)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading)
-                .padding()
-            Divider()
-                .padding(.horizontal)
             Section {
                 VStack() {
-                    Text("bio:")
+                    Text("Bio:")
                         .fontWeight(.regular)
                         .font(.callout)
                         .kerning(1.2)
@@ -61,9 +58,9 @@ struct EditProfileView: View {
                         .kerning(1.2)
                         .padding(.horizontal)
                         .multilineTextAlignment(.leading)
+                        .padding(.bottom)
                 }
-                Divider()
-                    .padding(.top)
+                
                 VStack() {
                     Text("Interests:")
                         .fontWeight(.regular)
@@ -71,15 +68,13 @@ struct EditProfileView: View {
                         .padding()
                         .padding(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 140, maximum: 120))], alignment: .center, spacing: 25) {
                         ForEach(interests, id: \.self) { item in
                             Button(action: {
                                 toggleInterest(interest: item)
                             }, label: {
                                 Text(item)
-                                    .foregroundStyle(interestArray.contains(item) ? Color.white : Color.black)                                    
+                                    .foregroundStyle(interestArray.contains(item) ? Color.white : Color.black)
                                     .frame(width: 80, height: 10)
                                     .padding()
                                     .background(
@@ -89,9 +84,8 @@ struct EditProfileView: View {
                             })
                         }
                     }
+                    .padding(.bottom)
                 }
-                Divider()
-                    .padding(.top)
                 HStack {
                     Text("Handicap:")
                         .fontWeight(.regular)
@@ -99,15 +93,22 @@ struct EditProfileView: View {
                         .padding()
                         .padding(.leading)
                         .frame(maxWidth: .infinity,alignment: .leading)
-                    Picker(selection: Binding(get: { self.user.handicap ?? nil }, set: { self.user.handicap = $0 }), label: Text("Handicap")) {
-                        ForEach(handicapSelection, id: \.self) { value in
-                            Text("\(value)")
+                    Picker(selection: $user.handicap.orDefault, label: Text("Handicap")) {
+                            ForEach(handicapSelection, id: \.self) { value in
+                                Button {
+                                    user.handicap = value
+                                } label: {
+                                    Text("\(value)").tag(value)
+                                }
+
+                            }
                         }
-                    }
-                    .frame(height: 120)
-                    .pickerStyle(.wheel)
+                        .pickerStyle(.wheel)
+                        .frame(height: 120)
+                    
+                    
+                   
                 }
-                Divider()
                 HStack(alignment: .top) {
                     Text("Home course:")
                         .fontWeight(.regular)
@@ -115,39 +116,93 @@ struct EditProfileView: View {
                         .padding()
                         .padding(.leading)
                     Spacer()
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .stroke(lineWidth: 0.3)
-                        .frame(maxWidth: .infinity, maxHeight: 50)
-                        .overlay(content: {
-                            VStack(alignment: .leading, spacing: 0) {
-                                TextField("Enter your home course", text: Binding(
-                                    get: { self.user.homeCourse ?? "" },
-                                    set: { self.user.homeCourse = $0 }
-                                ), axis: .vertical)
-                                .padding()
-                                .lineLimit(5)
-                                .multilineTextAlignment(.leading)
-                                .frame(maxHeight: .infinity, alignment: .topLeading)
+                    VStack {
+                        if let location = searchModel.currentLocation {
+                            Button(action: {
+                                searchModel.searchForGolfCourses(near: location)
+                                showCourseList.toggle()
+                            }) {
+                                if let courseName = user.homeCourse {
+                                    Text(courseName.isEmpty ? "Choose a course" : selectedCourseName.isEmpty ? courseName : selectedCourseName)
+                                        .opacity(0.8)
+                                        .fontWeight(.regular)
+                                        .kerning(1.2)
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                }
                             }
-                        })
-                        .padding(.trailing)
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                        } else {
+                            Text("Determining your location...")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.whiteOrDark)
+                    .edgesIgnoringSafeArea(.all)
+                }
+                .padding(.vertical)
+            }
+            .background(.whiteOrDark)
+            RoundedCorner(radius: 50, corners: .allCorners)
+                .fill(.green)
+                .frame(height: 50)
+                .foregroundStyle(.whiteOrBlack)
+                .overlay {
+                    Button {
+                        user.interests = interestArray.joined(separator: ",")
+                        authViewModel.saveUserData(user: user) { success, error in
+                            isSubmitButtonPressed = true
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    } label: {
+                        Text("Submit")
+                            .fontWeight(.medium)
+                            .font(.title2)
+                            .kerning(0.8)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .foregroundStyle(.white)
                 }
                 .padding(.top)
-                Divider()
+                .frame(maxWidth: .infinity)
+                .onAppear() {
+                    convertStringToArray()
+                }
+        }
+        .sheet(isPresented: $showCourseList) {
+            VStack {
+                if searchModel.locationResult.isEmpty {
+                    Text("Fetching nearby golf courses...")
+                } else {
+                    VStack {
+                        ForEach(searchModel.locationResult, id: \.self) { completion in
+                            VStack {
+                                Button {
+                                    user.homeCourse = completion.title
+                                    selectedCourseName = completion.title
+                                    showCourseList = false
+                                } label: {
+                                    Text(completion.title)
+                                }
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .buttonStyle(.plain)
+                                .padding()
+                            }
+                            Divider()
+                        }
+                    }
+                    .frame(maxHeight: .infinity, alignment: .top)
                     .padding(.top)
-                Button(action: {
-                    isSubmitButtonPressed = true
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Text("Submit")
-                })
-                .buttonStyle(.borderedProminent)
-                .padding(.top)
-                .frame(width: 200, height: 100, alignment: .center)
+                }
             }
-            .onAppear() {
-                convertStringToArray()
-            }
+            .presentationDetents([.height(400)])
         }
     }
     func convertStringToArray() {
@@ -166,6 +221,13 @@ struct EditProfileView: View {
             interestArray.append(interest)
         }
         //        isSelected.toggle()
+    }
+}
+
+extension Optional where Wrapped == Int {
+    var orDefault: Int {
+        get { self ?? 0 } // Provide a default value for the binding
+        set { self = newValue }
     }
 }
 

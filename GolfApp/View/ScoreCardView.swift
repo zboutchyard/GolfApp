@@ -29,6 +29,18 @@ struct ScoreCardView: View {
     @State var selectedCourseName: String = ""
     @State var isCourseSheetPresented: Bool = false
     @State private var showCourseList = false
+    struct TeeOption {
+        let name: String
+        let color: Color
+    }
+    let teeOptions = [
+        TeeOption(name: "Black", color: .black),
+        TeeOption(name: "Blue", color: .blue),
+        TeeOption(name: "White", color: .white),
+        TeeOption(name: "Yellow", color: .yellow),
+        TeeOption(name: "Red", color: .red)
+    ]
+    @State var selectedTeeOption = TeeOption(name: "Blue", color: .blue)
     
     
     var body: some View {
@@ -159,8 +171,8 @@ struct ScoreCardView: View {
                                 HStack {
                                     Circle()
                                         .frame(width: 10, height: 10)
-                                        .foregroundStyle(.blue)
-                                    Text("Blue")
+                                        .foregroundStyle(selectedTeeOption.color)
+                                    Text(selectedTeeOption.name)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .fontWeight(.medium)
                                         .foregroundStyle(.white)
@@ -390,15 +402,16 @@ struct ScoreCardView: View {
             
             .sheet(isPresented: $isTeeSelectorClicked) {
                 VStack {
-                    HStack {
-                        Button {
-                            //
-                        } label: {
+                    ForEach(teeOptions, id: \.name) { tee in
+                        Button(action: {
+                            self.selectedTeeOption = TeeOption(name: tee.name, color: tee.color)
+                            isTeeSelectorClicked.toggle()
+                        }) {
                             HStack {
                                 Circle()
                                     .frame(width: 10, height: 10)
-                                    .foregroundStyle(.black)
-                                Text("Black")
+                                    .foregroundStyle(tee.color)
+                                Text(tee.name)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .fontWeight(.medium)
                                     .font(.title2)
@@ -407,88 +420,9 @@ struct ScoreCardView: View {
                             .padding()
                         }
                         .buttonStyle(.plain)
-                    }
-                    Divider()
-
-                    HStack {
-                        Button {
-                            //
-                        } label: {
-                            HStack {
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundStyle(.blue)
-                                Text("Blue")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .fontWeight(.medium)
-                                    .font(.title2)
-                                    .kerning(0.8)
-                            }
-                            .padding()
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    Divider()
-
-                    HStack {
-                        Button {
-                            //
-                        } label: {
-                            HStack {
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundStyle(.white)
-                                Text("White")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .fontWeight(.medium)
-                                    .font(.title2)
-                                    .kerning(0.8)
-                            }
-                            .padding()
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    Divider()
-
-                    HStack {
-                        Button {
-                            //
-                        } label: {
-                            HStack {
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundStyle(.yellow)
-                                Text("Yellow")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .fontWeight(.medium)
-                                    .font(.title2)
-                                    .kerning(0.8)
-                            }
-                            .padding()
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    Divider()
-                    HStack {
-                        Button {
-                            //
-                        } label: {
-                            HStack {
-                                Circle()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundStyle(.red)
-                                Text("Red")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .fontWeight(.medium)
-                                    .font(.title2)
-                                    .kerning(0.8)
-                            }
-                            .padding()
-                        }
-                        .buttonStyle(.plain)
+                        Divider()
                     }
                 }
-                
                 .padding(.top)
                 .padding(.horizontal)
                 .frame(maxHeight: .infinity, alignment: .top)
