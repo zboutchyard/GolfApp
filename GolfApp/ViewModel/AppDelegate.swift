@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
+import GoogleMobileAds
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.message_id"
@@ -16,6 +17,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         FirebaseApp.configure()
 
         Messaging.messaging().delegate = self
+        
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "209af1d40ea972fbb4efc0e0435697c1" ]
 
         if #available(iOS 10.0, *) {
           // For iOS 10 display notification (sent via APNS)

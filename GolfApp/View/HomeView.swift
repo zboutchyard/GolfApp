@@ -15,6 +15,9 @@ struct HomeView: View {
     @State var isPostSubmitted: Bool = false
     @State var isLoading: Bool = false
     var onBack: () -> Void
+    @State private var adPositions: [Int] = []
+    @State private var postCounter = 0
+
 
 
     
@@ -64,23 +67,36 @@ struct HomeView: View {
                         })
                         .buttonStyle(.plain)
                     }
-                    .ignoresSafeArea()
                     .background(.whiteOrDark)
                     Spacer().frame(height: 8)
                     VStack {
                         if let posts = authViewModel.posts {
-                            ForEach(posts.sorted(by: { $0.timeStamp > $1.timeStamp }), id: \.id) { post in
-                                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
-                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user], onBack: onBack)
-                                }
-                            }
-                        } else {
+                                            ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
+                                                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user], onBack: onBack)
+
+                                                    // Display ad based on randomized positions
+                                                    if adPositions.contains(index) {
+                                                        Section {
+                                                            NativeAdViewControllerWrapper()
+                                                                .frame(height: 400)
+                                                                .padding()
+                                                                            .background(Color.whiteOrDark)
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                            }
+                                        } else {
                             LoadingView()
                         }
                         
                         
                         
                     }
+                    .onAppear {
+                        setupRandomAdPositions(for: authViewModel.posts?.count ?? 0)
+                                }
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
@@ -101,6 +117,19 @@ struct HomeView: View {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
     }
+    private func setupRandomAdPositions(for postCount: Int) {
+            adPositions.removeAll()
+            var potentialPositions = Set(1..<postCount) // Start from 1 to avoid the first position
+
+            while adPositions.count < postCount / 4 { // Adjust the division factor as needed
+                guard let randomPosition = potentialPositions.randomElement() else { break }
+                adPositions.append(randomPosition)
+                // Remove nearby positions to avoid consecutive ads
+                potentialPositions.remove(randomPosition)
+                potentialPositions.remove(randomPosition + 1)
+                potentialPositions.remove(randomPosition - 1)
+            }
+        }
 }
 
 //#Preview {

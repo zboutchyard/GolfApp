@@ -58,11 +58,7 @@ struct PostView: View {
                                         }
                                         .foregroundStyle(.whiteOrDark)
                                 }
-                                
-                                
-                                
-                                
-                                
+ 
                                 VStack {
                                     if let user = otherUser {
                                         Text("\(user.firstName) \(user.lastName)")

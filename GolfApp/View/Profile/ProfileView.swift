@@ -31,6 +31,7 @@ struct ProfileView: View {
     var body: some View {
         if isLoading {
             ProgressView()
+                .background(Color.whiteOrBlack)
         } else {
             ScrollView {
                     if user != nil {
