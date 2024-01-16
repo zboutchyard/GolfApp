@@ -29,6 +29,7 @@ struct ScoreCardView: View {
     @State var selectedCourseName: String = ""
     @State var isCourseSheetPresented: Bool = false
     @State private var showCourseList = false
+    @State var isRoundStarted: Bool = false
     struct TeeOption {
         let name: String
         let color: Color
@@ -276,7 +277,7 @@ struct ScoreCardView: View {
                     .frame(height: 50)
                     .overlay {
                         Button {
-                            //
+                            isRoundStarted = true
                         } label: {
                             Text("Start round")
                                 .fontWeight(.medium)
@@ -434,6 +435,9 @@ struct ScoreCardView: View {
             
             
             
+        }
+        .navigationDestination(isPresented: $isRoundStarted) {
+            LiveRoundView(isTextFieldFocused: false)
         }
         
         
