@@ -39,6 +39,7 @@
 		10696A352B3249030011FE9B /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A342B3249030011FE9B /* FirebaseMessaging */; };
 		10696A372B3249390011FE9B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A362B3249390011FE9B /* FirebaseFirestore */; };
 		10696A3B2B3259530011FE9B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10696A3A2B3259530011FE9B /* AppDelegate.swift */; };
+		107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107B54192BB0803300C00654 /* AuthViewModelExtention.swift */; };
 		108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32962B1976FB008F59F9 /* PostDetailView.swift */; };
 		108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */; };
 		108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */; };
@@ -65,6 +66,7 @@
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
 		10C89DA62B3F195300DF0837 /* GoogleAdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C89DA52B3F195300DF0837 /* GoogleAdViewController.swift */; };
+		10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */; };
 		17B0689C6B5B8076204FC69D /* Pods_GolfApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00941C7DA6F54FA2FEAEC180 /* Pods_GolfApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +114,7 @@
 		10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		10696A3A2B3259530011FE9B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10696A3C2B325BA30011FE9B /* GolfApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GolfApp.entitlements; sourceTree = "<group>"; };
+		107B54192BB0803300C00654 /* AuthViewModelExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModelExtention.swift; sourceTree = "<group>"; };
 		108C32962B1976FB008F59F9 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
@@ -141,6 +144,7 @@
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
 		10C89DA52B3F195300DF0837 /* GoogleAdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAdViewController.swift; sourceTree = "<group>"; };
+		10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundView.swift; sourceTree = "<group>"; };
 		7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.release.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.release.xcconfig"; sourceTree = "<group>"; };
 		87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AA09D7336AA6011BA26F8649 /* Pods-Par Pals.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.debug.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.debug.xcconfig"; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 				10551A032B22BC0A00218E1D /* LoadingView.swift */,
 				10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */,
 				10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */,
+				10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -319,6 +324,7 @@
 				108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */,
 				10696A3A2B3259530011FE9B /* AppDelegate.swift */,
 				10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */,
+				107B54192BB0803300C00654 /* AuthViewModelExtention.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -570,9 +576,11 @@
 				1032E9D62AF7FFEB00001048 /* Step1View.swift in Sources */,
 				1032E9D92AF8580C00001048 /* Step2View.swift in Sources */,
 				108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */,
+				107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */,
 				10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */,
 				10C89DA62B3F195300DF0837 /* GoogleAdViewController.swift in Sources */,
 				1032E9D22AF7D53B00001048 /* ProfileImage.swift in Sources */,
+				10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */,
 				10B0C3A92B38AD70003C6F31 /* CourseSearchViewModel.swift in Sources */,
 				1032E9E92AF9F99100001048 /* MessageField.swift in Sources */,
 				1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */,
