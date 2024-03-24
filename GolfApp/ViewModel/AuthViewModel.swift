@@ -26,6 +26,14 @@ class AuthViewModel: ObservableObject {
     @Published var userPosts: [Post] = []
     @Published var isUserLoggedIn: Bool = false
     @Published var user: User?
+    @Published var state: AppState = .loading
+    @Published var otherUserPendingRequest: [OtherUser] = []
+    @Published var otherUserNotifications: [String: OtherUser] = [:]
+    @Published var shouldLoad: Bool = false
+
+
+    let storage = Storage.storage()
+
     
     init(){
         if Auth.auth().currentUser != nil {
@@ -39,6 +47,12 @@ class AuthViewModel: ObservableObject {
         case loading(Progress)
         case success(Image)
         case failure(Error)
+    }
+    
+    enum AppState {
+        case loading
+        case loaded
+        case error
     }
 
     enum TransferError: Error {
@@ -117,9 +131,12 @@ class AuthViewModel: ObservableObject {
     
     // ... (other properties and methods)
     
+    
+    @MainActor
     func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(nil)
+            state = .error
             return
         }
         
@@ -147,7 +164,6 @@ class AuthViewModel: ObservableObject {
                     let receivedRequestsData = data["receivedRequests"] as? [[String: Any]] ?? []
                     let fcmToken = data["fcmToken"] as? String
                     
-
                     let sentRequests = sentRequestsData.compactMap { requestData in
                         if let user = requestData["user"] as? String
                         {
@@ -155,7 +171,6 @@ class AuthViewModel: ObservableObject {
                         }
                         return nil
                     }
-                    
                     let receivedRequests = receivedRequestsData.compactMap { requestData in
                         if let user = requestData["user"] as? String
                         {
@@ -163,10 +178,6 @@ class AuthViewModel: ObservableObject {
                         }
                         return nil
                     }
-                    
-                   
-                    
-                    
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
@@ -194,18 +205,18 @@ class AuthViewModel: ObservableObject {
                     
                 } else {
                     print("User data not present or incomplete in Firestore document.")
+                    self.state = .error
                     completion(nil)
                 }
             } else {
                 print("Document doesn't exist in Firestore.")
+                self.state = .error
                 completion(nil)
             }
         }
     }
     
-    
-    
-    let storage = Storage.storage()
+    @MainActor
     func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
         let photoRef = storage.reference().child("\(photoId)")
         
@@ -222,8 +233,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    
-    
+    @MainActor
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
         let db  = Firestore.firestore()
         let usersRef = db.collection("Users").document(id)
@@ -252,10 +262,6 @@ class AuthViewModel: ObservableObject {
                         self.postOtherUsers?[id] = otherUserModel
                         completion(otherUserModel)
                     }
-                    
-                        
-                   
-                
                 } else {
                     print(error?.localizedDescription ?? "")
                     completion(nil)
@@ -267,7 +273,8 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func fetchFriendsFromFirebase(ids: [String], completion: @escaping ([OtherUser]?) -> Void) {
+    @MainActor
+    func fetchFriendsFromFirebase(ids: [String]) async -> Void {
         let db = Firestore.firestore()
         var otherUsers = [OtherUser]()
         for id in ids {
@@ -288,28 +295,25 @@ class AuthViewModel: ObservableObject {
                                 let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
                                 otherUsers.append(otherUserModel)
                                 self.friendsList = otherUsers
-                                completion(otherUsers)
 
                             }
                         } else {
                             let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
                             otherUsers.append(otherUserModel)
                             self.friendsList = otherUsers
-                            completion(otherUsers)
                         }
                     } else {
                         print(error?.localizedDescription ?? "")
-                        completion(nil)
                     }
                 } else {
                     print(error?.localizedDescription ?? "")
-                    completion(nil)
                 }
             }
         }
     }
     
-    func fetchAllOtherUsersFromFirebase(completion: @escaping ([OtherUser]?) -> Void) {
+    @MainActor
+    func fetchAllOtherUsersFromFirebase() async -> Void {
         let db  = Firestore.firestore()
         let usersRef = db.collection("Users")
 
@@ -335,7 +339,6 @@ class AuthViewModel: ObservableObject {
                                     otherUsers.append(otherUserModel)
                                 }
                                 self.otherUsers = otherUsers
-                                completion(otherUsers)
                             }
                         } else {
                             let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
@@ -343,7 +346,6 @@ class AuthViewModel: ObservableObject {
                                 otherUsers.append(otherUserModel)
                             }
                             self.otherUsers = otherUsers
-                            completion(otherUsers)
                         }
                        
                     }
@@ -351,12 +353,12 @@ class AuthViewModel: ObservableObject {
               
             } else {
                 print(error?.localizedDescription ?? "")
-                completion(nil)
             }
         }
     }
     
-    func fetchAllPostsInUserObject(postIds: [String]) {
+    @MainActor
+    func fetchAllPostsInUserObject(postIds: [String]) async {
         userPosts = []
         for postId in postIds {
             fetchPostFromFirebase(postId: postId) { fetchedPost in
@@ -369,6 +371,16 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    @MainActor
+    func fetchPostFromFirebase(postId: String) async -> Post? {
+        await withCheckedContinuation { continuation in
+            fetchPostFromFirebase(postId: postId) { post in
+                    continuation.resume(returning: post)
+            }
+        }
+    }
+    
+    @MainActor
     func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
         guard let user = Auth.auth().currentUser else {
             completion(nil)
@@ -688,28 +700,21 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func updateFcmToken() {
+    func updateFcmToken() async {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
-            print("Current user not found")
             return
         }
         
-        let fcmToken = Messaging.messaging().fcmToken
-        
-        guard let token = fcmToken else {
-            print("FCM token is not available")
+        guard let token = Messaging.messaging().fcmToken else {
             return
         }
         
         let db = Firestore.firestore()
-        
         let userDoc = db.collection("Users").document(currentUserID)
         
-        userDoc.updateData(["fcmToken": token]) { error in
-            if let error = error {
-                print("Error updating FCM token: \(error.localizedDescription)")
-            } else {
-                print("FCM token updated successfully.")
+        await withCheckedContinuation { continuation in
+            userDoc.updateData(["fcmToken": token]) { error in
+                continuation.resume(returning: ())
             }
         }
     }

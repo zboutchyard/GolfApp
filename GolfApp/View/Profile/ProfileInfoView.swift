@@ -249,7 +249,9 @@ struct ProfileInfoView: View {
                     }
                     .background(Color.whiteOrBlack)
                     .onAppear() {
-                        authViewModel.fetchAllPostsInUserObject(postIds: otherUser?.posts ?? [])
+                        Task {
+                           await authViewModel.fetchAllPostsInUserObject(postIds: otherUser?.posts ?? [])
+                        }
                     }
                 
                 

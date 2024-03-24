@@ -9,23 +9,18 @@ import SwiftUI
 import AlertToast
 
 struct HomeView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var postSubmissionText: String = ""
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
-    @State var isLoading: Bool = false
-    var onBack: () -> Void
     @State private var adPositions: [Int] = []
     @State private var postCounter = 0
-
-
-
     
     var body: some View {
         ScrollView {
-            if isLoading {
+            if authViewModel.state == .loading {
                 LoadingView()
-            } else {
+            } else if authViewModel.state == .loaded {
                 VStack {
                     HStack {
                         HStack {
@@ -71,45 +66,44 @@ struct HomeView: View {
                     Spacer().frame(height: 8)
                     VStack {
                         if let posts = authViewModel.posts {
-                                            ForEach(Array(posts.enumerated()), id: \.element.id) { index, post in
-                                                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
-                                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user], onBack: onBack)
-
-                                                    // Display ad based on randomized positions
-                                                    if adPositions.contains(index) {
-                                                        Section {
-                                                            NativeAdViewControllerWrapper()
-                                                                .frame(height: 400)
-                                                                .padding()
-                                                                            .background(Color.whiteOrDark)
-                                                        }
-                                                        
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                            LoadingView()
-                        }
-                        
-                        
-                        
-                    }
-                    .onAppear {
-                        setupRandomAdPositions(for: authViewModel.posts?.count ?? 0)
+                            ForEach(posts, id: \.id) { post in
+                                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user])
+                                    
+                                    // Display ad based on randomized positions
+//                                    if adPositions.contains(index) {
+//                                        Section {
+//                                            NativeAdViewControllerWrapper()
+//                                                .frame(height: 400)
+//                                                .padding()
+//                                                .background(Color.whiteOrDark)
+//                                        }
+//                                        
+//                                    }
                                 }
+                            }
+                        }
+                    }
+//                    .onAppear {
+//                        setupRandomAdPositions(for: authViewModel.posts?.count ?? 0)
+//                    }
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
                         NewPostView(authViewModel: authViewModel, user: user, onPostSubmitted: {
-                            isLoading = true
+                            authViewModel.state = .loading
                             authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
-                                isLoading = false
+                                authViewModel.state = .loaded
                             }
                             isPostSubmitted = true
                         })
                     }
                 })
-            }    
+            } else {
+                VStack {
+                    Text("Error")
+                }
+            }
         }
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)
@@ -118,18 +112,18 @@ struct HomeView: View {
         })
     }
     private func setupRandomAdPositions(for postCount: Int) {
-            adPositions.removeAll()
-            var potentialPositions = Set(1..<postCount) // Start from 1 to avoid the first position
-
-            while adPositions.count < postCount / 4 { // Adjust the division factor as needed
-                guard let randomPosition = potentialPositions.randomElement() else { break }
-                adPositions.append(randomPosition)
-                // Remove nearby positions to avoid consecutive ads
-                potentialPositions.remove(randomPosition)
-                potentialPositions.remove(randomPosition + 1)
-                potentialPositions.remove(randomPosition - 1)
-            }
+        adPositions.removeAll()
+        var potentialPositions = Set(1..<postCount) // Start from 1 to avoid the first position
+        
+        while adPositions.count < postCount / 4 { // Adjust the division factor as needed
+            guard let randomPosition = potentialPositions.randomElement() else { break }
+            adPositions.append(randomPosition)
+            // Remove nearby positions to avoid consecutive ads
+            potentialPositions.remove(randomPosition)
+            potentialPositions.remove(randomPosition + 1)
+            potentialPositions.remove(randomPosition - 1)
         }
+    }
 }
 
 //#Preview {

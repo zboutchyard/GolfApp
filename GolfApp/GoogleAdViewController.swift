@@ -31,8 +31,6 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         setupCallToActionButton()
         setupPriceLabel()
         setupStoreLabel()
-
-
         loadNativeAd()
     }
 
@@ -103,7 +101,7 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         nativeAdPlaceholder.addSubview(headlineLabel)
 
         NSLayoutConstraint.activate([
-            headlineLabel.topAnchor.constraint(equalTo: nativeAdPlaceholder.topAnchor, constant: 17),
+            headlineLabel.topAnchor.constraint(equalTo: nativeAdPlaceholder.topAnchor, constant: 8),
             headlineLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 8),
             headlineLabel.trailingAnchor.constraint(equalTo: nativeAdPlaceholder.trailingAnchor, constant: -15)
         ])
@@ -174,7 +172,7 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
             mediaView.leadingAnchor.constraint(equalTo: nativeAdPlaceholder.leadingAnchor),
             mediaView.trailingAnchor.constraint(equalTo: nativeAdPlaceholder.trailingAnchor),
             mediaView.topAnchor.constraint(equalTo: bodyLabel.bottomAnchor, constant: 10), // Adjust constant for desired spacing
-            mediaView.heightAnchor.constraint(equalTo: mediaView.widthAnchor, multiplier: 9.0/16.0) // Assuming a 16:9 aspect ratio
+            mediaView.heightAnchor.constraint(equalToConstant: 225) // Assuming a 16:9 aspect ratio
         ])
         mediaView.clipsToBounds = true
     }
@@ -186,9 +184,9 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
 
         NSLayoutConstraint.activate([
             callToActionButton.trailingAnchor.constraint(equalTo: nativeAdPlaceholder.trailingAnchor, constant: -10),
-            callToActionButton.topAnchor.constraint(equalTo: mediaView.bottomAnchor, constant: 10), // Set top anchor relative to mediaView's bottom
+            callToActionButton.topAnchor.constraint(equalTo: mediaView.bottomAnchor, constant: 4), // Set top anchor relative to mediaView's bottom
             callToActionButton.widthAnchor.constraint(equalToConstant: 100),
-            callToActionButton.heightAnchor.constraint(equalToConstant: 40)
+            callToActionButton.heightAnchor.constraint(equalToConstant:40)
         ])
         callToActionButton.clipsToBounds = true
     }
@@ -197,10 +195,6 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         adLoader = GADAdLoader(adUnitID: adUnitID, rootViewController: self, adTypes: [.native], options: [])
         adLoader.delegate = self
         adLoader.load(GADRequest())
-    }
-    
-    func calculateContentHeight() -> CGFloat {
-        return 600.00
     }
 
     func updateAdHeight() {

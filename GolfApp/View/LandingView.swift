@@ -13,18 +13,12 @@ struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = .init()
+    @ObservedObject var msgViewModel: MessageViewModel = .init()
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
-    @State var isLoading: Bool = false
-    @State var shouldReloadData: Bool = true
     @State private var selectedTab: Int = 0
-    @State private var otherUserNotifications: [String: OtherUser] = [:]
-    @State var otherUserPendingRequest: [OtherUser] = []
 
-
-    
     init() {
     UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
     }
@@ -69,13 +63,14 @@ struct LandingView: View {
             .background(.whiteOrDark)
             Divider()
             TabView(selection: $selectedTab) {
-                if isLoading {
+                switch authViewModel.state {
+                case .loading:
                     ProgressView()
-                } else {
-                    if let user = authViewModel.user, let posts = authViewModel.posts, let otherUsers = authViewModel.postOtherUsers {
-                        HomeView(authViewModel: authViewModel, onBack: fetchAllData)
+                case .loaded:
+                    if let user = authViewModel.user, let _ = authViewModel.posts, let _ = authViewModel.postOtherUsers {
+                        HomeView(authViewModel: authViewModel)
                                 .refreshable {
-                                    fetchAllData()
+                                    await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
                                 }
                                 .tabItem {
@@ -93,9 +88,9 @@ struct LandingView: View {
                                 .onAppear() {
                                     isProfileView = false
                                 }
-                        AlertView(authViewModel: authViewModel, otherUserPendingRequest: otherUserPendingRequest, otherUserNotifications: otherUserNotifications)
+                        AlertView(authViewModel: authViewModel, otherUserPendingRequest: authViewModel.otherUserPendingRequest, otherUserNotifications: authViewModel.otherUserNotifications)
                                 .refreshable {
-                                    fetchAllData()
+                                    await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
                                 }
                                 .tabItem {
@@ -107,7 +102,7 @@ struct LandingView: View {
                                 }
                         ProfileView(authViewModel: authViewModel, user: user)
                                 .refreshable {
-                                    fetchAllData()
+                                    await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
                                 }
                                 .tabItem {
@@ -122,9 +117,9 @@ struct LandingView: View {
                         .toolbarBackground(Color.whiteOrDark, for: .tabBar)
                         .background(Color.whiteOrDark)
                     }
+                case .error:
+                    Text("Error")
                 }
-                
-                
             }
             .background(Color.whiteOrDark)
             .padding(.top, 0)
@@ -132,7 +127,7 @@ struct LandingView: View {
         .background(Color.whiteOrDark)
         .padding(.top, 0)
         .navigationDestination(isPresented: $isMessageBtnClicked) {
-            if let user = authViewModel.user {
+            if authViewModel.user != nil {
                 AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel)
 
             }
@@ -156,107 +151,10 @@ struct LandingView: View {
                 .navigationTitle("Settings")
         }
         .onAppear() {
-            if shouldReloadData {
-                fetchAllData()
+            Task {
+                await authViewModel.fetchAllDataForLandingView()
+                selectedTab = selectedTab
             }
-            
-            shouldReloadData = false
-            selectedTab = selectedTab
-            
-        }
-    }
-    
-    func fetchPosts(postIds: [String]) {
-        authViewModel.fetchAllPostsInUserObject(postIds: postIds)
-    }
-    
-    func fetchAllData() {
-        isLoading = true
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
-            let token = Messaging.messaging().fcmToken
-            if let user = fetchedUser {
-                if (token != user.fcmToken) {
-                    authViewModel.updateFcmToken()
-                }
-            }
-            if fetchedUser?.receivedRequests != nil {
-                fetchOtherUsersByRequest()
-            }
-            if let notifications = fetchedUser?.notifications {
-                isLoading = true
-                for notification in notifications {
-                    fetchUserInfoById(userId: notification.userCommenting)
-                }
-                isLoading = false
-            }
-            if let friends = authViewModel.user?.friendsList {
-                getFriendsList(friendsList: friends)
-
-            }
-            fetchOtherUsers()
-            fetchAllPostsAndUserData()
-            if let userPosts = authViewModel.user?.posts {
-                fetchPosts(postIds: userPosts)
-            }
-        }
-    }
-    
-    func fetchUserInfoById(userId: String) {
-        authViewModel.fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
-            otherUserNotifications[userId] = fetchedOtherUser
-        }
-    }
-    
-    func fetchOtherUsersByRequest() {
-        if let user = authViewModel.user {
-            if let receivedRequests = user.receivedRequests {
-                for request in receivedRequests {
-                    authViewModel.fetchOtherUserFromFirebase(id: request.user) { fetchedOtherUser in
-                        // Check if the fetched user is not already in the array
-                        if !otherUserPendingRequest.contains(where: { user in
-                            return user.id == fetchedOtherUser?.id // Update with the actual property used for comparison
-                        }) {
-                            // Append the fetched user to the array
-                            if let fetchedUser = fetchedOtherUser {
-                                otherUserPendingRequest.append(fetchedUser)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func fetchOtherUsers() {
-        authViewModel.fetchAllOtherUsersFromFirebase() { users in
-        }
-    }
-    
-    func getFriendsList(friendsList: [String]){
-        authViewModel.fetchFriendsFromFirebase(ids: friendsList) { allFriends in
-        }
-    }
-    
-    func fetchAllPostsAndUserData() {
-        authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
-            let group = DispatchGroup()
-            for post in fetchedPosts {
-                group.enter()
-                self.getOtherUserData(userId: post.user) {
-                    group.leave()
-                }
-            }
-
-            group.notify(queue: .main) {
-                // Now all user data is fetched, update the state to render HomeView
-                self.isLoading = false
-            }
-        }
-    }
-
-    func getOtherUserData(userId: String, completion: @escaping () -> Void) {
-        authViewModel.fetchOtherUserFromFirebase(id: userId) {  fetchedOtherUser in
-            completion()
         }
     }
 }
