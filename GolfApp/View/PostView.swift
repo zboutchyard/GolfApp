@@ -133,7 +133,7 @@ struct PostView: View {
             }
             HStack {
                 if let likes = post?.likes {
-                    if likes.count > 0 {
+                    if !likes.isEmpty {
                         Image(systemName: "hand.thumbsup.fill")
                             .background(Circle().fill(.blue).frame(width: 20, height: 20))
                             .foregroundStyle(.whiteOrDark)

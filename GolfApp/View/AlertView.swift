@@ -20,9 +20,7 @@ struct AlertView: View {
     @State var otherUserNotifications: [String: OtherUser]
     @State var isNotificationClicked: Bool = false
     @State var selectedPost: Post?
-    
-    
-    
+
     var body: some View {
         VStack {
             if otherUserPendingRequest.isEmpty && ((authViewModel.user?.notifications == nil)) {
@@ -86,14 +84,13 @@ struct AlertView: View {
                                                     otherUserPendingRequest.removeAll()
                                                     isRequestDeclined = true
                                                 }
-                                                
+
                                             }, label: {
                                                 Text("Decline")
                                             })
                                             .buttonStyle(.borderedProminent)
                                         }
                                         .background(.whiteOrDark)
-                                        
 
                                     }
                                     .padding()
@@ -101,11 +98,10 @@ struct AlertView: View {
                                 .padding()
                                 Divider()
                             }
-                            
-                            
+
                         }
                         if let notifications = authViewModel.user?.notifications {
-                            VStack (spacing: 3) {
+                            VStack(spacing: 3) {
                             ForEach(notifications, id: \.self) { notification in
                                     Button(action: {
                                         authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
@@ -114,7 +110,8 @@ struct AlertView: View {
                                         }
                                     }, label: {
                                         HStack {
-                                            if let data = otherUserNotifications[notification.userCommenting]?.profilePicData, let uiImage = UIImage(data: data) {
+                                            if let data = otherUserNotifications[notification.userCommenting]?.profilePicData, 
+                                                let uiImage = UIImage(data: data) {
                                                 Image(uiImage: uiImage)
                                                     .resizable()
                                                     .scaledToFill()
@@ -134,12 +131,12 @@ struct AlertView: View {
                                                     }
                                                     .foregroundStyle(.whiteOrDark)
                                             }
-                                            
                                             VStack {
+                                                // swiftlint:disable:next line_length
                                                 Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
                                                     .fontWeight(.semibold)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                                
+
                                                 Text(notification.timeStamp.formatted(.dateTime.hour().minute()))
                                                     .font(.caption2)
                                                     .fontWeight(.light)
@@ -157,10 +154,9 @@ struct AlertView: View {
                         }
                     }
                 }
-            
-            
+
         }
-        
+
         .background(.whiteOrBlack)
         .toast(isPresenting: $isRequestAccepted) {
             AlertToast(displayMode: .banner(.slide), type: .systemImage("checkmark", Color("Green")), title: "Request approved")
@@ -174,13 +170,9 @@ struct AlertView: View {
 
             }
         }
-        
+
     }
 }
-//#Preview {
+// #Preview {
 //    AlertView()
-//}
-
-
-
-
+// }

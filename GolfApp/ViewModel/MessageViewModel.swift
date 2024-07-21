@@ -17,11 +17,10 @@ class MessageViewModel: ObservableObject {
     @Published var lastMessage: Message?
     @Published var chat: Chat?
     @Published private(set) var chatId = ""
-    
-    let db = Firestore.firestore()
+    let database = Firestore.firestore()
     
     func fetchChat(chatId: String, completion: @escaping (Chat?) -> Void?) {
-        db.collection("Chats").document(chatId).addSnapshotListener { querySnapshot, error in
+        database.collection("Chats").document(chatId).addSnapshotListener { querySnapshot, error in
             guard let document = querySnapshot else {
                 print("error fetching document \(String(describing: error))")
                 return
@@ -49,8 +48,8 @@ class MessageViewModel: ObservableObject {
         
         let otherUserName = otherUser.firstName
         
-        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String : Any]
-        let chatRef = db.collection("Chats").document(chatId)
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String: Any]
+        let chatRef = database.collection("Chats").document(chatId)
         
         chatRef.updateData([
             "messages": FieldValue.arrayUnion([newMessage])
@@ -68,11 +67,11 @@ class MessageViewModel: ObservableObject {
             print("Current user not found")
             return
         }
-        let otherUserRef = db.collection("Users").document(otherUser.id)
+        let otherUserRef = database.collection("Users").document(otherUser.id)
         let otherUserName = otherUser.firstName
-        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String : Any]
+        let newMessage = ["sender": currentUserID, "text": text, "timestamp": Date(), "senderName": otherUserName] as [String: Any]
         let participants = [currentUserID, otherUser.id]
-        let chatRef = db.collection("Chats").addDocument(data: ["messages": FieldValue.arrayUnion([newMessage])]) { error in
+        let chatRef = database.collection("Chats").addDocument(data: ["messages": FieldValue.arrayUnion([newMessage])]) { error in
             if let error = error {
                 print("Error updating document: \(error.localizedDescription)")
             } else {
@@ -81,10 +80,10 @@ class MessageViewModel: ObservableObject {
         }
         let chatId = chatRef.documentID
         self.chatId = chatId
-        let participantsRef = db.collection("Chats").document(chatId)
+        let participantsRef = database.collection("Chats").document(chatId)
         participantsRef.updateData(["participants": FieldValue.arrayUnion(participants)])
-        let userRef = db.collection("Users").document(currentUserID)
-        userRef.updateData(["chats": FieldValue.arrayUnion([chatId])]){ error in
+        let userRef = database.collection("Users").document(currentUserID)
+        userRef.updateData(["chats": FieldValue.arrayUnion([chatId])]) { error in
             if let error = error {
                 print("Error updating current users data \(error.localizedDescription)")
             } else {
@@ -101,17 +100,17 @@ class MessageViewModel: ObservableObject {
         }
         fetchChat(chatId: chatRef.documentID) { fetchedChat in
             if let chat = fetchedChat {
-                self.messages = (fetchedChat?.messages!)!
+                self.messages = (chat.messages ?? [])
             }
         }
     }
     
-    func deleteUserChat(chatId: String){
+    func deleteUserChat(chatId: String) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("Current user not found")
             return
         }
-        let userChatRef = db.collection("Users").document(currentUserID)
+        let userChatRef = database.collection("Users").document(currentUserID)
         userChatRef.updateData([
                 "chats": FieldValue.arrayRemove([chatId])
             ]) { error in

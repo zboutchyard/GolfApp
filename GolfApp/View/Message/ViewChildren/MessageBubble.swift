@@ -14,7 +14,7 @@ struct MessageBubble: View {
     var body: some View {
         let received: Bool = message.sender == Auth.auth().currentUser?.uid ? false : true
 
-        VStack(alignment: received ? .leading : .trailing){
+        VStack(alignment: received ? .leading : .trailing) {
             HStack {
                 Text(message.text ?? "")
                     .padding()
@@ -37,4 +37,3 @@ struct MessageBubble: View {
         .padding(.horizontal, 10)
     }
 }
-

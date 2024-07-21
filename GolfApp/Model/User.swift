@@ -24,6 +24,24 @@ struct User: Codable, Hashable {
     var receivedRequests: [Request]?
     var notifications: [Notification]?
     var fcmToken: String?
+    
+    init(firstName: String, lastName: String, email: String, profilePicData: Data? = nil, chats: [String]? = nil, friendsList: [String]? = nil, bio: String? = nil, interests: String? = nil, handicap: Int? = nil, homeCourse: String? = nil, posts: [String]? = nil, sentRequests: [Request]? = nil, receivedRequests: [Request]? = nil, notifications: [Notification]? = nil, fcmToken: String? = nil) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.profilePicData = profilePicData
+        self.chats = chats
+        self.friendsList = friendsList
+        self.bio = bio
+        self.interests = interests
+        self.handicap = handicap
+        self.homeCourse = homeCourse
+        self.posts = posts
+        self.sentRequests = sentRequests
+        self.receivedRequests = receivedRequests
+        self.notifications = notifications
+        self.fcmToken = fcmToken
+    }
 }
 
 struct Request: Codable, Hashable {

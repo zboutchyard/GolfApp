@@ -13,7 +13,6 @@ import PhotosUI
 import FirebaseStorage
 import FirebaseMessaging
 
-
 class AuthViewModel: ObservableObject {
     @Published var otherUsers: [OtherUser]?
     @Published var friends: [OtherUser]?
@@ -30,11 +29,21 @@ class AuthViewModel: ObservableObject {
     @Published var otherUserPendingRequest: [OtherUser] = []
     @Published var otherUserNotifications: [String: OtherUser] = [:]
     @Published var shouldLoad: Bool = false
-
+    @Published private(set) var imageState: ImageState = .empty
+    @Published var profileImage: ProfileImage? = nil
+    @Published var imageSelection: PhotosPickerItem? = nil {
+        didSet {
+            if let imageSelection {
+                let progress = loadTransferable(from: imageSelection)
+                imageState = .loading(progress)
+            } else {
+                imageState = .empty
+            }
+        }
+    }
 
     let storage = Storage.storage()
 
-    
     init(){
         if Auth.auth().currentUser != nil {
             self.isUserLoggedIn = true
@@ -42,6 +51,7 @@ class AuthViewModel: ObservableObject {
             self.isUserLoggedIn = false
         }
     }
+    
     enum ImageState {
         case empty
         case loading(Progress)
@@ -54,70 +64,6 @@ class AuthViewModel: ObservableObject {
         case loaded
         case error
     }
-
-    enum TransferError: Error {
-        case importFailed
-    }
-
-    
-    
-    struct ProfileImage: Transferable {
-        let image: Image
-        
-        static var transferRepresentation: some TransferRepresentation {
-            DataRepresentation(importedContentType: .image) { data in
-#if canImport(AppKit)
-                guard let nsImage = NSImage(data: data) else {
-                    throw TransferError.importFailed
-                }
-                let image = Image(nsImage: nsImage)
-                return ProfileImage(image: image)
-#elseif canImport(UIKit)
-                guard let uiImage = UIImage(data: data) else {
-                    throw TransferError.importFailed
-                }
-                let image = Image(uiImage: uiImage)
-                //instead of adding the photo in 1 register page, we could first create the user within a register page, establish a uid, then proceed to a walkthrugh screen and call uploadPhoto() here when the photo gets updated.
-                return ProfileImage(image: image)
-#else
-                throw TransferError.importFailed
-#endif
-            }
-        }
-    }
-    
-    @Published private(set) var imageState: ImageState = .empty
-    @Published var profileImage: ProfileImage? = nil
-    
-    @Published var imageSelection: PhotosPickerItem? = nil {
-        didSet {
-            if let imageSelection {
-                let progress = loadTransferable(from: imageSelection)
-                imageState = .loading(progress)
-            } else {
-                imageState = .empty
-            }
-        }
-    }
-    
-    private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
-        return imageSelection.loadTransferable(type: ProfileImage.self) { result in
-            DispatchQueue.main.async {
-                guard imageSelection == self.imageSelection else {
-                    print("Failed to get the selected item.")
-                    return
-                }
-                switch result {
-                case .success(let profileImage?):
-                    self.imageState = .success(profileImage.image)
-                case .success(nil):
-                    self.imageState = .empty
-                case .failure(let error):
-                    self.imageState = .failure(error)
-                }
-            }
-        }
-    }
     
     func signOut() {
         do {
@@ -128,10 +74,6 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    
-    // ... (other properties and methods)
-    
-    
     @MainActor
     func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -139,17 +81,14 @@ class AuthViewModel: ObservableObject {
             state = .error
             return
         }
-        
-        let db = Firestore.firestore()
-        let usersRef = db.collection("Users").document(uid)
-        
+        let database = Firestore.firestore()
+        let usersRef = database.collection("Users").document(uid)
         usersRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 if let data = document.data(),
                    let firstName = data["firstName"] as? String,
                    let lastName = data["lastName"] as? String,
-                   let email = data["email"] as? String
-                {
+                   let email = data["email"] as? String {
                     // Optional fields with default values
                     let profilePic = data["profilePic"] as? String ?? ""
                     let chats = data["chats"] as? [String] ?? []
@@ -163,17 +102,14 @@ class AuthViewModel: ObservableObject {
                     let sentRequestsData = data["sentRequests"] as? [[String: Any]] ?? []
                     let receivedRequestsData = data["receivedRequests"] as? [[String: Any]] ?? []
                     let fcmToken = data["fcmToken"] as? String
-                    
                     let sentRequests = sentRequestsData.compactMap { requestData in
-                        if let user = requestData["user"] as? String
-                        {
+                        if let user = requestData["user"] as? String {
                             return Request(user: user)
-                        }
+                        } 
                         return nil
                     }
                     let receivedRequests = receivedRequestsData.compactMap { requestData in
-                        if let user = requestData["user"] as? String
-                        {
+                        if let user = requestData["user"] as? String {
                             return Request(user: user)
                         }
                         return nil
@@ -183,33 +119,61 @@ class AuthViewModel: ObservableObject {
                         if let text = notificationData["text"] as? String,
                            let timeStamp = notificationData["timeStamp"] as? Timestamp,
                            let userCommenting = notificationData["userCommenting"] as? String,
-                            let postId = notificationData["postId"] as? String
-                        {
+                            let postId = notificationData["postId"] as? String {
                             let timeStamp = timeStamp.dateValue()
-                            return Notification(text: text, timeStamp: timeStamp, userCommenting: userCommenting, postId: postId)
+                            return Notification(
+                                text: text,
+                                timeStamp: timeStamp,
+                                userCommenting: userCommenting,
+                                postId: postId)
                         }
                         return nil
                     }
-                    if profilePic != "" {
+                    if !profilePic.isEmpty {
                         self.fetchPhotoData(photoId: profilePic) { fetchedPhoto in
-                            let userModel = User(firstName: firstName, lastName: lastName, email: email, profilePicData: fetchedPhoto, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
+                            let userModel = User(
+                                firstName: firstName,
+                                lastName: lastName,
+                                email: email,
+                                profilePicData: fetchedPhoto,
+                                chats: chats,
+                                friendsList: friendsList,
+                                bio: bio,
+                                interests: interests,
+                                handicap: handicap,
+                                homeCourse: homeCourse,
+                                posts: posts,
+                                sentRequests: sentRequests,
+                                receivedRequests: receivedRequests,
+                                notifications: notifications,
+                                fcmToken: fcmToken)
                             self.user = userModel
                             completion(userModel)
                         }
                     } else {
-                        let userModel = User(firstName: firstName, lastName: lastName, email: email, chats: chats, friendsList: friendsList, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts, sentRequests: sentRequests, receivedRequests: receivedRequests, notifications: notifications, fcmToken: fcmToken)
-                        print("User model created successfully.")
+                        let userModel = User(
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            chats: chats,
+                            friendsList: friendsList,
+                            bio: bio,
+                            interests: interests,
+                            handicap: handicap,
+                            homeCourse: homeCourse,
+                            posts: posts,
+                            sentRequests: sentRequests,
+                            receivedRequests: receivedRequests,
+                            notifications: notifications,
+                            fcmToken: fcmToken)
                         self.user = userModel
                         completion(userModel)
                     }
-                    
                 } else {
-                    print("User data not present or incomplete in Firestore document.")
                     self.state = .error
                     completion(nil)
                 }
             } else {
-                print("Document doesn't exist in Firestore.")
                 self.state = .error
                 completion(nil)
             }
@@ -217,33 +181,14 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
-        let photoRef = storage.reference().child("\(photoId)")
-        
-        
-        // Download the photo data
-        photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-            if let error = error {
-                print("Error downloading photo:", error.localizedDescription)
-                completion(nil)
-            } else {
-                print("got photho data \(data)")
-                completion(data)
-            }
-        }
-    }
-    
-    @MainActor
     func fetchOtherUserFromFirebase(id: String, completion: @escaping (OtherUser?) -> Void) {
-        let db  = Firestore.firestore()
-        let usersRef = db.collection("Users").document(id)
+        let database  = Firestore.firestore()
+        let usersRef = database.collection("Users").document(id)
         usersRef.getDocument { [self] (document, error) in
             if let document = document, document.exists {
                 if let data = document.data() ?? nil,
                    let firstName = data["firstName"] as? String,
-                   let lastName = data["lastName"] as? String
-                    
-                {
+                   let lastName = data["lastName"] as? String {
                     let profilePic = data["profilePic"] as? String
                     let bio = data["bio"] as? String ?? ""
                     let interests = data["interests"] as? String ?? ""
@@ -252,13 +197,30 @@ class AuthViewModel: ObservableObject {
                     let posts = data["posts"] as? [String] ?? []
                     if profilePic != nil {
                         fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
-                            let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            let otherUserModel = OtherUser(
+                                id: id,
+                                firstName: firstName,
+                                profilePicData: fetchedPhoto,
+                                lastName: lastName,
+                                bio: bio,
+                                interests: interests,
+                                handicap: handicap,
+                                homeCourse: homeCourse,
+                                posts: posts)
                             self.postOtherUsers?[id] = otherUserModel
                             completion(otherUserModel)
 
                         }
                     } else {
-                        let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                        let otherUserModel = OtherUser(
+                            id: id,
+                            firstName: firstName,
+                            lastName: lastName,
+                            bio: bio,
+                            interests: interests,
+                            handicap: handicap,
+                            homeCourse: homeCourse,
+                            posts: posts)
                         self.postOtherUsers?[id] = otherUserModel
                         completion(otherUserModel)
                     }
@@ -274,11 +236,11 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchFriendsFromFirebase(ids: [String]) async -> Void {
-        let db = Firestore.firestore()
+    func fetchFriendsFromFirebase(ids: [String]) async {
+        let database = Firestore.firestore()
         var otherUsers = [OtherUser]()
         for id in ids {
-            let usersRef = db.collection("Users").document(id)
+            let usersRef = database.collection("Users").document(id)
             usersRef.getDocument { [self] (document, error) in
                 if let document = document, document.exists {
                     if let data = document.data() ?? nil,
@@ -292,13 +254,30 @@ class AuthViewModel: ObservableObject {
                         let posts = data["posts"] as? [String] ?? []
                         if profilePic != nil {
                             fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
-                                let otherUserModel = OtherUser(id: id, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                                let otherUserModel = OtherUser(
+                                    id: id, 
+                                    firstName: firstName,
+                                    profilePicData: fetchedPhoto,
+                                    lastName: lastName,
+                                    bio: bio,
+                                    interests: interests,
+                                    handicap: handicap,
+                                    homeCourse: homeCourse,
+                                    posts: posts)
                                 otherUsers.append(otherUserModel)
                                 self.friendsList = otherUsers
 
                             }
                         } else {
-                            let otherUserModel = OtherUser(id: id, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
+                            let otherUserModel = OtherUser(
+                                id: id, 
+                                firstName: firstName,
+                                lastName: lastName,
+                                bio: bio, 
+                                interests: interests,
+                                handicap: handicap,
+                                homeCourse: homeCourse,
+                                posts: posts)
                             otherUsers.append(otherUserModel)
                             self.friendsList = otherUsers
                         }
@@ -313,107 +292,58 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchAllOtherUsersFromFirebase() async -> Void {
-        let db  = Firestore.firestore()
-        let usersRef = db.collection("Users")
-
-        
+    func fetchAllOtherUsersFromFirebase() async {
+        let database  = Firestore.firestore()
+        let usersRef = database.collection("Users")
         usersRef.getDocuments { (documents, error) in
             if let documents = documents {
                 var otherUsers = [OtherUser]()
-                
                 for document in documents.documents {
-                    if let data = document.data() ?? nil,
-                       let firstName = data["firstName"] as? String,
-                       let lastName = data["lastName"] as? String {
-                        let profilePic = data["profilePic"] as? String
-                        let bio = data["bio"] as? String ?? ""
-                        let interests = data["interests"] as? String ?? ""
-                        let handicap = data["handicap"] as? Int ?? 0
-                        let homeCourse = data["homeCourse"] as? String ?? ""
-                        let posts = data["posts"] as? [String] ?? []
-                        if profilePic != nil {
-                            self.fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
-                                let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, profilePicData: fetchedPhoto, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
-                                if otherUserModel.id != Auth.auth().currentUser?.uid {
-                                    otherUsers.append(otherUserModel)
-                                }
-                                self.otherUsers = otherUsers
-                            }
-                        } else {
-                            let otherUserModel = OtherUser(id: document.documentID, firstName: firstName, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, posts: posts)
-                            if otherUserModel.id != Auth.auth().currentUser?.uid {
-                                otherUsers.append(otherUserModel)
-                            }
-                            self.otherUsers = otherUsers
-                        }
-                       
-                    }
+                        let data = document.data()
+                        if let firstName = data["firstName"] as? String,
+                        let lastName = data["lastName"] as? String {
+                         let profilePic = data["profilePic"] as? String
+                         let bio = data["bio"] as? String ?? ""
+                         let interests = data["interests"] as? String ?? ""
+                         let handicap = data["handicap"] as? Int ?? 0
+                         let homeCourse = data["homeCourse"] as? String ?? ""
+                         let posts = data["posts"] as? [String] ?? []
+                         if profilePic != nil {
+                             self.fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
+                                 let otherUserModel = OtherUser(
+                                     id: document.documentID,
+                                     firstName: firstName,
+                                     profilePicData: fetchedPhoto,
+                                     lastName: lastName,
+                                     bio: bio,
+                                     interests: interests,
+                                     handicap: handicap,
+                                     homeCourse: homeCourse,
+                                     posts: posts)
+                                 if otherUserModel.id != Auth.auth().currentUser?.uid {
+                                     otherUsers.append(otherUserModel)
+                                 }
+                                 self.otherUsers = otherUsers
+                             }
+                         } else {
+                             let otherUserModel = OtherUser(
+                                 id: document.documentID,
+                                 firstName: firstName,
+                                 lastName: lastName,
+                                 bio: bio,
+                                 interests: interests,
+                                 handicap: handicap,
+                                 homeCourse: homeCourse,
+                                 posts: posts)
+                             if otherUserModel.id != Auth.auth().currentUser?.uid {
+                                 otherUsers.append(otherUserModel)
+                             }
+                             self.otherUsers = otherUsers
+                         }
+                     }
                 }
-              
             } else {
                 print(error?.localizedDescription ?? "")
-            }
-        }
-    }
-    
-    @MainActor
-    func fetchAllPostsInUserObject(postIds: [String]) async {
-        userPosts = []
-        for postId in postIds {
-            fetchPostFromFirebase(postId: postId) { fetchedPost in
-                print(fetchedPost ?? "no fetched post")
-                if let userPost = fetchedPost {
-                    self.userPosts.append(userPost)
-                }
-            }
-            print(self.userPosts ?? "user posts is nil???")
-        }
-    }
-    
-    @MainActor
-    func fetchPostFromFirebase(postId: String) async -> Post? {
-        await withCheckedContinuation { continuation in
-            fetchPostFromFirebase(postId: postId) { post in
-                    continuation.resume(returning: post)
-            }
-        }
-    }
-    
-    @MainActor
-    func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
-        guard let user = Auth.auth().currentUser else {
-            completion(nil)
-            return
-        }
-
-        let db = Firestore.firestore()
-        let postRef = db.collection("Posts").document(postId)
-
-        postRef.getDocument { [weak self] (document, error) in
-            if let document = document, document.exists {
-                do {
-                    var post = try document.data(as: Post.self)
-                    post.id = document.documentID
-
-                    // Check for an image reference
-                    if let imageRef = post.imageRef {
-                        self?.fetchPhotoData(photoId: imageRef) { imageData in
-                            post.imageData = imageData
-                            self?.post = post
-                            completion(post)
-                        }
-                    } else {
-                        self?.post = post
-                        completion(post)
-                    }
-                } catch {
-                    print("Error decoding document:", error.localizedDescription)
-                    completion(nil)
-                }
-            } else {
-                print(error?.localizedDescription ?? "Document does not exist")
-                completion(nil)
             }
         }
     }
@@ -424,14 +354,14 @@ class AuthViewModel: ObservableObject {
             return
         }
 
-        let db = Firestore.firestore()
-        let usersRef = db.collection("Users").document(uid)
+        let database = Firestore.firestore()
+        let usersRef = database.collection("Users").document(uid)
 
         // Prepare the data dictionary
         var data: [String: Any] = [
             "firstName": user.firstName,
             "lastName": user.lastName,
-            "email": user.email,
+            "email": user.email
         ]
 
         // Optional fields
@@ -451,8 +381,6 @@ class AuthViewModel: ObservableObject {
         }
         
     }
-
-
     
     func addComment(postId: String, text: String, postOwner: String) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
@@ -485,7 +413,6 @@ class AuthViewModel: ObservableObject {
             }
         }
        
-        
         postRef.updateData([
             "comments": FieldValue.arrayUnion([commentData])
         ]) { error in
@@ -496,52 +423,7 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-    
-    
-    
-    
-    func fetchAllPostsFromFirebase(completion: @escaping ([Post]) -> Void) {
-        Firestore.firestore().collection("Posts").getDocuments { [weak self] (snapshot, error) in
-            guard let snapshot = snapshot, error == nil else {
-                print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
-                completion([])
-                return
-            }
 
-            let group = DispatchGroup()
-            var tempPosts: [Post] = []
-
-            for document in snapshot.documents {
-                group.enter()
-                do {
-                    var post = try document.data(as: Post.self)
-                    post.id = document.documentID
-
-                    if let imageRef = post.imageRef {
-                        self?.fetchPhotoData(photoId: imageRef) { data in
-                            post.imageData = data
-                            tempPosts.append(post)
-                            group.leave()
-                        }
-                    } else {
-                        tempPosts.append(post)
-                        group.leave()
-                    }
-                } catch {
-                    print("Error decoding document:", error.localizedDescription)
-                    group.leave()
-                }
-            }
-
-            group.notify(queue: .main) {
-                self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
-                print("Fetched posts successfully")
-                completion(tempPosts)
-            }
-        }
-    }
-
-    
     func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -584,65 +466,9 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-    
-    func addPost(text: String, imageRef: String?, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-        var newPost: [String: Any] = [:]
-        
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            print("Current user not found")
-            return
-        }
-        
-        if imageRef != nil {
-            newPost = [
-                "text": text,
-                "timeStamp": Date.now,
-                "user": currentUserID,
-                "imageRef": imageRef as Any
-            ]
-        } else {
-            newPost = [
-                "text": text,
-                "timeStamp": Date.now,
-                "user": currentUserID
-            ]
-        }
-        
-        
-        let postRef = db.collection("Posts")
-        let userRef = db.collection("Users").document(currentUserID)
-        
-        // Add new post to the "Posts" collection
-        let addedPostRef = postRef.addDocument(data: newPost) { error in
-            if let error = error {
-                completion(error)
-            }
-        }
-        
-        // Use the documentID of the added post in the user's document
-        let newPostID = addedPostRef.documentID
-        userRef.getDocument { userDocument, userError in
-            if let userError = userError {
-                completion(userError)
-            } else if let userDocument = userDocument, userDocument.exists {
-                var currentPosts = userDocument["posts"] as? [String] ?? []
-                currentPosts.append(newPostID)
-                
-                userRef.updateData(["posts": currentPosts]) { updateError in
-                    completion(updateError)
-                }
-            }
-        }
-        
-    }
-    
-    
-    
-    
-    
-    func registerUserWithFirebase(email: String, password: String, firstName: String, profilePic: String?, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+
+    func registerUserWithFirebase(user: User, password: String, profilePic: String?, completion: @escaping (Error?) -> Void) {
+        Auth.auth().createUser(withEmail: user.email, password: password) { result, error in
             if let error = error {
                 completion(error)
                 return
@@ -652,38 +478,37 @@ class AuthViewModel: ObservableObject {
                 completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User ID not available"]))
                 return
             }
-            
-            self.createFirestoreUserDocument(uid: uid, email: email, firstName: firstName, profilePic: profilePic, lastName: lastName, bio: bio, interests: interests, handicap: handicap, homeCourse: homeCourse, completion: completion)
+            self.createFirestoreUserDocument(uid: uid, user: user, profilePic: profilePic, completion: completion)
         }
     }
     
-    func createFirestoreUserDocument(uid: String, email: String, firstName: String,  profilePic: String?, lastName: String, bio: String?, interests: String?, handicap: Int?, homeCourse: String?, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-        let usersCollection = db.collection("Users")
+    func createFirestoreUserDocument(uid: String, user: User, profilePic: String?, completion: @escaping (Error?) -> Void) {
+        let database = Firestore.firestore()
+        let usersCollection = database.collection("Users")
         
         var userData: [String: Any] = [
-            "email": email,
-            "firstName": firstName,
-            "lastName": lastName
+            "email": user.email,
+            "firstName": user.firstName,
+            "lastName": user.lastName
         ]
         
         // Add optional fields if provided
         if let profilePic = profilePic {
             userData["profilePic"] = profilePic
         }
-        if let bio = bio {
+        if let bio = user.bio {
             userData["bio"] = bio
         }
         
-        if let interests = interests {
+        if let interests = user.interests {
             userData["interests"] = interests
         }
         
-        if let handicap = handicap {
+        if let handicap = user.handicap {
             userData["handicap"] = handicap
         }
         
-        if let homeCourse = homeCourse {
+        if let homeCourse = user.homeCourse {
             userData["homeCourse"] = homeCourse
         }
         
@@ -709,26 +534,26 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        let db = Firestore.firestore()
-        let userDoc = db.collection("Users").document(currentUserID)
+        let database = Firestore.firestore()
+        let userDoc = database.collection("Users").document(currentUserID)
         
         await withCheckedContinuation { continuation in
-            userDoc.updateData(["fcmToken": token]) { error in
+            userDoc.updateData(["fcmToken": token]) { _ in
                 continuation.resume(returning: ())
             }
         }
     }
     
     func uploadPhoto(uiImage: UIImage ) {
-        //make sure that the selected image is not nil
+        // make sure that the selected image is not nil
         guard profileImage != nil else {
             print("profile image is nil")
             return
         }
-        //create the storage reference
+        // create the storage reference
         let storageRef = Storage.storage().reference()
         
-        //turn our image into data
+        // turn our image into data
         let imageData = uiImage.jpegData(compressionQuality: 0.3)
         
         print("image data \(String(describing: imageData))")
@@ -737,13 +562,226 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        //specify the file path and name
+        // specify the file path and name
         let fileRef = storageRef.child("images/\(UUID().uuidString).jpg")
         
-        //upload that data
+        // upload that data
         let uploadTask = fileRef.putData(imageData!, metadata: nil) { metadata, error in
             if error == nil && metadata != nil {
-                //save the reference to the file in firestore db
+                // save the reference to the file in firestore db
+            }
+        }
+    }
+}
+
+extension AuthViewModel {
+    enum TransferError: Error {
+        case importFailed
+    }
+
+    struct ProfileImage: Transferable {
+        let image: Image
+        static var transferRepresentation: some TransferRepresentation {
+            DataRepresentation(importedContentType: .image) { data in
+#if canImport(AppKit)
+                guard let nsImage = NSImage(data: data) else {
+                    throw TransferError.importFailed
+                }
+                let image = Image(nsImage: nsImage)
+                return ProfileImage(image: image)
+#elseif canImport(UIKit)
+                guard let uiImage = UIImage(data: data) else {
+                    throw TransferError.importFailed
+                }
+                let image = Image(uiImage: uiImage)
+                return ProfileImage(image: image)
+#else
+                throw TransferError.importFailed
+#endif
+            }
+        }
+    }
+    
+    private func loadTransferable(from imageSelection: PhotosPickerItem) -> Progress {
+        return imageSelection.loadTransferable(type: ProfileImage.self) { result in
+            DispatchQueue.main.async {
+                guard imageSelection == self.imageSelection else {
+                    print("Failed to get the selected item.")
+                    return
+                }
+                switch result {
+                case .success(let profileImage?):
+                    self.imageState = .success(profileImage.image)
+                case .success(nil):
+                    self.imageState = .empty
+                case .failure(let error):
+                    self.imageState = .failure(error)
+                }
+            }
+        }
+    }
+    
+    @MainActor
+    func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
+        let photoRef = storage.reference().child("\(photoId)")
+        photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+            if let error = error {
+                completion(nil)
+            } else {
+                completion(data)
+            }
+        }
+    }
+}
+
+extension AuthViewModel {
+    @MainActor
+    func fetchAllPostsInUserObject(postIds: [String]) async {
+        userPosts = []
+        for postId in postIds {
+            fetchPostFromFirebase(postId: postId) { fetchedPost in
+                print(fetchedPost ?? "no fetched post")
+                if let userPost = fetchedPost {
+                    self.userPosts.append(userPost)
+                }
+            }
+        }
+    }
+    
+    @MainActor
+    func fetchPostFromFirebase(postId: String) async -> Post? {
+        await withCheckedContinuation { continuation in
+            fetchPostFromFirebase(postId: postId) { post in
+                    continuation.resume(returning: post)
+            }
+        }
+    }
+    
+    @MainActor
+    func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
+        guard let _ = Auth.auth().currentUser else {
+            completion(nil)
+            return
+        }
+
+        let database = Firestore.firestore()
+        let postRef = database.collection("Posts").document(postId)
+
+        postRef.getDocument { [weak self] (document, error) in
+            if let document = document, document.exists {
+                do {
+                    var post = try document.data(as: Post.self)
+                    post.id = document.documentID
+
+                    // Check for an image reference
+                    if let imageRef = post.imageRef {
+                        self?.fetchPhotoData(photoId: imageRef) { imageData in
+                            post.imageData = imageData
+                            self?.post = post
+                            completion(post)
+                        }
+                    } else {
+                        self?.post = post
+                        completion(post)
+                    }
+                } catch {
+                    print("Error decoding document:", error.localizedDescription)
+                    completion(nil)
+                }
+            } else {
+                print(error?.localizedDescription ?? "Document does not exist")
+                completion(nil)
+            }
+        }
+    }
+    
+    func addPost(text: String, imageRef: String?, completion: @escaping (Error?) -> Void) {
+        let database = Firestore.firestore()
+        var newPost: [String: Any] = [:]
+        
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("Current user not found")
+            return
+        }
+        
+        if imageRef != nil {
+            newPost = [
+                "text": text,
+                "timeStamp": Date.now,
+                "user": currentUserID,
+                "imageRef": imageRef as Any
+            ]
+        } else {
+            newPost = [
+                "text": text,
+                "timeStamp": Date.now,
+                "user": currentUserID
+            ]
+        }
+        
+        let postRef = database.collection("Posts")
+        let userRef = database.collection("Users").document(currentUserID)
+        
+        // Add new post to the "Posts" collection
+        let addedPostRef = postRef.addDocument(data: newPost) { error in
+            if let error = error {
+                completion(error)
+            }
+        }
+        
+        // Use the documentID of the added post in the user's document
+        let newPostID = addedPostRef.documentID
+        userRef.getDocument { userDocument, userError in
+            if let userError = userError {
+                completion(userError)
+            } else if let userDocument = userDocument, userDocument.exists {
+                var currentPosts = userDocument["posts"] as? [String] ?? []
+                currentPosts.append(newPostID)
+                
+                userRef.updateData(["posts": currentPosts]) { updateError in
+                    completion(updateError)
+                }
+            }
+        }
+    }
+    
+    func fetchAllPostsFromFirebase(completion: @escaping ([Post]) -> Void) {
+        Firestore.firestore().collection("Posts").getDocuments { [weak self] (snapshot, error) in
+            guard let snapshot = snapshot, error == nil else {
+                print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
+                completion([])
+                return
+            }
+
+            let group = DispatchGroup()
+            var tempPosts: [Post] = []
+
+            for document in snapshot.documents {
+                group.enter()
+                do {
+                    var post = try document.data(as: Post.self)
+                    post.id = document.documentID
+
+                    if let imageRef = post.imageRef {
+                        self?.fetchPhotoData(photoId: imageRef) { data in
+                            post.imageData = data
+                            tempPosts.append(post)
+                            group.leave()
+                        }
+                    } else {
+                        tempPosts.append(post)
+                        group.leave()
+                    }
+                } catch {
+                    print("Error decoding document:", error.localizedDescription)
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) {
+                self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
+                print("Fetched posts successfully")
+                completion(tempPosts)
             }
         }
     }

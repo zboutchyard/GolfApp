@@ -29,7 +29,7 @@ struct LoginView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top)
-                Button("Login"){
+                Button("Login") {
                     Task {
                         login()
                     }
@@ -38,7 +38,7 @@ struct LoginView: View {
                     .padding(.trailing)
                     .padding(.top)
             }
-            .navigationDestination(isPresented: $isLoggedIn){
+            .navigationDestination(isPresented: $isLoggedIn) {
                     LandingView()
                         .navigationBarBackButtonHidden()
                         .toolbar(.hidden)

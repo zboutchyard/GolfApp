@@ -24,11 +24,10 @@ struct LoadingView: View {
         }
         .opacity(isBlinking ? 0 : 1)
         .animation(.easeInOut(duration: 2.5).repeatForever(), value: isBlinking)
-        .onAppear() {
+        .onAppear {
             self.isBlinking.toggle()
         }
-       
-            .foregroundStyle(.gray)
+        .foregroundStyle(.gray)
         Spacer()
     }
 }

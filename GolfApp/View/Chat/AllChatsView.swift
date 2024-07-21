@@ -9,14 +9,13 @@ import SwiftUI
 import FirebaseDatabase
 import Firebase
 
-
-//class MockAuthViewModel: ObservableObject {
+// class MockAuthViewModel: ObservableObject {
 //    func fetchUserDataFromFirebase(completion: @escaping (User?) -> Void) {
 //        // Mock implementation for testing in previews
 //        let mockUser = User(firstName: "Zack", lastName: "Boutchyard", email: "Zackboutchyard@gmail.com")
 //        completion(mockUser)
 //    }
-//}
+// }
 
 struct AllChatsView: View {
     @StateObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -39,9 +38,9 @@ struct AllChatsView: View {
                     .font(.largeTitle)
                 Divider()
                 ScrollView {
-                    //change this to actual array when done with UI
-                    ForEach(mockParticipantArray, id: \.self){ participant in
-                        NavigationLink(destination: ChatView()){
+                    // change this to actual array when done with UI
+                    ForEach(mockParticipantArray, id: \.self) { participant in
+                        NavigationLink(destination: ChatView()) {
                             ChatCardView(participant: participant)
                         }
                     }
@@ -49,7 +48,7 @@ struct AllChatsView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                                //action()
+                                // action()
                             }) {
                                 Image(systemName: "message.circle.fill")
                                     .resizable()
@@ -70,18 +69,18 @@ struct AllChatsView: View {
                     .progressViewStyle(.circular)
                     .padding()
             }
-        } .onAppear(){
-            //uncomment this when using actual data when done with UI
+        } .onAppear {
+            // uncomment this when using actual data when done with UI
 //            participantArray.removeAll()
 //            fetchUserDataAndGetAllConversations()
             
-            //remove this when done with UI
+            // remove this when done with UI
             isLoading = false
         }
     }
     
     func fetchUserDataAndGetAllConversations() {
-        authViewModel.fetchUserDataFromFirebase() { fetchedUser in
+        authViewModel.fetchUserDataFromFirebase { fetchedUser in
             user = fetchedUser
             if let userChats = user?.chats {
                 let dispatchGroup = DispatchGroup()

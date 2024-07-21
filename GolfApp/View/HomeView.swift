@@ -92,7 +92,7 @@ struct HomeView: View {
                     if let user = authViewModel.user {
                         NewPostView(authViewModel: authViewModel, user: user, onPostSubmitted: {
                             authViewModel.state = .loading
-                            authViewModel.fetchAllPostsFromFirebase() { fetchedPosts in
+                            authViewModel.fetchAllPostsFromFirebase { _ in
                                 authViewModel.state = .loaded
                             }
                             isPostSubmitted = true
@@ -125,7 +125,3 @@ struct HomeView: View {
         }
     }
 }
-
-//#Preview {
-//    HomeView()
-//}

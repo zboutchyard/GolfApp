@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct Chat: Codable, Hashable {
     var participants: [String]?
     var messages: [Message]?
@@ -18,6 +17,3 @@ struct Message: Codable, Hashable {
     var text: String?
     var timestamp: Date?
 }
-
-
-

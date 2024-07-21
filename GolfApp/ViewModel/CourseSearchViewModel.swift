@@ -10,10 +10,8 @@ import MapKit
 
 class CourseSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate, CLLocationManagerDelegate {
     @Published var locationResult: [MKLocalSearchCompletion] = []
-    
-    
-    let completer = MKLocalSearchCompleter()
     @Published var currentLocation: CLLocation?
+    let completer = MKLocalSearchCompleter()
     private let locationManager = CLLocationManager()
     
     override init() {

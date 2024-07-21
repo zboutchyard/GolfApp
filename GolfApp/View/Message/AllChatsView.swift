@@ -27,28 +27,24 @@ struct AllChatsView: View {
                             .font(.title)
                             .frame(maxWidth: .infinity)
                         Button(action: {
-                            isAddMessageButtonClicked = true
-                        }) {
+                            isAddMessageButtonClicked = true}) {
                             Image(systemName: "square.and.pencil")
                                 .resizable()
                                 .frame(width: 20, height: 20)
-                        } .padding(.trailing)
+                        } 
+                        .padding(.trailing)
                     }
                     Divider()
-                    if let chats = authViewModel.user?.chats, chats.count > 0 {
+                    if let chats = authViewModel.user?.chats, chats.isEmpty {
                         List {
-                            ForEach((chats), id: \.self){  chat in
+                            ForEach((chats), id: \.self) { chat in
                                 AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
                                     .frame(maxWidth: .infinity)
-                                
-                                
                             }
                             .onDelete(perform: deleteItem)
-                            
 
                         }
-                    }
-                    else {
+                    } else {
                         Spacer()
                         Image(systemName: "bubble.left.and.exclamationmark.bubble.right")
                             .resizable()
@@ -77,9 +73,6 @@ struct AllChatsView: View {
         .toolbar {
             EditButton()
         }
-       
-        
-        
     }
     
     func deleteItem(at offsets: IndexSet) {
@@ -90,8 +83,4 @@ struct AllChatsView: View {
         // Update the local state to reflect the deletion
         authViewModel.user?.chats?.remove(atOffsets: offsets)
     }
-}
-
-#Preview {
-    AllChatsView()
 }

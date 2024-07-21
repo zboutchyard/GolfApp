@@ -29,7 +29,7 @@ struct MessageField: View {
                 } else {
                     if let otherUser {
                         messageViewmodel.createChatAndSendMessage(text: message, otherUser: otherUser)
-                        messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
+                        messageViewmodel.fetchChat(chatId: msgViewModel.chatId) { _ in
                             
                         }
                         message = ""
@@ -55,8 +55,8 @@ struct MessageField: View {
 struct CustomTextField: View {
     var placeholder: Text
     @Binding var text: String
-    var editingChanged: (Bool) -> () = {_ in}
-    var commit: () -> () = {}
+    var editingChanged: (Bool) -> Void = { _ in }
+    var commit: () -> Void = {}
     
     var body: some View {
         ZStack(alignment: .leading) {

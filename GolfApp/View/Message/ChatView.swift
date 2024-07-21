@@ -32,13 +32,13 @@ struct ChatView: View {
                         .onTapGesture {
                             hideKeyboard()
                         }
-                        .onAppear() {
+                        .onAppear {
                             withAnimation {
                                 proxy.scrollTo(messages.last?.text, anchor: .bottom)
                             }
                         }
-                        .onChange(of: msgViewModel.lastMessage){
-                            if msgViewModel.lastMessage?.text == messages.last?.text{
+                        .onChange(of: msgViewModel.lastMessage) {
+                            if msgViewModel.lastMessage?.text == messages.last?.text {
                                 withAnimation {
                                     proxy.scrollTo(messages.last?.text, anchor: .bottom)
                                 }
@@ -47,8 +47,6 @@ struct ChatView: View {
                             }
                         }
                     }
-                    
-                    
                     .padding(.top, 10)
                     .background(colorScheme == .dark ? Color("DarkGray") : .white)
                     .cornerRadius(30, corners: [.topLeft, .topRight])
@@ -58,7 +56,7 @@ struct ChatView: View {
             Divider()
                 MessageField(chatId: chatId, otherUser: otherUser)
                     .environmentObject(msgViewModel)
-        } .onAppear() {
+        } .onAppear {
             msgViewModel.fetchChat(chatId: chatId) { fetchedChat in
                 messages = fetchedChat?.messages ?? []
             }

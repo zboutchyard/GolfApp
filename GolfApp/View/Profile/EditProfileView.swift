@@ -30,7 +30,7 @@ struct EditProfileView: View {
     var body: some View {
         ScrollView {
             Section {
-                VStack() {
+                VStack {
                     Text("Bio:")
                         .fontWeight(.regular)
                         .font(.callout)
@@ -61,7 +61,7 @@ struct EditProfileView: View {
                         .padding(.bottom)
                 }
                 
-                VStack() {
+                VStack {
                     Text("Interests:")
                         .fontWeight(.regular)
                         .kerning(1.2)
@@ -92,7 +92,7 @@ struct EditProfileView: View {
                         .kerning(1.2)
                         .padding()
                         .padding(.leading)
-                        .frame(maxWidth: .infinity,alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     Picker(selection: $user.handicap.orDefault, label: Text("Handicap")) {
                             ForEach(handicapSelection, id: \.self) { value in
                                 Button {
@@ -105,9 +105,6 @@ struct EditProfileView: View {
                         }
                         .pickerStyle(.wheel)
                         .frame(height: 120)
-                    
-                    
-                   
                 }
                 HStack(alignment: .top) {
                     Text("Home course:")
@@ -154,7 +151,7 @@ struct EditProfileView: View {
                 .overlay {
                     Button {
                         user.interests = interestArray.joined(separator: ",")
-                        authViewModel.saveUserData(user: user) { success, error in
+                        authViewModel.saveUserData(user: user) { _, _ in
                             isSubmitButtonPressed = true
                             presentationMode.wrappedValue.dismiss()
                         }
@@ -169,7 +166,7 @@ struct EditProfileView: View {
                 }
                 .padding(.top)
                 .frame(maxWidth: .infinity)
-                .onAppear() {
+                .onAppear {
                     convertStringToArray()
                 }
         }
@@ -232,5 +229,14 @@ extension Optional where Wrapped == Int {
 }
 
 #Preview {
-    EditProfileView(user: User(firstName: "zack", lastName: "boutchyard", email: "zackboutchyard@gmail.com", bio: "hello there how are you", interests: "baseball, basketball, football, soccer", handicap: 3, homeCourse: "Asheboro Municipal"), isSubmitButtonPressed: .constant(false))
+    EditProfileView(
+        user: User(
+            firstName: "zack",
+            lastName: "boutchyard",
+            email: "zackboutchyard@gmail.com",
+            bio: "hello there how are you",
+            interests: "baseball, basketball, football, soccer",
+            handicap: 3,
+            homeCourse: "Asheboro Municipal"),
+        isSubmitButtonPressed: .constant(false))
 }

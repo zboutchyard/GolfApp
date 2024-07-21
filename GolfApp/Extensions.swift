@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-//extension for adding rounded corners for specific corners
+// extension for adding rounded corners for specific corners
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))

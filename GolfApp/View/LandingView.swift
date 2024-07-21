@@ -8,7 +8,6 @@
 import SwiftUI
 import FirebaseMessaging
 
-
 struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
@@ -77,7 +76,7 @@ struct LandingView: View {
                                     Label("Home", systemImage: "house.fill")
                                 }
                                 .tag(0)
-                                .onAppear() {
+                                .onAppear {
                                     isProfileView = false
                                 }
                             ScoreCardView(authViewModel: authViewModel)
@@ -85,10 +84,14 @@ struct LandingView: View {
                                     Label("Score Card", systemImage: "figure.golf")
                                 }
                                 .tag(1)
-                                .onAppear() {
+                                .onAppear {
                                     isProfileView = false
                                 }
-                        AlertView(authViewModel: authViewModel, otherUserPendingRequest: authViewModel.otherUserPendingRequest, otherUserNotifications: authViewModel.otherUserNotifications)
+                        AlertView(
+                            authViewModel: authViewModel,
+                            otherUserPendingRequest: authViewModel.otherUserPendingRequest,
+                            otherUserNotifications: authViewModel.otherUserNotifications
+                        )
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
@@ -97,7 +100,7 @@ struct LandingView: View {
                                     Label("Notifications", systemImage: "bell.fill")
                                 }
                                 .tag(2)
-                                .onAppear() {
+                                .onAppear {
                                     isProfileView = false
                                 }
                         ProfileView(authViewModel: authViewModel, user: user)
@@ -109,7 +112,7 @@ struct LandingView: View {
                                     Label("Profile", systemImage: "person.fill")
                                 }
                                 .tag(3)
-                                .onAppear() {
+                                .onAppear {
                                     isProfileView = true
                                 }
                         
@@ -134,7 +137,7 @@ struct LandingView: View {
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
             if let currentUser = authViewModel.user {
-                SearchDetailView(authViewModel: authViewModel ,searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                SearchDetailView(authViewModel: authViewModel, searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
                     .toolbar(content: {
                         ToolbarItem(placement: .principal) {
                             TextField("search users", text: $searchText)
@@ -150,7 +153,7 @@ struct LandingView: View {
             SettingsView()
                 .navigationTitle("Settings")
         }
-        .onAppear() {
+        .onAppear {
             Task {
                 await authViewModel.fetchAllDataForLandingView()
                 selectedTab = selectedTab
@@ -158,4 +161,3 @@ struct LandingView: View {
         }
     }
 }
-

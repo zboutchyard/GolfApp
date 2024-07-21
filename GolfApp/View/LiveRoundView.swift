@@ -105,9 +105,6 @@ struct LiveRoundView: View {
                 Divider()
                     .padding(.bottom, 5)
                 HStack {
-                    
-                    
-                    
                     Image(systemName: "person.fill")
                         .scaledToFill()
                         .clipShape(Circle())
@@ -116,19 +113,12 @@ struct LiveRoundView: View {
                             Circle().fill(Color("AppGray"))
                         }
                         .foregroundStyle(.whiteOrDark)
-                    
-                    
-                    
                     VStack {
-                        
                         Text("Jane Mary")
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Text("Hey there!")
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
                     }
-                    
-                    
                 }
                 .padding()
                 Divider()
@@ -141,13 +131,15 @@ struct LiveRoundView: View {
         @FocusState var isTextFieldFocused: Bool
         //        var onCommentAdded: () -> Void
         //        @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-        
-        
         var body: some View {
             HStack {
-                CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
+                CustomTextField(
+                    placeholder: Text("...type something")
+                        .foregroundStyle(.black),
+                    text: $comment,
+                    isTextFieldFocused: _isTextFieldFocused)
                 Button(action: {
-                  //button action
+                  // button action
                 }, label: {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.white)
@@ -169,8 +161,8 @@ struct LiveRoundView: View {
     struct CustomTextField: View {
         var placeholder: Text
         @Binding var text: String
-        var editingChanged: (Bool) -> () = {_ in}
-        var commit: () -> () = {}
+        var editingChanged: (Bool) -> Void = { _ in }
+        var commit: () -> Void = {}
         @FocusState var isTextFieldFocused: Bool
         
         var body: some View {

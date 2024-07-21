@@ -19,11 +19,9 @@ struct NewMessageView: View {
     @State var isAddFriendClicked: Bool = false
     @State private var searchText: String = ""
 
-
-
     var body: some View {
         NavigationStack {
-            VStack() {
+            VStack {
                 HStack {
                     Button("Cancel") {
                         isPresented = false
@@ -39,8 +37,8 @@ struct NewMessageView: View {
                 }
                 Divider()
                 ScrollView {
-                    if otherUsers.count > 0 {
-                        ForEach(otherUsers, id: \.firstName){ friend in
+                    if !otherUsers.isEmpty {
+                        ForEach(otherUsers, id: \.firstName) { friend in
                                 HStack {
                                     Image(systemName: "person.fill")
                                         .foregroundStyle(.whiteOrDark)
@@ -119,14 +117,14 @@ struct NewMessageView: View {
                 })
             }
         }
-         .onAppear() {
+         .onAppear {
                 getOtherUserInfo(friendsList: user.friendsList ?? [])
         }
     }
     
-    func getOtherUserInfo(friendsList: [String]){
+    func getOtherUserInfo(friendsList: [String]) {
         for friend in friendsList {
-            authViewModel.fetchOtherUserFromFirebase(id: friend){ friend in
+            authViewModel.fetchOtherUserFromFirebase(id: friend) { friend in
                 if let friend = friend {
                     otherUsers.append(friend)
                 }
@@ -134,7 +132,3 @@ struct NewMessageView: View {
         }
     }
 }
-
-//#Preview {
-//    NewMessageView()
-//}

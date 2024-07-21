@@ -21,7 +21,7 @@ extension AuthViewModel {
         //        fetchUserDataFromFirebase { fetchedUser in
         let token = Messaging.messaging().fcmToken
         //            if let user = fetchedUser {
-        if (token != fetchedUser.fcmToken) {
+        if token != fetchedUser.fcmToken {
             await self.updateFcmToken()
         }
         await fetchAllPostsAndUserData()
@@ -96,7 +96,7 @@ extension AuthViewModel {
         
         let fetchedPosts = await fetchAllPostsFromFirebase()
         await withTaskGroup(of: Void.self) { group in
-            for post in fetchedPosts ?? []{
+            for post in fetchedPosts ?? [] {
                 group.addTask {
                     _ = await self.fetchOtherUserFromFirebase(id: post.user)
                 }

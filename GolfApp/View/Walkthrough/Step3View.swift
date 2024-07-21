@@ -122,7 +122,16 @@ struct Step3View: View {
         isSelected.toggle()
     }
     func registerUser(interests: String) {
-        authViewModel.registerUserWithFirebase(email: email, password: password, firstName: firstName,  profilePic: storageReference.name, lastName: lastName, bio: bio ?? "", interests: interestsString, handicap: handicap, homeCourse: homeCourse) { error in
+        let user: User = User(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            bio: bio,
+            interests: interestsString,
+            handicap: handicap,
+            homeCourse: homeCourse
+        )
+        authViewModel.registerUserWithFirebase(user: user, password: password,  profilePic: storageReference.name) { error in
             if let error = error {
                 print(error)
             } else {
@@ -133,7 +142,6 @@ struct Step3View: View {
                         }
                     }
                 }
-                
                 isStepComplete = true
             }
         }

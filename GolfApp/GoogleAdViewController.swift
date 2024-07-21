@@ -16,9 +16,7 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
     var nativeAdView: GADNativeAdView!
     let adUnitID = "ca-app-pub-6684582127321393/3737224559"
     var sponsoredLabel: UILabel!
-    
     var onHeightChange: ((CGFloat) -> Void)?
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,13 +85,10 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         iconView.clipsToBounds = true
     }
 
-
     func handleIconForNativeAd(_ nativeAd: GADNativeAd) {
         let iconImage = nativeAd.icon?.image
         setupIconView(with: iconImage)
     }
-
-
 
     func setupHeadlineLabel() {
         headlineLabel = UILabel()
@@ -123,7 +118,6 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         ])
         sponsoredLabel.clipsToBounds = true
     }
-
 
     func setupBodyLabel() {
         bodyLabel = UILabel()
@@ -186,7 +180,7 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
             callToActionButton.trailingAnchor.constraint(equalTo: nativeAdPlaceholder.trailingAnchor, constant: -10),
             callToActionButton.topAnchor.constraint(equalTo: mediaView.bottomAnchor, constant: 4), // Set top anchor relative to mediaView's bottom
             callToActionButton.widthAnchor.constraint(equalToConstant: 100),
-            callToActionButton.heightAnchor.constraint(equalToConstant:40)
+            callToActionButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         callToActionButton.clipsToBounds = true
     }
@@ -263,7 +257,6 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
         nativeAdView.clipsToBounds = true
     }
 
-
     // GADNativeAdDelegate
     func nativeAdDidRecordClick(_ nativeAd: GADNativeAd) {
         print("Native ad was clicked.")
@@ -272,8 +265,6 @@ class GoogleAdViewController: UIViewController, GADVideoControllerDelegate, GADA
     func videoControllerDidEndVideoPlayback(_ videoController: GADVideoController) {
         print("Video playback ended")
         loadNativeAd() // Function to load a new native ad
-
-
     }
 
     func nativeAdDidRecordImpression(_ nativeAd: GADNativeAd) {
