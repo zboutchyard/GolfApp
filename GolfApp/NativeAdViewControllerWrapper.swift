@@ -18,4 +18,3 @@ struct NativeAdViewControllerWrapper: UIViewControllerRepresentable {
         // This is where you could pass additional data to the controller if needed
     }
 }
-

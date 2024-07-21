@@ -17,7 +17,7 @@ struct OtherUserProfileView: View {
     @State var isLoading: Bool = true
     var body: some View {
         ScrollView {
-            VStack (spacing: 0){
+            VStack(spacing: 0) {
                     VStack {
                         if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                             Image(uiImage: uiImage)
@@ -29,7 +29,7 @@ struct OtherUserProfileView: View {
                                     Circle().fill(Color("AppGray"))
                                 }
                                 .foregroundStyle(.whiteOrDark)
-                        }else {
+                        } else {
                             ProfileImage(imageState: .empty)
                                 .scaledToFill()
                                 .clipShape(Circle())
@@ -60,19 +60,18 @@ struct OtherUserProfileView: View {
                         if user.sentRequests?.contains(where: { $0.user == otherUser.id }) == true {
                             Text("Pending approval")
                                 .padding()
-                        } else if ((user.friendsList?.contains(otherUser.id)) == true) {
+                        } else if (user.friendsList?.contains(otherUser.id)) == true {
                             Text("Friend")
                                 .padding()
                         } else {
                             Button(action: {
-                                //TODO: implement add friend function here
+                                // TODO: implement add friend function here
                             }, label: {
                                 Text("Add friend")
                             })
                             .buttonStyle(.borderedProminent)
                             .padding()
                         }
-                        
                         
                         Button(action: {
                             if let chats = user.chats {
@@ -95,12 +94,9 @@ struct OtherUserProfileView: View {
                     }
                     ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
                         .background(Color.whiteOrDark)
-                    
                
             }
                     .background(Color.whiteOrDark)
-            
-
             
         }
         .navigationDestination(isPresented: $isChatViewTriggered) {
@@ -114,6 +110,6 @@ struct OtherUserProfileView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    OtherUserProfileView()
-//}
+// }

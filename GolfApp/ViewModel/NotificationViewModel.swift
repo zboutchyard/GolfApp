@@ -15,18 +15,17 @@ import FirebaseStorage
 class NotificationViewModel: ObservableObject {
     @Published var requestsReceived: [String] = []
     @Published var requestsSent: [String] = []
-    let db = Firestore.firestore()
-
+    let database = Firestore.firestore()
     
     func sendRequest(userId: String) {
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-        let sentRequestRef = db.collection("Users").document(userId)
+        let sentRequestRef = database.collection("Users").document(userId)
         let requestSentData: [String: Any] = [
             "user": uid
         ]
-        let pendingRequestRef = db.collection("Users").document(uid)
+        let pendingRequestRef = database.collection("Users").document(uid)
         let pendingRequestData: [String: Any] = [
             "user": userId
         ]
@@ -56,9 +55,8 @@ class NotificationViewModel: ObservableObject {
             return
         }
 
-        let otherUserFriendsListRef = db.collection("Users").document(userId)
-        let currentUserFriendsListRef = db.collection("Users").document(uid)
-        
+        let otherUserFriendsListRef = database.collection("Users").document(userId)
+        let currentUserFriendsListRef = database.collection("Users").document(uid)
 
         // Update friendsList for the user with userId
         otherUserFriendsListRef.updateData(["friendsList": FieldValue.arrayUnion([uid])]) { error in
@@ -83,17 +81,17 @@ class NotificationViewModel: ObservableObject {
         }
         print("here is the userId \(userId)")
 
-        let sentRequestRef = db.collection("Users").document(userId)
+        let sentRequestRef = database.collection("Users").document(userId)
         let requestSentData = [
             "user": uid
         ]
 
-        let pendingRequestRef = db.collection("Users").document(uid)
+        let pendingRequestRef = database.collection("Users").document(uid)
         let pendingRequestData = [
             "user": userId
         ]
-        pendingRequestRef.getDocument { document, error in
-            print(document?.data())
+        pendingRequestRef.getDocument { document, _ in
+            print(document?.data() as Any)
         }
 
         sentRequestRef.updateData([
@@ -117,6 +115,4 @@ class NotificationViewModel: ObservableObject {
         }
     }
 
-
 }
-

@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseDatabase
 import AlertToast
 
-
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @State var user: User?
@@ -36,7 +35,6 @@ struct ProfileView: View {
             ScrollView {
                     if user != nil {
                         ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
-                        
                         
                         if !isEditButtonClicked {
                             VStack {
@@ -104,7 +102,7 @@ struct ProfileView: View {
                                         .font(.system(size: 20))
                                         .background(RoundedRectangle(cornerRadius: 5).stroke(Color.gray, lineWidth: .init(0.5))).padding()
                                     Divider()
-                                    ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id){ friend in
+                                    ForEach(filteredUsers ?? authViewModel.friendsList ?? [], id: \.id) { friend in
                                         HStack {
                                             if let data = friend.profilePicData, let uiImage = UIImage(data: data) {
                                                     Image(uiImage: uiImage)
@@ -127,7 +125,6 @@ struct ProfileView: View {
                                                     .foregroundStyle(.whiteOrDark)
                                             }
                                             
-                                            
                                             VStack {
                                                 Button {
                                                     otherUser = friend
@@ -146,16 +143,12 @@ struct ProfileView: View {
                                             Spacer()
                                         }
                                         
-                                        
-                                        
                                         Divider()
                                     }
                                     
-                                    
-                                    
                                 }
                             }
-                            .onChange(of: isSubmitButtonPressed){
+                            .onChange(of: isSubmitButtonPressed) {
                                 isLoading = true
                                 authViewModel.fetchUserDataFromFirebase { fetchedUser in
                                     user = fetchedUser
@@ -166,8 +159,6 @@ struct ProfileView: View {
                         }
                            
                     }
-               
-                
                     
             }
             .toast(isPresenting: $isSubmitButtonPressed) {
@@ -193,7 +184,6 @@ struct ProfileView: View {
                         })
                 }
                 
-                
             }
             .navigationDestination(isPresented: $isOtherUserClicked) {
                 if let otherUser = otherUser {
@@ -206,12 +196,11 @@ struct ProfileView: View {
                 filterUsers()
             }
         }
-        
        
     }
     
     private func filterUsers() {
-        if searchText != "" {
+        if !searchText.isEmpty {
             if let allUsers = authViewModel.friendsList {
                 filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
             }
@@ -220,8 +209,6 @@ struct ProfileView: View {
         }
     }
 }
-
-
 
 #Preview {
     ProfileView()

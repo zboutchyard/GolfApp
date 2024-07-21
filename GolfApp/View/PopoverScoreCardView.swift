@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PopoverScoreCardView: View {
+    let text: String = "Share your current round with others in your feed, allowing them to comment and react in real time while you're playing"
     var body: some View {
                 VStack {
                     Image("golf_swing_popover")
@@ -15,28 +16,21 @@ struct PopoverScoreCardView: View {
                     Spacer()
                     VStack(spacing: 0) {
                         RoundedCorner(radius: 70.0, corners: [.topRight, .topLeft])
-                            .overlay(){
-                                Text("Share your current round with others in your feed, allowing them to comment and react in real time while you're playing")
+                            .overlay {
+                                Text(text)
                                     .foregroundStyle(.white)
                                     .padding(30)
                                     .font(.title3)
                             }
                             .foregroundStyle(.whiteOrDark)
                             .frame(height: 300, alignment: .bottom)
-                            
                         
                             .background(.whiteOrDark)
-
-                            
-                            
                         
                     }
                     .frame(height: 300, alignment: .bottom)
-                   
-
                     
                 }
-                
             
             .background(.whiteOrDark)
         

@@ -66,7 +66,6 @@ struct PostView: View {
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            
                         }
                         .padding([.leading, .trailing, .top])
                     }
@@ -106,7 +105,6 @@ struct PostView: View {
                                     
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                
                                 
                             }
                             .padding([.leading, .trailing, .top])
@@ -218,9 +216,9 @@ struct PostView: View {
             
         }
         .background(.whiteOrDark)
-        .onAppear() {
+        .onAppear {
             if let likes = post?.likes {
-                if ((likes.contains(userId))) {
+                if likes.contains(userId) {
                     likeBtnClicked = true
                 }
             }
@@ -243,20 +241,16 @@ struct PostView: View {
         }
     }
     func addLikeToFirebase(postId: String) async {
-        authViewModel.addUserIdToLikes(postId: postId) { addedLike in}
+        authViewModel.addUserIdToLikes(postId: postId) { _ in}
         authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
             tempPost = fetchedPost
         }
     }
     func removeLikeFromFirebase(postId: String) async {
-        authViewModel.removeUserIdFromLikes(postId: postId) { removedLike in}
+        authViewModel.removeUserIdFromLikes(postId: postId) { _ in}
         authViewModel.fetchPostFromFirebase(postId: postId) { fetchedPost in
             tempPost = fetchedPost
         }
     }
     
 }
-
-//#Preview {
-//    PostView()
-//}

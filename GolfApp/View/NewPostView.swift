@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseStorage
 import AlertToast
 
-
 struct NewPostView: View {
     @State var postText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
@@ -21,7 +20,6 @@ struct NewPostView: View {
     @Environment(\.presentationMode) var presentationMode
     var onPostSubmitted: (() -> Void)?
     let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
-
     
     var body: some View {
         ScrollView {
@@ -52,16 +50,15 @@ struct NewPostView: View {
                                 }
 
                                 // After successful upload, add the post referencing the image
-                                authViewModel.addPost(text: postText, imageRef: storageReference.name) { post in
+                                authViewModel.addPost(text: postText, imageRef: storageReference.name) { _ in
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }
                         } else {
-                                authViewModel.addPost(text: postText, imageRef: nil) { post in
+                                authViewModel.addPost(text: postText, imageRef: nil) { _ in
                                     onPostSubmitted?()
                                     presentationMode.wrappedValue.dismiss()
                                 }
-                            
                            
                         }
                     }
@@ -71,7 +68,6 @@ struct NewPostView: View {
                 })                       
                 .buttonStyle(.borderedProminent)
                 .disabled((data == nil) && postText.isEmpty)
-                
                 
             }
             .padding()
@@ -134,7 +130,7 @@ struct ImagePicker: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
             }

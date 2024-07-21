@@ -24,7 +24,7 @@ struct Step2View: View {
     @State var data: Data?
     @State var shouldHideButton: Bool = false
     var remainingCharacters: Int {
-        if(characterLimit - bioText.count < 0){
+        if characterLimit - bioText.count < 0 {
             charLimitReached = true
         }
         return characterLimit - bioText.count
@@ -110,7 +110,15 @@ struct Step2View: View {
             }
         }
         .navigationDestination(isPresented: $isStepComplete) {
-            Step3View(email: email, password: password, firstName: firstName, lastName: lastName, bio: bioText, handicap: handicap, homeCourse: homeCourse, data: data)
+            Step3View(
+                email: email,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                bio: bioText,
+                handicap: handicap,
+                homeCourse: homeCourse,
+                data: data)
         }
         if !shouldHideButton {
             Button(action: {
@@ -123,7 +131,7 @@ struct Step2View: View {
                     .background(Color.blue)
                     .clipShape(Circle())
                     .overlay(
-                        ZStack{
+                        ZStack {
                             Circle()
                                 .stroke(Color.black.opacity(0.04), lineWidth: 4)
                             Circle()
@@ -135,7 +143,6 @@ struct Step2View: View {
                     ) .disabled(charLimitReached == true)
             })
         }
-          
         
     }
     private func hideKeyboard() {

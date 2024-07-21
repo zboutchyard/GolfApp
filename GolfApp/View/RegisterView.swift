@@ -123,7 +123,7 @@ struct RegisterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 20)
                 }
-                Button("Register"){
+                Button("Register") {
                     Task {
                         if email.isEmpty {
                             showEmailError = true

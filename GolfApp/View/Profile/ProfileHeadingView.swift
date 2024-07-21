@@ -14,7 +14,7 @@ struct ProfileHeadingView: View {
     @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     
     var body: some View {
-        VStack (spacing: 0){
+        VStack(spacing: 0) {
             VStack {
                 if let data = user.profilePicData, let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage)
@@ -26,7 +26,7 @@ struct ProfileHeadingView: View {
                                 Circle().fill(Color("AppGray"))
                             }
                             .foregroundStyle(.whiteOrDark)
-                    }else {
+                    } else {
                     ProfileImage(imageState: .empty)
                         .scaledToFill()
                         .clipShape(Circle())
@@ -76,6 +76,6 @@ struct ProfileHeadingView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    ProfileHeadingView(isEditButtonClicked: .constant(false), isOtherViewTriggered: .constant(false))
-//}
+// }

@@ -12,7 +12,7 @@ struct SettingsView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State var isUserSignedOut: Bool = false
     var body: some View {
-        VStack{
+        VStack {
             Spacer()
             Button(action: {
                 Task {

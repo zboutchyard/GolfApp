@@ -43,9 +43,8 @@ struct ScoreCardView: View {
     ]
     @State var selectedTeeOption = TeeOption(name: "Blue", color: .blue)
     
-    
     var body: some View {
-        VStack{}
+        VStack {}
         //        VStack {
         //            ZStack {
         //                VStack {
@@ -440,7 +439,6 @@ struct ScoreCardView: View {
         //        .navigationDestination(isPresented: $isRoundStarted) {
         //            LiveRoundView(isTextFieldFocused: false)
         //        }
-        
     
     }
 //    func filterUsers() {

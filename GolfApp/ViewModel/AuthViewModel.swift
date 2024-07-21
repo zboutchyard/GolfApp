@@ -30,8 +30,8 @@ class AuthViewModel: ObservableObject {
     @Published var otherUserNotifications: [String: OtherUser] = [:]
     @Published var shouldLoad: Bool = false
     @Published private(set) var imageState: ImageState = .empty
-    @Published var profileImage: ProfileImage? = nil
-    @Published var imageSelection: PhotosPickerItem? = nil {
+    @Published var profileImage: ProfileImage?
+    @Published var imageSelection: PhotosPickerItem? {
         didSet {
             if let imageSelection {
                 let progress = loadTransferable(from: imageSelection)
@@ -44,7 +44,7 @@ class AuthViewModel: ObservableObject {
 
     let storage = Storage.storage()
 
-    init(){
+    init() {
         if Auth.auth().currentUser != nil {
             self.isUserLoggedIn = true
         } else {
@@ -83,7 +83,7 @@ class AuthViewModel: ObservableObject {
         }
         let database = Firestore.firestore()
         let usersRef = database.collection("Users").document(uid)
-        usersRef.getDocument { (document, error) in
+        usersRef.getDocument { (document, _) in
             if let document = document, document.exists {
                 if let data = document.data(),
                    let firstName = data["firstName"] as? String,

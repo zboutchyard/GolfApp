@@ -38,10 +38,6 @@ struct PersonCellView: View {
                             .foregroundStyle(.whiteOrDark)
                     }
                     
-                    
-                    
-                    
-                    
                     VStack {
                         if let user = otherUser {
                             Text("\(user.firstName) \(user.lastName)")
@@ -54,7 +50,6 @@ struct PersonCellView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
                     
                 }
                 .padding([.leading, .trailing, .top])
@@ -90,16 +85,13 @@ struct PersonCellView: View {
                 }
                 
             }
-            .onAppear() {
+            .onAppear {
                 if let user = otherUser {
                     getUser(userId: user.id)
                 }
                 
-                
             }
         }
-        
-        
         
     }
     func getUser(userId: String) {
@@ -109,6 +101,6 @@ struct PersonCellView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    PersonCellView()
-//}
+// }

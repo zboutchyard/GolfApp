@@ -22,12 +22,12 @@ struct NewChatView: View {
             VStack {
                 TopRow(otherUser: otherUser!)
                     .background(Color("Green"))
-                ScrollViewReader { proxy in
+                ScrollViewReader { _ in
                     ScrollView {
                         ForEach(msgViewModel.messages, id: \.self) { message in
                             let received: Bool = message.sender == Auth.auth().currentUser?.uid ? false : true
 
-                            VStack(alignment: received ? .leading : .trailing){
+                            VStack(alignment: received ? .leading : .trailing) {
                                 HStack {
                                     Text(message.text ?? "")
                                         .padding()
@@ -63,7 +63,7 @@ struct NewChatView: View {
             Button(action: {
                     if let otherUser {
                         msgViewModel.createChatAndSendMessage(text: message, otherUser: otherUser)
-                        msgViewModel.fetchChat(chatId: msgViewModel.chatId) { fetchedChat in
+                        msgViewModel.fetchChat(chatId: msgViewModel.chatId) { _ in
                             
                         }
                         message = ""
@@ -87,6 +87,6 @@ struct NewChatView: View {
     }
 }
 
-//#Preview {
+// #Preview {
 //    NewChatView()
-//}
+// }

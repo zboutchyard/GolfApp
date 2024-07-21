@@ -87,7 +87,7 @@ struct Step3View: View {
                         .background(Color.blue)
                         .clipShape(Circle())
                         .overlay(
-                            ZStack{
+                            ZStack {
                                 Circle()
                                     .stroke(Color.black.opacity(0.04), lineWidth: 4)
                                 Circle()
@@ -97,8 +97,7 @@ struct Step3View: View {
                             }
                                 .padding(-15)
                         )
-                })
-                ,alignment: .bottom
+                }), alignment: .bottom
             )
             
             .navigationDestination(isPresented: $isStepComplete) {
@@ -109,7 +108,6 @@ struct Step3View: View {
             .padding()
         }
     }
-    
     
     func toggleInterest(interest: String) {
         if selectedInterests.contains(interest) {
@@ -131,13 +129,13 @@ struct Step3View: View {
             handicap: handicap,
             homeCourse: homeCourse
         )
-        authViewModel.registerUserWithFirebase(user: user, password: password,  profilePic: storageReference.name) { error in
+        authViewModel.registerUserWithFirebase(user: user, password: password, profilePic: storageReference.name) { error in
             if let error = error {
                 print(error)
             } else {
                 if let data = data {
-                    storageReference.putData(data, metadata: nil) { (metadata, error) in
-                        guard let metadata = metadata else {
+                    storageReference.putData(data, metadata: nil) { (metadata, _) in
+                        guard let _ = metadata else {
                             return
                         }
                     }
@@ -147,5 +145,3 @@ struct Step3View: View {
         }
     }
 }
-
-

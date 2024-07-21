@@ -79,7 +79,7 @@ struct EditableCircularProfileImage: View {
                         .font(.system(size: 75))
                         .foregroundColor(.accentColor)
                 }
-            }.onChange(of: viewModel.imageSelection) { newValue in
+            }.onChange(of: viewModel.imageSelection) { _ in
                 guard let item = viewModel.imageSelection else {
                     return
                 }
@@ -118,6 +118,3 @@ private func uiImage(from image: Image) -> UIImage? {
     print("Converted UIImage: \(uiImage)")
     return uiImage
 }
-
-
-

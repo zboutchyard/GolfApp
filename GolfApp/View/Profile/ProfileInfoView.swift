@@ -29,8 +29,6 @@ struct ProfileInfoView: View {
                         }
                         .background(Color.appGray)
                         
-                        
-                        
                         HStack(alignment: .top) {
                             Text("About me:")
                                 .fontWeight(.regular)
@@ -128,12 +126,9 @@ struct ProfileInfoView: View {
                         .background(Color.whiteOrDark)
                     }
                     
-                    
                 }
                 .background(Color.whiteOrBlack)
-            }
-            
-            else {
+            } else {
                     VStack {
                         VStack {
                             VStack {
@@ -146,8 +141,6 @@ struct ProfileInfoView: View {
                                 Divider()
                             }
                             .background(Color.appGray)
-                            
-                            
                             
                             HStack(alignment: .top) {
                                 Text("About me:")
@@ -248,18 +241,17 @@ struct ProfileInfoView: View {
                         
                     }
                     .background(Color.whiteOrBlack)
-                    .onAppear() {
+                    .onAppear {
                         Task {
                            await authViewModel.fetchAllPostsInUserObject(postIds: otherUser?.posts ?? [])
                         }
                     }
-                
                 
             }
         }
         
     }
 }
-//#Preview {
+// #Preview {
 //    ProfileInfoView(user: User(firstName: "Zack", lastName: "Boutchyard", email: "zackboutchyard@gmail.com", chats: ["123123"], friendsList: ["123123"], bio: "Here is a short bio about a boy who was sitting on the ouch doing nothing but coding for months so he could get maybe a slightly bigger paycheck", handicap: 12, homeCourse: "asheboro municipal"), isLoading: false)
-//}
+// }

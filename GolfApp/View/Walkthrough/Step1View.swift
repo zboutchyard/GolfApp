@@ -52,7 +52,7 @@ struct Step1View: View {
                         .background(Color.blue)
                         .clipShape(Circle())
                         .overlay(
-                            ZStack{
+                            ZStack {
                                 Circle()
                                     .stroke(Color.black.opacity(0.04), lineWidth: 4)
                                 Circle()
@@ -62,10 +62,9 @@ struct Step1View: View {
                             }
                                 .padding(-15)
                         )
-                })
-                ,alignment: .bottom
+                }), alignment: .bottom
             )
-            .navigationDestination(isPresented: $isStep1Complete){
+            .navigationDestination(isPresented: $isStep1Complete) {
                 Step2View(email: email, password: password, firstName: firstName, lastName: lastName, data: data)
             }
             
@@ -74,5 +73,3 @@ struct Step1View: View {
         }
     }
 }
-
-

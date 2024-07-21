@@ -25,7 +25,7 @@ struct PostDetailView: View {
                 PostView(user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser)
                 Divider()
                 if let comments = post.comments {
-                    ScrollViewReader { proxy in
+                    ScrollViewReader { _ in
                         ScrollView {
                             ForEach(comments, id: \.self) { comment in
                                 HStack {
@@ -76,7 +76,6 @@ struct PostDetailView: View {
                     
                 }
             }
-            
                
         }
         .onTapGesture {
@@ -84,14 +83,12 @@ struct PostDetailView: View {
         }
         .background(.whiteOrDark)
         if let post = post {
-            MessageToolbar(post: post ,isTextFieldFocused: _isTextFieldFocused) {
+            MessageToolbar(post: post, isTextFieldFocused: _isTextFieldFocused) {
                 authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
                     self.post = fetchedPost
                 }
             }
         }
-            
-           
         
     }
     
@@ -101,11 +98,14 @@ struct PostDetailView: View {
         @FocusState var isTextFieldFocused: Bool
         var onCommentAdded: () -> Void
         @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-
         
         var body: some View {
                 HStack {
-                    CustomTextField(placeholder: Text("...type something").foregroundStyle(.black), text: $comment, isTextFieldFocused: _isTextFieldFocused)
+                    CustomTextField(
+                        placeholder: Text("...type something")
+                            .foregroundStyle(.black),
+                        text: $comment,
+                        isTextFieldFocused: _isTextFieldFocused)
                     Button(action: {
                         authViewModel.addComment(postId: post.id ?? "", text: comment, postOwner: post.user)
                         comment = ""
@@ -131,8 +131,8 @@ struct PostDetailView: View {
     struct CustomTextField: View {
         var placeholder: Text
         @Binding var text: String
-        var editingChanged: (Bool) -> () = {_ in}
-        var commit: () -> () = {}
+        var editingChanged: (Bool) -> Void = {_ in}
+        var commit: () -> Void = {}
         @FocusState var isTextFieldFocused: Bool
         
         var body: some View {
@@ -155,8 +155,3 @@ struct PostDetailView: View {
         }
     }
 }
-
-
-//#Preview {
-//    PostDetailView()
-//}

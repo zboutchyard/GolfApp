@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 struct Post: Codable, Hashable {
     var id: String?
     var likes: [String]?

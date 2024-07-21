@@ -48,7 +48,7 @@ struct SearchDetailView: View {
                                         Text("Pending approval")
                                     })
                                     .disabled(true)
-                                } else if ((user?.friendsList?.contains(otherUser.id)) == true) {
+                                } else if (user?.friendsList?.contains(otherUser.id)) == true {
                                     Button(action: {
                                     }, label: {
                                         Text("Friends")
@@ -88,7 +88,7 @@ struct SearchDetailView: View {
     }
     
     private func filterUsers() {
-        if searchText != "" {
+        if !searchText.isEmpty {
             if let allUsers = authViewModel.otherUsers {
                 filteredUsers = allUsers.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
             }
@@ -99,7 +99,6 @@ struct SearchDetailView: View {
     }
 }
 
-
-//#Preview {
+// #Preview {
 //    SearchDetailView(searchText: "")
-//}
+// }
