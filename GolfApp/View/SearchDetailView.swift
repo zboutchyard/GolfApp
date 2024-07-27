@@ -9,13 +9,14 @@ import SwiftUI
 import AlertToast
 
 struct SearchDetailView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @Binding var searchText: String
     @State var user: User?
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
-    @StateObject var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @StateObject var notificationViewModel: NotificationViewModel
     @State var selectedUser: OtherUser?
     @State var isUserSelected: Bool = false
     @State var isLoading: Bool = false
@@ -75,7 +76,7 @@ struct SearchDetailView: View {
         .navigationDestination(isPresented: $isUserSelected, destination: {
             if let selectedUser = selectedUser {
                 if let user = user {
-                    OtherUserProfileView(otherUser: selectedUser, user: user)
+                    OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: selectedUser, user: user, msgViewModel: msgViewModel)
                 }
             }
         })

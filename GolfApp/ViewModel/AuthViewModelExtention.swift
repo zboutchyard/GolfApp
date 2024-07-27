@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import FirebaseAuth
+import FirebaseFirestore
 import FirebaseMessaging
 
 extension AuthViewModel {
@@ -17,31 +19,34 @@ extension AuthViewModel {
             state = .error // Assuming you have an error state
             return
         }
-        
-        //        fetchUserDataFromFirebase { fetchedUser in
-        let token = Messaging.messaging().fcmToken
-        //            if let user = fetchedUser {
-        if token != fetchedUser.fcmToken {
-            await self.updateFcmToken()
+        do {
+            let token = Messaging.messaging().fcmToken
+            if token != fetchedUser.fcmToken {
+                await self.updateFcmToken()
+            }
+            await fetchAllPostsAndUserData()
+            
+            if fetchedUser.receivedRequests != nil {
+                await self.fetchOtherUsersByRequest()
+            }
+            await fetchUserInfo(user: fetchedUser)
+            if let friends = fetchedUser.friendsList {
+                await fetchFriendsFromFirebase(ids: friends)
+            }
+            await self.fetchAllOtherUsersFromFirebase()
+            if let userPosts = self.user?.posts {
+                await self.fetchAllPostsInUserObject(postIds: userPosts)
+            }
+            self.state = .loaded
         }
-        await fetchAllPostsAndUserData()
-        
-        if fetchedUser.receivedRequests != nil {
-            await self.fetchOtherUsersByRequest()
-        }
-        if let notifications = fetchedUser.notifications {
+    }
+    
+    func fetchUserInfo(user: User) async {
+        if let notifications = user.notifications {
             for notification in notifications {
-                await self.fetchUserInfoById(userId: notification.userCommenting)
+                await fetchUserInfoById(userId: notification.userCommenting)
             }
         }
-        if let friends = fetchedUser.friendsList {
-            await fetchFriendsFromFirebase(ids: friends)
-        }
-        await self.fetchAllOtherUsersFromFirebase()
-        if let userPosts = self.user?.posts {
-            await self.fetchAllPostsInUserObject(postIds: userPosts)
-        }
-        self.state = .loaded
     }
     
     func fetchOtherUsersByRequest() async {
@@ -108,6 +113,35 @@ extension AuthViewModel {
     func fetchUserInfoById(userId: String) async {
         await fetchOtherUserFromFirebase(id: userId) { fetchedOtherUser in
             self.otherUserNotifications[userId] = fetchedOtherUser
+        }
+    }
+    
+    func saveUserData(user: User, completion: @escaping (Bool, Error?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(false, nil)
+            return
+        }
+        let database = Firestore.firestore()
+        let usersRef = database.collection("Users").document(uid)
+        // Prepare the data dictionary
+        var data: [String: Any] = [
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            "email": user.email
+        ]
+        // Optional fields
+        if let bio = user.bio { data["bio"] = bio }
+        if let interests = user.interests { data["interests"] = interests }
+        if let handicap = user.handicap { data["handicap"] = handicap }
+        if let homeCourse = user.homeCourse { data["homeCourse"] = homeCourse }
+        usersRef.setData(data, merge: true) { error in
+            if let error = error {
+                print("Error updating user: \(error)")
+                completion(false, error)
+            } else {
+                print("User successfully updated.")
+                completion(true, nil)
+            }
         }
     }
 }

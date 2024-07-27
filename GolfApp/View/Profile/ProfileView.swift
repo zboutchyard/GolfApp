@@ -10,7 +10,9 @@ import FirebaseDatabase
 import AlertToast
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State private var badgeViewBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
@@ -34,7 +36,7 @@ struct ProfileView: View {
         } else {
             ScrollView {
                     if user != nil {
-                        ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked)
+                        ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked, authViewModel: authViewModel)
                         
                         if !isEditButtonClicked {
                             VStack {
@@ -73,7 +75,7 @@ struct ProfileView: View {
                                 
                                 if profileBtnSelected {
                                     if let user = authViewModel.user {
-                                        ProfileInfoView(authViewModel: authViewModel, user: user, isOtherUserProfile: false)
+                                        ProfileInfoView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, isOtherUserProfile: false)
                                     }
                                 }
                                 if badgeViewBtnSelected {
@@ -166,13 +168,19 @@ struct ProfileView: View {
             }
             .navigationDestination(isPresented: $isEditButtonClicked, destination: {
                 if let user = user {
-                    EditProfileView(user: user, isSubmitButtonPressed: $isSubmitButtonPressed)
+                    EditProfileView(user: user, authViewModel: authViewModel, isSubmitButtonPressed: $isSubmitButtonPressed)
                         .navigationTitle("Update profile")
                 }
             })
             .navigationDestination(isPresented: $isAddFriendClicked) {
                 if let currentUser = user {
-                    SearchDetailView(authViewModel: authViewModel, searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                    SearchDetailView(
+                        authViewModel: authViewModel,
+                        msgViewModel: msgViewModel,
+                        searchText: $searchText,
+                        user: currentUser,
+                        isAddFriendView: .constant(true),
+                        notificationViewModel: notificationViewModel)
                         .toolbar(content: {
                             ToolbarItem(placement: .principal) {
                                 TextField("search users", text: $searchText)
@@ -188,7 +196,7 @@ struct ProfileView: View {
             .navigationDestination(isPresented: $isOtherUserClicked) {
                 if let otherUser = otherUser {
                     if let user = user {
-                        OtherUserProfileView(otherUser: otherUser, user: user)
+                        OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: otherUser, user: user, msgViewModel: msgViewModel)
                     }
                 }
             }
@@ -208,8 +216,4 @@ struct ProfileView: View {
             filteredUsers = authViewModel.friendsList
         }
     }
-}
-
-#Preview {
-    ProfileView()
 }

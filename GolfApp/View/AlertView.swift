@@ -11,8 +11,9 @@ import FirebaseAuth
 
 struct AlertView: View {
     @State private var otherUser: OtherUser?
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @ObservedObject private var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @State var otherUserPendingRequest: [OtherUser]
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
@@ -100,7 +101,7 @@ struct AlertView: View {
                             }
 
                         }
-                        if let notifications = authViewModel.user?.notifications {
+                        if let notifications = authViewModel.user?.notifications, !notifications.isEmpty {
                             VStack(spacing: 3) {
                             ForEach(notifications, id: \.self) { notification in
                                     Button(action: {
@@ -151,6 +152,8 @@ struct AlertView: View {
                                     .buttonStyle(.plain)
                                 }
                             }
+                        } else {
+                            Text("No notifications")
                         }
                     }
                 }
@@ -166,7 +169,7 @@ struct AlertView: View {
         }
         .navigationDestination(isPresented: $isNotificationClicked) {
             if let user = authViewModel.user {
-                PostDetailView(post: selectedPost, user: user, otherUser: otherUser)
+                PostDetailView(post: selectedPost, authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
 
             }
         }

@@ -14,12 +14,14 @@ struct LandingView: View {
     @State private var searchText: String = ""
     @ObservedObject var authViewModel: AuthViewModel = .init()
     @ObservedObject var msgViewModel: MessageViewModel = .init()
+    @ObservedObject var notificationViewModel: NotificationViewModel = .init()
+    @ObservedObject var searchViewModel: CourseSearchViewModel = .init()
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
     @State private var selectedTab: Int = 0
 
     init() {
-    UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
+        UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
     }
   
     var body: some View {
@@ -67,7 +69,7 @@ struct LandingView: View {
                     ProgressView()
                 case .loaded:
                     if let user = authViewModel.user, let _ = authViewModel.posts, let _ = authViewModel.postOtherUsers {
-                        HomeView(authViewModel: authViewModel)
+                        HomeView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel)
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
@@ -79,7 +81,7 @@ struct LandingView: View {
                                 .onAppear {
                                     isProfileView = false
                                 }
-                            ScoreCardView(authViewModel: authViewModel)
+                        ScoreCardView(authViewModel: authViewModel, searchModel: searchViewModel)
                                 .tabItem {
                                     Label("Score Card", systemImage: "figure.golf")
                                 }
@@ -89,6 +91,7 @@ struct LandingView: View {
                                 }
                         AlertView(
                             authViewModel: authViewModel,
+                            notificationViewModel: notificationViewModel, msgViewModel: msgViewModel,
                             otherUserPendingRequest: authViewModel.otherUserPendingRequest,
                             otherUserNotifications: authViewModel.otherUserNotifications
                         )
@@ -103,7 +106,7 @@ struct LandingView: View {
                                 .onAppear {
                                     isProfileView = false
                                 }
-                        ProfileView(authViewModel: authViewModel, user: user)
+                        ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user)
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
@@ -131,13 +134,19 @@ struct LandingView: View {
         .padding(.top, 0)
         .navigationDestination(isPresented: $isMessageBtnClicked) {
             if authViewModel.user != nil {
-                AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel)
+                AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel, notificationViewModel: notificationViewModel)
 
             }
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
             if let currentUser = authViewModel.user {
-                SearchDetailView(authViewModel: authViewModel, searchText: $searchText, user: currentUser, isAddFriendView: .constant(true))
+                SearchDetailView(
+                    authViewModel: authViewModel,
+                    msgViewModel: msgViewModel,
+                    searchText: $searchText,
+                    user: currentUser,
+                    isAddFriendView: .constant(true),
+                    notificationViewModel: notificationViewModel)
                     .toolbar(content: {
                         ToolbarItem(placement: .principal) {
                             TextField("search users", text: $searchText)
@@ -155,7 +164,6 @@ struct LandingView: View {
         }
         .onAppear {
             Task {
-                await authViewModel.fetchAllDataForLandingView()
                 selectedTab = selectedTab
             }
         }

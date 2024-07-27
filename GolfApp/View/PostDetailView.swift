@@ -12,7 +12,9 @@ struct PostDetailView: View {
     @State var post: Post?
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
-    @ObservedObject var authViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @FocusState var isTextFieldFocused: Bool
     @State var isLoading: Bool = false
     @State var user: User?
@@ -22,7 +24,15 @@ struct PostDetailView: View {
     var body: some View {
         ScrollView {
             if let post = post {
-                PostView(user: user, post: post, isPostDetailView: true, isTextFieldFocused: _isTextFieldFocused, otherUser: otherUser)
+                PostView(
+                    authViewModel: authViewModel,
+                    notificationViewModel: notificationViewModel,
+                    msgViewModel: msgViewModel,
+                    user: user,
+                    post: post,
+                    isPostDetailView: true,
+                    isTextFieldFocused: _isTextFieldFocused,
+                    otherUser: otherUser)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { _ in

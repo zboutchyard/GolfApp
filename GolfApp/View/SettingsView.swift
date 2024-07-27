@@ -25,7 +25,7 @@ struct SettingsView: View {
             Spacer()
         }
         .navigationDestination(isPresented: $isUserSignedOut) {
-            LoginView(isLoggedIn: false)
+            LoginView(authViewModel: authViewModel, isLoggedIn: false)
                 .navigationBarBackButtonHidden()
         }
        

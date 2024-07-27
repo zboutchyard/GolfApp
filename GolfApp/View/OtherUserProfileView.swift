@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct OtherUserProfileView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUser: OtherUser
     @State var user: User
-    @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @StateObject var msgViewModel: MessageViewModel
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
     @State var isLoading: Bool = true
@@ -92,7 +93,7 @@ struct OtherUserProfileView: View {
                         .padding()
                         Spacer()
                     }
-                    ProfileInfoView(otherUser: otherUser, isOtherUserProfile: true)
+                ProfileInfoView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, otherUser: otherUser, isOtherUserProfile: true)
                         .background(Color.whiteOrDark)
                
             }

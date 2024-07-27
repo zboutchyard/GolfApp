@@ -11,7 +11,7 @@ struct ProfileHeadingView: View {
     @State var user: User
     @Binding var isEditButtonClicked: Bool
     @Binding var isOtherViewTriggered: Bool
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
     
     var body: some View {
         VStack(spacing: 0) {

@@ -9,8 +9,9 @@ import SwiftUI
 
 struct NewMessageView: View {
     @State var user: User
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-    @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var msgViewModel: MessageViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUsers: [OtherUser] = []
     @Binding var isPresented: Bool
     @State var isChatViewTriggered: Bool = false
@@ -94,7 +95,13 @@ struct NewMessageView: View {
                         
                 }
                 .navigationDestination(isPresented: $isAddFriendClicked) {
-                        SearchDetailView(searchText: $searchText, user: user, isAddFriendView: .constant(true))
+                    SearchDetailView(
+                        authViewModel: authViewModel,
+                        msgViewModel: msgViewModel,
+                        searchText: $searchText,
+                        user: user,
+                        isAddFriendView: .constant(true), 
+                        notificationViewModel: notificationViewModel)
                             .toolbar(content: {
                                 ToolbarItem(placement: .principal) {
                                     TextField("search users", text: $searchText)

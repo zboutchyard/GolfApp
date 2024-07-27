@@ -23,8 +23,8 @@ struct ScoreCardView: View {
     @State var otherUsers: [OtherUser] = []
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @StateObject var searchModel = CourseSearchViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var searchModel: CourseSearchViewModel
     @State var shouldCloseSearch: Bool = false
     @State var selectedCourseName: String = ""
     @State var isCourseSheetPresented: Bool = false
@@ -455,8 +455,4 @@ struct ScoreCardView: View {
 //        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 //    }
     
-}
-
-#Preview {
-    ScoreCardView()
 }

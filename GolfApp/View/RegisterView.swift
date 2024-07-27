@@ -157,7 +157,7 @@ struct RegisterView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top)
-                NavigationLink( destination: LoginView(isLoggedIn: false)) {
+                NavigationLink( destination: LoginView(authViewModel: authViewModel, isLoggedIn: false)) {
                     Text("Already have an account? Log in")
                         .underline()
                 }

@@ -12,7 +12,9 @@ struct PostView: View {
     @State private var likeBtnClicked: Bool = false
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var post: Post?
     @State var userId: String = Auth.auth().currentUser?.uid ?? ""
@@ -224,18 +226,18 @@ struct PostView: View {
             }
         }
         .navigationDestination(isPresented: $commentBtnClicked) {
-            PostDetailView(post: post, authViewModel: authViewModel, user: user, otherUser: otherUser)
+            PostDetailView(post: post, authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
         }
         .navigationDestination(isPresented: $userClicked) {
             if let user = user {
-                ProfileView(authViewModel: authViewModel, user: user, otherUser: otherUser)
+                ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
                     .background(Color.whiteOrDark)
             }
         }
         .navigationDestination(isPresented: $otherUserClicked) {
             if let otherUser = otherUser {
                 if let user = user {
-                    OtherUserProfileView(otherUser: otherUser, user: user)
+                    OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: otherUser, user: user, msgViewModel: msgViewModel)
                 }
             }
         }

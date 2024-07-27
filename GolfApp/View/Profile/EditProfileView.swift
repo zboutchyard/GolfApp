@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditProfileView: View {
     @State var user: User
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
     @Environment(\.presentationMode) var presentationMode
     @State var interestArray: [String] = []
     @StateObject var searchModel = CourseSearchViewModel()
@@ -226,17 +226,4 @@ extension Optional where Wrapped == Int {
         get { self ?? 0 } // Provide a default value for the binding
         set { self = newValue }
     }
-}
-
-#Preview {
-    EditProfileView(
-        user: User(
-            firstName: "zack",
-            lastName: "boutchyard",
-            email: "zackboutchyard@gmail.com",
-            bio: "hello there how are you",
-            interests: "baseball, basketball, football, soccer",
-            handicap: 3,
-            homeCourse: "Asheboro Municipal"),
-        isSubmitButtonPressed: .constant(false))
 }

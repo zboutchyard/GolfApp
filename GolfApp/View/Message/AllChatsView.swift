@@ -10,8 +10,9 @@ import FirebaseDatabase
 import Firebase
 
 struct AllChatsView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
-    @ObservedObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var msgViewModel: MessageViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
     @State private var prts: [String]?
     @State private var isLoading: Bool = false
     @State private var isAddMessageButtonClicked = false
@@ -67,7 +68,7 @@ struct AllChatsView: View {
         }
         .sheet(isPresented: $isAddMessageButtonClicked) {
             if let user = authViewModel.user {
-                NewMessageView(user: user, isPresented: $isAddMessageButtonClicked)
+                NewMessageView(user: user, authViewModel: authViewModel, msgViewModel: msgViewModel, notificationViewModel: notificationViewModel, isPresented: $isAddMessageButtonClicked)
             }
         }
         .toolbar {

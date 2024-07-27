@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ProfileInfoView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var otherUser: OtherUser?
     @State var isOtherUserProfile: Bool = false
@@ -116,7 +118,7 @@ struct ProfileInfoView: View {
                             .background(Color.appGray)
                             VStack {
                                 ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                    PostView(user: user, post: post)
+                                    PostView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, post: post)
                                 }
                                 .padding(.bottom, 2)
                             }
@@ -229,7 +231,7 @@ struct ProfileInfoView: View {
                                 .background(Color.appGray)
                                 VStack {
                                     ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                        PostView(post: post, otherUser: otherUser)
+                                        PostView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, post: post, otherUser: otherUser)
                                     }
                                     .padding(.bottom, 2)
                                 }

@@ -50,6 +50,9 @@ class AuthViewModel: ObservableObject {
         } else {
             self.isUserLoggedIn = false
         }
+        Task {
+            await fetchAllDataForLandingView()
+        }
     }
     
     enum ImageState {
@@ -209,7 +212,6 @@ class AuthViewModel: ObservableObject {
                                 posts: posts)
                             self.postOtherUsers?[id] = otherUserModel
                             completion(otherUserModel)
-
                         }
                     } else {
                         let otherUserModel = OtherUser(
@@ -266,7 +268,6 @@ class AuthViewModel: ObservableObject {
                                     posts: posts)
                                 otherUsers.append(otherUserModel)
                                 self.friendsList = otherUsers
-
                             }
                         } else {
                             let otherUserModel = OtherUser(
@@ -348,40 +349,6 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func saveUserData(user: User, completion: @escaping (Bool, Error?) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(false, nil)
-            return
-        }
-
-        let database = Firestore.firestore()
-        let usersRef = database.collection("Users").document(uid)
-
-        // Prepare the data dictionary
-        var data: [String: Any] = [
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "email": user.email
-        ]
-
-        // Optional fields
-        if let bio = user.bio { data["bio"] = bio }
-        if let interests = user.interests { data["interests"] = interests }
-        if let handicap = user.handicap { data["handicap"] = handicap }
-        if let homeCourse = user.homeCourse { data["homeCourse"] = homeCourse }
-
-        usersRef.setData(data, merge: true) { error in
-            if let error = error {
-                print("Error updating user: \(error)")
-                completion(false, error)
-            } else {
-                print("User successfully updated.")
-                completion(true, nil)
-            }
-        }
-        
-    }
-    
     func addComment(postId: String, text: String, postOwner: String) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -430,7 +397,6 @@ class AuthViewModel: ObservableObject {
             completion(nil)
             return
         }
-        
         postRef.updateData([
             "likes": FieldValue.arrayUnion([uid])
         ]) { error in
@@ -473,7 +439,6 @@ class AuthViewModel: ObservableObject {
                 completion(error)
                 return
             }
-            
             guard let uid = result?.user.uid else {
                 completion(NSError(domain: "AppDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "User ID not available"]))
                 return
@@ -499,23 +464,18 @@ class AuthViewModel: ObservableObject {
         if let bio = user.bio {
             userData["bio"] = bio
         }
-        
         if let interests = user.interests {
             userData["interests"] = interests
         }
-        
         if let handicap = user.handicap {
             userData["handicap"] = handicap
         }
-        
         if let homeCourse = user.homeCourse {
             userData["homeCourse"] = homeCourse
         }
-        
         if let fcmToken = Messaging.messaging().fcmToken {
             userData["fcmToken"] = fcmToken
         }
-        
         usersCollection.document(uid).setData(userData) { error in
             if let error = error {
                 completion(error)

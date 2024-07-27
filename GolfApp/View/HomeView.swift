@@ -9,7 +9,9 @@ import SwiftUI
 import AlertToast
 
 struct HomeView: View {
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @State private var postSubmissionText: String = ""
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
@@ -68,7 +70,13 @@ struct HomeView: View {
                         if let posts = authViewModel.posts {
                             ForEach(posts, id: \.id) { post in
                                 if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
-                                    PostView(authViewModel: authViewModel, user: user, post: post, otherUser: otherUser[post.user])
+                                    PostView(
+                                        authViewModel: authViewModel,
+                                        notificationViewModel: notificationViewModel,
+                                        msgViewModel: msgViewModel,
+                                        user: user,
+                                        post: post,
+                                        otherUser: otherUser[post.user])
                                     
                                     // Display ad based on randomized positions
 //                                    if adPositions.contains(index) {

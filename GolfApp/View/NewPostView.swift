@@ -11,7 +11,7 @@ import AlertToast
 
 struct NewPostView: View {
     @State var postText: String = ""
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel
     @State var user: User
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
@@ -138,8 +138,4 @@ struct ImagePicker: UIViewControllerRepresentable {
             parent.presentationMode.wrappedValue.dismiss()
         }
     }
-}
-
-#Preview {
-    NewPostView(user: User(firstName: "Zack", lastName: "Boutchyard", email: "zackboutchyard"))
 }

@@ -12,7 +12,7 @@ import FirebaseMessaging
 
 @main
 struct GolfAppApp: App {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
