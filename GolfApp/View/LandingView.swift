@@ -69,7 +69,6 @@ struct LandingView: View {
                 case .loading:
                     ProgressView()
                 case .loaded:
-                    if let user = authViewModel.user, let _ = authViewModel.posts, let _ = authViewModel.postOtherUsers {
                         HomeView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel)
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
@@ -92,9 +91,7 @@ struct LandingView: View {
                                 }
                         AlertView(
                             authViewModel: authViewModel,
-                            notificationViewModel: notificationViewModel, msgViewModel: msgViewModel,
-                            otherUserPendingRequest: authViewModel.otherUserPendingRequest,
-                            otherUserNotifications: authViewModel.otherUserNotifications
+                            notificationViewModel: notificationViewModel, msgViewModel: msgViewModel
                         )
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
@@ -107,7 +104,10 @@ struct LandingView: View {
                                 .onAppear {
                                     isProfileView = false
                                 }
-                        ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user)
+                        ProfileView(
+                            authViewModel: authViewModel,
+                            notificationViewModel: notificationViewModel,
+                            msgViewModel: msgViewModel)
                                 .refreshable {
                                     await authViewModel.fetchAllDataForLandingView()
                                     selectedTab = selectedTab
@@ -123,7 +123,6 @@ struct LandingView: View {
                         .toolbar(.visible, for: .tabBar)
                         .toolbarBackground(Color.whiteOrDark, for: .tabBar)
                         .background(Color.whiteOrDark)
-                    }
                 case .error:
                     Text("Error")
                 }
@@ -140,12 +139,10 @@ struct LandingView: View {
             }
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
-            if let currentUser = authViewModel.user {
                 SearchDetailView(
                     authViewModel: authViewModel,
                     msgViewModel: msgViewModel,
                     searchText: $searchText,
-                    user: currentUser,
                     isAddFriendView: .constant(true),
                     notificationViewModel: notificationViewModel)
                     .toolbar(content: {
@@ -157,7 +154,6 @@ struct LandingView: View {
                                 .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
                         }
                     })
-            }
         }
         .navigationDestination(isPresented: $isSettingsButtonClicked) {
             SettingsView()

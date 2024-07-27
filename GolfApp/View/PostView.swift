@@ -226,11 +226,17 @@ struct PostView: View {
             }
         }
         .navigationDestination(isPresented: $commentBtnClicked) {
-            PostDetailView(post: post, authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
+            PostDetailView(
+                post: post,
+                authViewModel: authViewModel,
+                notificationViewModel: notificationViewModel,
+                msgViewModel: msgViewModel,
+                user: user,
+                otherUser: otherUser)
         }
         .navigationDestination(isPresented: $userClicked) {
             if let user = user {
-                ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
+                ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, otherUser: otherUser)
                     .background(Color.whiteOrDark)
             }
         }

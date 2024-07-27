@@ -12,7 +12,6 @@ struct SearchDetailView: View {
     @StateObject var authViewModel: AuthViewModel
     @StateObject var msgViewModel: MessageViewModel
     @Binding var searchText: String
-    @State var user: User?
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false
     @Binding var isAddFriendView: Bool
@@ -42,14 +41,14 @@ struct SearchDetailView: View {
                             })
                             .buttonStyle(.plain)
                             if isAddFriendView == true {
-                                if let sentRequests = user?.sentRequests, let receivedRequests = user?.receivedRequests,
+                                if let sentRequests = authViewModel.user?.sentRequests, let receivedRequests = authViewModel.user?.receivedRequests,
                                    sentRequests.contains(where: { $0.user == otherUser.id }) || receivedRequests.contains(where: { $0.user == otherUser.id }) {
                                     Button(action: {
                                     }, label: {
                                         Text("Pending approval")
                                     })
                                     .disabled(true)
-                                } else if (user?.friendsList?.contains(otherUser.id)) == true {
+                                } else if (authViewModel.user?.friendsList?.contains(otherUser.id)) == true {
                                     Button(action: {
                                     }, label: {
                                         Text("Friends")
@@ -75,7 +74,7 @@ struct SearchDetailView: View {
         }
         .navigationDestination(isPresented: $isUserSelected, destination: {
             if let selectedUser = selectedUser {
-                if let user = user {
+                if let user = authViewModel.user {
                     OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: selectedUser, user: user, msgViewModel: msgViewModel)
                 }
             }

@@ -13,7 +13,6 @@ struct ProfileView: View {
     @StateObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
-    @State var user: User?
     @State private var badgeViewBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
     @State private var friendsListBtnSelected: Bool = false
@@ -35,8 +34,8 @@ struct ProfileView: View {
                 .background(Color.whiteOrBlack)
         } else {
             ScrollView {
-                    if user != nil {
-                        ProfileHeadingView(user: user!, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked, authViewModel: authViewModel)
+                if let user = authViewModel.user {
+                    ProfileHeadingView(user: user, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked, authViewModel: authViewModel)
                         
                         if !isEditButtonClicked {
                             VStack {
@@ -153,7 +152,7 @@ struct ProfileView: View {
                             .onChange(of: isSubmitButtonPressed) {
                                 isLoading = true
                                 authViewModel.fetchUserDataFromFirebase { fetchedUser in
-                                    user = fetchedUser
+                                    authViewModel.user = fetchedUser
                                     isLoading = false
                                 }
                             }
@@ -167,18 +166,16 @@ struct ProfileView: View {
                 AlertToast(displayMode: .banner(.pop), type: .complete(.green), title: "Profile updated successfully")
             }
             .navigationDestination(isPresented: $isEditButtonClicked, destination: {
-                if let user = user {
+                if let user = authViewModel.user {
                     EditProfileView(user: user, authViewModel: authViewModel, isSubmitButtonPressed: $isSubmitButtonPressed)
                         .navigationTitle("Update profile")
                 }
             })
             .navigationDestination(isPresented: $isAddFriendClicked) {
-                if let currentUser = user {
                     SearchDetailView(
                         authViewModel: authViewModel,
                         msgViewModel: msgViewModel,
                         searchText: $searchText,
-                        user: currentUser,
                         isAddFriendView: .constant(true),
                         notificationViewModel: notificationViewModel)
                         .toolbar(content: {
@@ -190,12 +187,10 @@ struct ProfileView: View {
                                     .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
                             }
                         })
-                }
-                
             }
             .navigationDestination(isPresented: $isOtherUserClicked) {
                 if let otherUser = otherUser {
-                    if let user = user {
+                    if let user = authViewModel.user {
                         OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: otherUser, user: user, msgViewModel: msgViewModel)
                     }
                 }

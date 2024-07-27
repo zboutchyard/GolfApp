@@ -99,7 +99,6 @@ struct NewMessageView: View {
                         authViewModel: authViewModel,
                         msgViewModel: msgViewModel,
                         searchText: $searchText,
-                        user: user,
                         isAddFriendView: .constant(true), 
                         notificationViewModel: notificationViewModel)
                             .toolbar(content: {

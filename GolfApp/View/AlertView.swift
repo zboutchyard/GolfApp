@@ -14,17 +14,14 @@ struct AlertView: View {
     @StateObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
-    @State var otherUserPendingRequest: [OtherUser]
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
-    @State var otherUserNotification: OtherUser?
-    @State var otherUserNotifications: [String: OtherUser]
     @State var isNotificationClicked: Bool = false
     @State var selectedPost: Post?
 
     var body: some View {
         VStack {
-            if otherUserPendingRequest.isEmpty && ((authViewModel.user?.notifications == nil)) {
+            if authViewModel.otherUserPendingRequest.isEmpty && ((authViewModel.user?.notifications == nil)) {
                     VStack {
                         Spacer()
                         Image(systemName: "bell.slash.fill")
@@ -40,8 +37,8 @@ struct AlertView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ScrollView {
-                        if !otherUserPendingRequest.isEmpty {
-                            ForEach(otherUserPendingRequest, id: \.id) { otherUser in
+                        if !authViewModel.otherUserPendingRequest.isEmpty {
+                            ForEach(authViewModel.otherUserPendingRequest, id: \.id) { otherUser in
                                 HStack {
                                     if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                                         Image(uiImage: uiImage)
@@ -72,7 +69,7 @@ struct AlertView: View {
                                                 Task {
                                                     notificationViewModel.addFriend(userId: otherUser.id)
                                                     notificationViewModel.removePendingRequests(userId: otherUser.id)
-                                                    otherUserPendingRequest.removeAll()
+                                                    authViewModel.otherUserPendingRequest.removeAll()
                                                     isRequestAccepted = true
                                                 }
                                             }, label: {
@@ -82,7 +79,7 @@ struct AlertView: View {
                                             Button(action: {
                                                 Task {
                                                     notificationViewModel.removePendingRequests(userId: otherUser.id)
-                                                    otherUserPendingRequest.removeAll()
+                                                    authViewModel.otherUserPendingRequest.removeAll()
                                                     isRequestDeclined = true
                                                 }
 
@@ -111,7 +108,7 @@ struct AlertView: View {
                                         }
                                     }, label: {
                                         HStack {
-                                            if let data = otherUserNotifications[notification.userCommenting]?.profilePicData, 
+                                            if let data = authViewModel.otherUserNotifications[notification.userCommenting]?.profilePicData,
                                                 let uiImage = UIImage(data: data) {
                                                 Image(uiImage: uiImage)
                                                     .resizable()
@@ -134,7 +131,7 @@ struct AlertView: View {
                                             }
                                             VStack {
                                                 // swiftlint:disable:next line_length
-                                                Text("\(otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
+                                                Text("\(authViewModel.otherUserNotifications[notification.userCommenting]?.firstName ?? "") \(authViewModel.otherUserNotifications[notification.userCommenting]?.lastName ?? "") commented saying: \(notification.text)")
                                                     .fontWeight(.semibold)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
 

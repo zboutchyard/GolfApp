@@ -93,7 +93,12 @@ struct OtherUserProfileView: View {
                         .padding()
                         Spacer()
                     }
-                ProfileInfoView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, otherUser: otherUser, isOtherUserProfile: true)
+                ProfileInfoView(
+                    authViewModel: authViewModel,
+                    notificationViewModel: notificationViewModel,
+                    msgViewModel: msgViewModel,
+                    otherUser: otherUser,
+                    isOtherUserProfile: true)
                         .background(Color.whiteOrDark)
                
             }
