@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditProfileView: View {
     @State var user: User
-    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel
     @Environment(\.presentationMode) var presentationMode
     @State var interestArray: [String] = []
     @StateObject var searchModel = CourseSearchViewModel()

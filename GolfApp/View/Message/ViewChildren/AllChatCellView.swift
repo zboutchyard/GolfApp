@@ -72,7 +72,7 @@ struct AllChatCellView: View {
         }
         .navigationDestination(isPresented: $isMessageClicked) {
             if let otherUser = otherUser {
-                ChatView(chatId: chatId, otherUser: otherUser)
+                ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
             }
         }
         .onAppear {

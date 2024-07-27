@@ -102,9 +102,9 @@ struct OtherUserProfileView: View {
         }
         .navigationDestination(isPresented: $isChatViewTriggered) {
             if let chatId = chatId {
-                ChatView(chatId: chatId, otherUser: otherUser)
+                ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
             } else {
-                NewChatView(otherUser: otherUser, isPresented: .constant(true))
+                NewChatView(msgViewModel: msgViewModel, otherUser: otherUser, isPresented: .constant(true))
             }
         }
         .background(Color.whiteOrDark)

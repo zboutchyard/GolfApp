@@ -23,7 +23,7 @@ struct ScoreCardView: View {
     @State var otherUsers: [OtherUser] = []
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
-    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel
     @StateObject var searchModel: CourseSearchViewModel
     @State var shouldCloseSearch: Bool = false
     @State var selectedCourseName: String = ""

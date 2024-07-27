@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 struct ChatView: View {
     @Environment(\.colorScheme) var colorScheme
-    @StateObject var msgViewModel = MessageViewModel()
+    @StateObject var msgViewModel: MessageViewModel
     @State var chatId: String
     @State var otherUser: OtherUser
     @State var messages: [Message] = []
@@ -54,7 +54,7 @@ struct ChatView: View {
                 .background(Color("Green").ignoresSafeArea())
             
             Divider()
-                MessageField(chatId: chatId, otherUser: otherUser)
+            MessageField(chatId: chatId, messageViewmodel: msgViewModel, otherUser: otherUser)
                     .environmentObject(msgViewModel)
         } .onAppear {
             msgViewModel.fetchChat(chatId: chatId) { fetchedChat in

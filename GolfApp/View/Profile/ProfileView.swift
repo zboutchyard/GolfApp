@@ -10,7 +10,7 @@ import FirebaseDatabase
 import AlertToast
 
 struct ProfileView: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State var user: User?

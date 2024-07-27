@@ -116,10 +116,10 @@ struct NewMessageView: View {
                 .navigationDestination(isPresented: $isChatViewTriggered, destination: {
                     if let chatId = chatId {
                         if let otherUser = otherUser {
-                            ChatView(chatId: chatId, otherUser: otherUser)
+                            ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
                         }
                     } else {
-                        NewChatView(otherUser: otherUser, isPresented: .constant(true))
+                        NewChatView(msgViewModel: msgViewModel, otherUser: otherUser, isPresented: .constant(true))
                     }
                 })
             }

@@ -9,7 +9,7 @@ import SwiftUI
 import AlertToast
 
 struct HomeView: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State private var postSubmissionText: String = ""

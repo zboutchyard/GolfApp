@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct LoginView: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel
     @State var isLoggedIn: Bool
     @State private var email: String = ""
     @State private var password: String = ""

@@ -11,7 +11,7 @@ struct MessageField: View {
     @State private var message: String = ""
     @State var chatId: String?
     @EnvironmentObject var msgViewModel: MessageViewModel
-    @StateObject var messageViewmodel: MessageViewModel = MessageViewModel()
+    @StateObject var messageViewmodel: MessageViewModel
     @State var isNewMessage: Bool = false
     @State var otherUser: OtherUser?
     var body: some View {
