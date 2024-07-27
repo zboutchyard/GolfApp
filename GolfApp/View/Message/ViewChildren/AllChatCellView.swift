@@ -10,8 +10,8 @@ import FirebaseDatabase
 import Firebase
 
 struct AllChatCellView: View {
-    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
-    @StateObject var msgViewModel: MessageViewModel = MessageViewModel()
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var msgViewModel: MessageViewModel
     @Binding var selectedChatId: String?
     @State private var otherUser: OtherUser?
     @State var isLoading: Bool = true

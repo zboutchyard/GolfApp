@@ -39,7 +39,7 @@ struct AllChatsView: View {
                     if let chats = authViewModel.user?.chats, chats.isEmpty {
                         List {
                             ForEach((chats), id: \.self) { chat in
-                                AllChatCellView(selectedChatId: $selectedChatId, chatId: chat)
+                                AllChatCellView(authViewModel: authViewModel, msgViewModel: msgViewModel, selectedChatId: $selectedChatId, chatId: chat)
                                     .frame(maxWidth: .infinity)
                             }
                             .onDelete(perform: deleteItem)

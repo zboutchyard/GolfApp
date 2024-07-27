@@ -38,7 +38,7 @@ struct SearchDetailView: View {
                                 selectedUser = otherUser
                                 isUserSelected = true
                             }, label: {
-                                PersonCellView(otherUser: otherUser, isPostView: .constant(false))
+                                PersonCellView(otherUser: otherUser, authViewModel: authViewModel, isPostView: .constant(false))
                             })
                             .buttonStyle(.plain)
                             if isAddFriendView == true {

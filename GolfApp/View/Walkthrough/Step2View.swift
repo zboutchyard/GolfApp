@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct Step2View: View {
-    @StateObject var authViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel
     //    @StateObject var mockViewModel = MockAuthViewModel()
     @State var user: User?
     @State var bioText: String = ""
@@ -111,7 +111,7 @@ struct Step2View: View {
         }
         .navigationDestination(isPresented: $isStepComplete) {
             Step3View(
-                email: email,
+                authViewModel: authViewModel, email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
@@ -148,8 +148,4 @@ struct Step2View: View {
     private func hideKeyboard() {
            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
        }
-}
-
-#Preview {
-    Step2View(email: "zack@zack.com", password: "yaya", firstName: "Zack", lastName: "Boutchyard")
 }

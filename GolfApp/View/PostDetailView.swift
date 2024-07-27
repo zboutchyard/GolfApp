@@ -93,7 +93,7 @@ struct PostDetailView: View {
         }
         .background(.whiteOrDark)
         if let post = post {
-            MessageToolbar(post: post, isTextFieldFocused: _isTextFieldFocused) {
+            MessageToolbar(post: post, isTextFieldFocused: _isTextFieldFocused, authViewModel: authViewModel) {
                 authViewModel.fetchPostFromFirebase(postId: post.id ?? "") { fetchedPost in
                     self.post = fetchedPost
                 }
@@ -106,8 +106,8 @@ struct PostDetailView: View {
         @State var post: Post
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
+        @StateObject var authViewModel: AuthViewModel
         var onCommentAdded: () -> Void
-        @StateObject var authViewModel: AuthViewModel = AuthViewModel()
         
         var body: some View {
                 HStack {

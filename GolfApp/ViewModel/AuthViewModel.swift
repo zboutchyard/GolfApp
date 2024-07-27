@@ -12,6 +12,7 @@ import SwiftUI
 import PhotosUI
 import FirebaseStorage
 import FirebaseMessaging
+import FirebaseCore
 
 class AuthViewModel: ObservableObject {
     @Published var otherUsers: [OtherUser]?
@@ -42,9 +43,8 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    let storage = Storage.storage()
-
     init() {
+        FirebaseApp.configure()
         if Auth.auth().currentUser != nil {
             self.isUserLoggedIn = true
         } else {
@@ -583,7 +583,7 @@ extension AuthViewModel {
     
     @MainActor
     func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
-        let photoRef = storage.reference().child("\(photoId)")
+        let photoRef = Storage.storage().reference().child("\(photoId)")
         photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
             if let error = error {
                 completion(nil)
