@@ -18,7 +18,7 @@ struct GolfAppApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                    ViewSwitcher()
+                ViewSwitcher()
             }
         }
         .environmentObject(authViewModel)

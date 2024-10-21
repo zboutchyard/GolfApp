@@ -36,10 +36,13 @@ struct AllChatsView: View {
                         .padding(.trailing)
                     }
                     Divider()
-                    if let chats = authViewModel.user?.chats, chats.isEmpty {
+                    if let chats = authViewModel.user?.chats, !chats.isEmpty {
                         List {
                             ForEach((chats), id: \.self) { chat in
-                                AllChatCellView(authViewModel: authViewModel, msgViewModel: msgViewModel, selectedChatId: $selectedChatId, chatId: chat)
+                                AllChatCellView(authViewModel: authViewModel,
+                                                msgViewModel: msgViewModel,
+                                                selectedChatId: $selectedChatId,
+                                                chatId: chat)
                                     .frame(maxWidth: .infinity)
                             }
                             .onDelete(perform: deleteItem)
@@ -62,13 +65,15 @@ struct AllChatsView: View {
                     }
                     
                 }
-               
             }
-            
         }
         .sheet(isPresented: $isAddMessageButtonClicked) {
             if let user = authViewModel.user {
-                NewMessageView(user: user, authViewModel: authViewModel, msgViewModel: msgViewModel, notificationViewModel: notificationViewModel, isPresented: $isAddMessageButtonClicked)
+                NewMessageView(user: user,
+                               authViewModel: authViewModel,
+                               msgViewModel: msgViewModel,
+                               notificationViewModel: notificationViewModel,
+                               isPresented: $isAddMessageButtonClicked)
             }
         }
         .toolbar {

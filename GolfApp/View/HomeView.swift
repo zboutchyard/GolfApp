@@ -15,12 +15,13 @@ struct HomeView: View {
     @State private var postSubmissionText: String = ""
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
-    @State private var adPositions: [Int] = []
     @State private var postCounter = 0
+    @State var isAdLoading: Bool = true
     
     var body: some View {
+        
         ScrollView {
-            if authViewModel.state == .loading {
+            if authViewModel.state == .loading, isAdLoading {
                 LoadingView()
             } else if authViewModel.state == .loaded {
                 VStack {
@@ -68,33 +69,20 @@ struct HomeView: View {
                     Spacer().frame(height: 8)
                     VStack {
                         if let posts = authViewModel.posts {
-                            ForEach(posts, id: \.id) { post in
+                            ForEach(posts.indices, id: \.self) { index in
+                                let post = posts[index]
                                 if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
-                                    PostView(
+                                    PostsWithAdsView(
                                         authViewModel: authViewModel,
                                         notificationViewModel: notificationViewModel,
                                         msgViewModel: msgViewModel,
                                         user: user,
                                         post: post,
-                                        otherUser: otherUser[post.user])
-                                    
-                                    // Display ad based on randomized positions
-//                                    if adPositions.contains(index) {
-//                                        Section {
-//                                            NativeAdViewControllerWrapper()
-//                                                .frame(height: 400)
-//                                                .padding()
-//                                                .background(Color.whiteOrDark)
-//                                        }
-//                                        
-//                                    }
+                                        otherUser: otherUser[post.user], index: index, isAdLoading: isAdLoading)
                                 }
                             }
                         }
                     }
-//                    .onAppear {
-//                        setupRandomAdPositions(for: authViewModel.posts?.count ?? 0)
-//                    }
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
@@ -118,18 +106,5 @@ struct HomeView: View {
         .toast(isPresenting: $isPostSubmitted, alert: {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
-    }
-    private func setupRandomAdPositions(for postCount: Int) {
-        adPositions.removeAll()
-        var potentialPositions = Set(1..<postCount) // Start from 1 to avoid the first position
-        
-        while adPositions.count < postCount / 4 { // Adjust the division factor as needed
-            guard let randomPosition = potentialPositions.randomElement() else { break }
-            adPositions.append(randomPosition)
-            // Remove nearby positions to avoid consecutive ads
-            potentialPositions.remove(randomPosition)
-            potentialPositions.remove(randomPosition + 1)
-            potentialPositions.remove(randomPosition - 1)
-        }
     }
 }

@@ -12,7 +12,7 @@ struct EditProfileView: View {
     @StateObject var authViewModel: AuthViewModel
     @Environment(\.presentationMode) var presentationMode
     @State var interestArray: [String] = []
-    @StateObject var searchModel = CourseSearchViewModel()
+    @ObservedObject var searchModel = CourseSearchViewModel()
     @State private var showCourseList = false
     @State var selectedCourseName: String = ""
     
@@ -171,36 +171,45 @@ struct EditProfileView: View {
                 }
         }
         .sheet(isPresented: $showCourseList) {
-            VStack {
-                if searchModel.locationResult.isEmpty {
-                    Text("Fetching nearby golf courses...")
-                } else {
-                    VStack {
-                        ForEach(searchModel.locationResult, id: \.self) { completion in
-                            VStack {
-                                Button {
-                                    user.homeCourse = completion.title
-                                    selectedCourseName = completion.title
-                                    showCourseList = false
-                                } label: {
-                                    Text(completion.title)
-                                }
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .buttonStyle(.plain)
-                                .padding()
-                            }
-                            Divider()
-                        }
-                    }
-                    .frame(maxHeight: .infinity, alignment: .top)
-                    .padding(.top)
+            switch searchModel.state {
+            case .loading:
+                VStack {
+                    LoadingView()
                 }
+            case .loaded:
+                VStack {
+                    if searchModel.locationResult.isEmpty {
+                        Text("No courses found, please change your location and try again.")
+                    } else {
+                        VStack {
+                            ForEach(searchModel.locationResult, id: \.name) { course in
+                                VStack {
+                                    Button {
+                                        user.homeCourse = course.name
+                                        selectedCourseName = course.name
+                                        showCourseList = false
+                                    } label: {
+                                        Text(course.name)
+                                    }
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .buttonStyle(.plain)
+                                    .padding()
+                                }
+                                Divider()
+                            }
+                        }
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .padding(.top)
+                    }
+                }
+            case .error:
+                Text("An error occurred. Please try again later.")
             }
-            .presentationDetents([.height(400)])
         }
+        .presentationDetents([.height(400)])
     }
     func convertStringToArray() {
         if let interestsString = user.interests {

@@ -19,7 +19,7 @@ class AuthViewModel: ObservableObject {
     @Published var friends: [OtherUser]?
     @Published var postOtherUsers: [String: OtherUser]? = [:]
     @Published var friend: OtherUser?
-    @State var friendId: String?
+    @Published var friendId: String?
     @Published var friendsList: [OtherUser]?
     @Published var posts: [Post]?
     @Published var post: Post?
@@ -32,6 +32,7 @@ class AuthViewModel: ObservableObject {
     @Published var shouldLoad: Bool = false
     @Published private(set) var imageState: ImageState = .empty
     @Published var profileImage: ProfileImage?
+    @Published var adPositions: [Int] = []
     @Published var imageSelection: PhotosPickerItem? {
         didSet {
             if let imageSelection {
@@ -74,6 +75,20 @@ class AuthViewModel: ObservableObject {
             self.isUserLoggedIn = false            
         } catch {
             print("error signing out")
+        }
+    }
+    
+    func setupRandomAdPositions(for postCount: Int) {
+        adPositions.removeAll()
+        var potentialPositions = Set(1..<postCount) // Start from 1 to avoid the first position
+        
+        while adPositions.count < postCount / 4 { // Adjust the division factor as needed
+            guard let randomPosition = potentialPositions.randomElement() else { break }
+            adPositions.append(randomPosition)
+            // Remove nearby positions to avoid consecutive ads
+            potentialPositions.remove(randomPosition)
+            potentialPositions.remove(randomPosition + 1)
+            potentialPositions.remove(randomPosition - 1)
         }
     }
     
@@ -238,7 +253,7 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchFriendsFromFirebase(ids: [String]) async {
+    func fetchFriendsFromFirebase(ids: [String]) {
         let database = Firestore.firestore()
         var otherUsers = [OtherUser]()
         for id in ids {
@@ -293,7 +308,7 @@ class AuthViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchAllOtherUsersFromFirebase() async {
+    func fetchAllOtherUsersFromFirebase() {
         let database  = Firestore.firestore()
         let usersRef = database.collection("Users")
         usersRef.getDocuments { (documents, error) in
@@ -526,7 +541,7 @@ class AuthViewModel: ObservableObject {
         let fileRef = storageRef.child("images/\(UUID().uuidString).jpg")
         
         // upload that data
-        let uploadTask = fileRef.putData(imageData!, metadata: nil) { metadata, error in
+        let _ = fileRef.putData(imageData!, metadata: nil) { metadata, error in
             if error == nil && metadata != nil {
                 // save the reference to the file in firestore db
             }
@@ -585,7 +600,7 @@ extension AuthViewModel {
     func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
         let photoRef = Storage.storage().reference().child("\(photoId)")
         photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
-            if let error = error {
+            if error != nil {
                 completion(nil)
             } else {
                 completion(data)
@@ -619,7 +634,7 @@ extension AuthViewModel {
     
     @MainActor
     func fetchPostFromFirebase(postId: String, completion: @escaping (Post?) -> Void) {
-        guard let _ = Auth.auth().currentUser else {
+        guard Auth.auth().currentUser != nil else {
             completion(nil)
             return
         }
@@ -723,11 +738,14 @@ extension AuthViewModel {
                     post.id = document.documentID
 
                     if let imageRef = post.imageRef {
-                        self?.fetchPhotoData(photoId: imageRef) { data in
-                            post.imageData = data
-                            tempPosts.append(post)
-                            group.leave()
+                        Task {
+                            await self?.fetchPhotoData(photoId: imageRef) { data in
+                                post.imageData = data
+                                tempPosts.append(post)
+                                group.leave()
+                            }
                         }
+                       
                     } else {
                         tempPosts.append(post)
                         group.leave()

@@ -134,7 +134,7 @@ struct Step3View: View {
             } else {
                 if let data = data {
                     storageReference.putData(data, metadata: nil) { (metadata, _) in
-                        guard let _ = metadata else {
+                        guard metadata != nil else {
                             return
                         }
                     }

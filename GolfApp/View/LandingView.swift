@@ -19,12 +19,12 @@ struct LandingView: View {
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
     @State private var selectedTab: Int = 0
-
+    
     init(authViewModel: AuthViewModel) {
         UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
         _authViewModel = StateObject(wrappedValue: authViewModel)
     }
-  
+    
     var body: some View {
         VStack {
             HStack(spacing: 0) {
@@ -70,59 +70,60 @@ struct LandingView: View {
                     ProgressView()
                 case .loaded:
                         HomeView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel)
-                                .refreshable {
-                                    await authViewModel.fetchAllDataForLandingView()
-                                    selectedTab = selectedTab
-                                }
-                                .tabItem {
-                                    Label("Home", systemImage: "house.fill")
-                                }
-                                .tag(0)
-                                .onAppear {
-                                    isProfileView = false
-                                }
-                        ScoreCardView(authViewModel: authViewModel, searchModel: searchViewModel)
-                                .tabItem {
-                                    Label("Score Card", systemImage: "figure.golf")
-                                }
-                                .tag(1)
-                                .onAppear {
-                                    isProfileView = false
-                                }
-                        AlertView(
-                            authViewModel: authViewModel,
-                            notificationViewModel: notificationViewModel, msgViewModel: msgViewModel
-                        )
-                                .refreshable {
-                                    await authViewModel.fetchAllDataForLandingView()
-                                    selectedTab = selectedTab
-                                }
-                                .tabItem {
-                                    Label("Notifications", systemImage: "bell.fill")
-                                }
-                                .tag(2)
-                                .onAppear {
-                                    isProfileView = false
-                                }
-                        ProfileView(
-                            authViewModel: authViewModel,
-                            notificationViewModel: notificationViewModel,
-                            msgViewModel: msgViewModel)
-                                .refreshable {
-                                    await authViewModel.fetchAllDataForLandingView()
-                                    selectedTab = selectedTab
-                                }
-                                .tabItem {
-                                    Label("Profile", systemImage: "person.fill")
-                                }
-                                .tag(3)
-                                .onAppear {
-                                    isProfileView = true
-                                }
-                        
-                        .toolbar(.visible, for: .tabBar)
-                        .toolbarBackground(Color.whiteOrDark, for: .tabBar)
-                        .background(Color.whiteOrDark)
+                            .refreshable {
+                                await authViewModel.fetchAllDataForLandingView()
+                                selectedTab = selectedTab
+                            }
+                            .tabItem {
+                                Label("Home", systemImage: "house.fill")
+                            }
+                            .tag(0)
+                            .onAppear {
+                                isProfileView = false
+                            }
+                    
+                    ScoreCardView(authViewModel: authViewModel, searchModel: searchViewModel)
+                        .tabItem {
+                            Label("Score Card", systemImage: "figure.golf")
+                        }
+                        .tag(1)
+                        .onAppear {
+                            isProfileView = false
+                        }
+                    AlertView(
+                        authViewModel: authViewModel,
+                        notificationViewModel: notificationViewModel, msgViewModel: msgViewModel
+                    )
+                    .refreshable {
+                        await authViewModel.fetchAllDataForLandingView()
+                        selectedTab = selectedTab
+                    }
+                    .tabItem {
+                        Label("Notifications", systemImage: "bell.fill")
+                    }
+                    .tag(2)
+                    .onAppear {
+                        isProfileView = false
+                    }
+                    ProfileView(
+                        authViewModel: authViewModel,
+                        notificationViewModel: notificationViewModel,
+                        msgViewModel: msgViewModel)
+                    .refreshable {
+                        await authViewModel.fetchAllDataForLandingView()
+                        selectedTab = selectedTab
+                    }
+                    .tabItem {
+                        Label("Profile", systemImage: "person.fill")
+                    }
+                    .tag(3)
+                    .onAppear {
+                        isProfileView = true
+                    }
+                    
+                    .toolbar(.visible, for: .tabBar)
+                    .toolbarBackground(Color.whiteOrDark, for: .tabBar)
+                    .background(Color.whiteOrDark)
                 case .error:
                     Text("Error")
                 }
@@ -135,25 +136,25 @@ struct LandingView: View {
         .navigationDestination(isPresented: $isMessageBtnClicked) {
             if authViewModel.user != nil {
                 AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel, notificationViewModel: notificationViewModel)
-
+                
             }
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {
-                SearchDetailView(
-                    authViewModel: authViewModel,
-                    msgViewModel: msgViewModel,
-                    searchText: $searchText,
-                    isAddFriendView: .constant(true),
-                    notificationViewModel: notificationViewModel)
-                    .toolbar(content: {
-                        ToolbarItem(placement: .principal) {
-                            TextField("search users", text: $searchText)
-                                .padding(.leading)
-                                .padding(4)
-                                .font(.system(size: 20))
-                                .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
-                        }
-                    })
+            SearchDetailView(
+                authViewModel: authViewModel,
+                msgViewModel: msgViewModel,
+                searchText: $searchText,
+                isAddFriendView: .constant(true),
+                notificationViewModel: notificationViewModel)
+            .toolbar(content: {
+                ToolbarItem(placement: .principal) {
+                    TextField("search users", text: $searchText)
+                        .padding(.leading)
+                        .padding(4)
+                        .font(.system(size: 20))
+                        .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
+                }
+            })
         }
         .navigationDestination(isPresented: $isSettingsButtonClicked) {
             SettingsView()

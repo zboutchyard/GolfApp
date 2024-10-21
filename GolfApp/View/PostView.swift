@@ -235,9 +235,12 @@ struct PostView: View {
                 otherUser: otherUser)
         }
         .navigationDestination(isPresented: $userClicked) {
-            if let user = user {
-                ProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, otherUser: otherUser)
-                    .background(Color.whiteOrDark)
+            if user != nil {
+                ProfileView(authViewModel: authViewModel,
+                            notificationViewModel: notificationViewModel,
+                            msgViewModel: msgViewModel,
+                            otherUser: otherUser)
+                .background(Color.whiteOrDark)
             }
         }
         .navigationDestination(isPresented: $otherUserClicked) {

@@ -11,6 +11,8 @@
 		100634992B1390FA005CF4CB /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100634982B1390FA005CF4CB /* AlertView.swift */; };
 		1006349B2B13EDA8005CF4CB /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006349A2B13EDA8005CF4CB /* Post.swift */; };
 		1006349D2B16D3CD005CF4CB /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006349C2B16D3CD005CF4CB /* NewPostView.swift */; };
+		100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */; };
+		100F7DEE2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */; };
 		1032E9C82AF665BF00001048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C72AF665BF00001048 /* User.swift */; };
 		1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C92AF66B1100001048 /* AuthViewModel.swift */; };
 		1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9CB2AF68C8E00001048 /* LandingView.swift */; };
@@ -28,6 +30,9 @@
 		1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EA2AFB1BDC00001048 /* MessageViewModel.swift */; };
 		1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9EC2AFB1E5300001048 /* AllChatsView.swift */; };
 		10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10551A032B22BC0A00218E1D /* LoadingView.swift */; };
+		105D99E32C55A03D00323DFF /* TeeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E22C55A03D00323DFF /* TeeOptions.swift */; };
+		105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E42C69022500323DFF /* LiveRoundViewModel.swift */; };
+		105D99E72C690E3700323DFF /* LiveRound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E62C690E3700323DFF /* LiveRound.swift */; };
 		10696A2C2B2E1FDC0011FE9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */; };
 		10696A2F2B3248CF0011FE9B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A2E2B3248CF0011FE9B /* FirebaseStorage */; };
 		10696A312B3248E00011FE9B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A302B3248E00011FE9B /* FirebaseAuth */; };
@@ -38,6 +43,9 @@
 		107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107B54192BB0803300C00654 /* AuthViewModelExtention.swift */; };
 		107B54212BB0EA2B00C00654 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 107B54202BB0EA2B00C00654 /* GoogleService-Info.plist */; };
 		107B54242BB0EB4000C00654 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 107B54232BB0EB4000C00654 /* GoogleMobileAds */; };
+		108A1B552CC58E8D00F0861E /* NativeAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108A1B542CC58E8C00F0861E /* NativeAdView.swift */; };
+		108A1B572CC5A51600F0861E /* AdLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108A1B562CC5A51600F0861E /* AdLoaderDelegate.swift */; };
+		108A1B5B2CC6080900F0861E /* NativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 108A1B5A2CC6080900F0861E /* NativeAdView.xib */; };
 		108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32962B1976FB008F59F9 /* PostDetailView.swift */; };
 		108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */; };
 		108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */; };
@@ -50,9 +58,10 @@
 		108D36E42AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36E32AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift */; };
 		108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F32AF57FB0005DAD22 /* RegisterView.swift */; };
 		108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F52AF582AB005DAD22 /* ProfileView.swift */; };
+		10A72EED2CBDB98200AD78F1 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 10A72EEC2CBDB98200AD78F1 /* BottomSheet */; };
 		10B0C3A72B369F59003C6F31 /* PopoverScoreCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */; };
 		10B0C3A92B38AD70003C6F31 /* CourseSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */; };
-		10B145822B3E62B100983BE8 /* NativeAdViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B145812B3E62B100983BE8 /* NativeAdViewControllerWrapper.swift */; };
+		10B1BB572CC4496400BC8BE8 /* PostsWithAdsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */; };
 		10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */; };
 		10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */; };
 		10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3632B0D6F75004D45E7 /* NewChatView.swift */; };
@@ -63,7 +72,6 @@
 		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
-		10C89DA62B3F195300DF0837 /* GoogleAdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C89DA52B3F195300DF0837 /* GoogleAdViewController.swift */; };
 		10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */; };
 		17B0689C6B5B8076204FC69D /* Pods_GolfApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00941C7DA6F54FA2FEAEC180 /* Pods_GolfApp.framework */; };
 /* End PBXBuildFile section */
@@ -90,6 +98,8 @@
 		100634982B1390FA005CF4CB /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		1006349A2B13EDA8005CF4CB /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1006349C2B16D3CD005CF4CB /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
+		100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldWithTextFieldFocused.swift; sourceTree = "<group>"; };
+		100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageToolbarLiveRoundView.swift; sourceTree = "<group>"; };
 		1032E9C72AF665BF00001048 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1032E9C92AF66B1100001048 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		1032E9CB2AF68C8E00001048 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
@@ -108,12 +118,18 @@
 		1032E9EC2AFB1E5300001048 /* AllChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatsView.swift; sourceTree = "<group>"; };
 		10551A032B22BC0A00218E1D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		10598C1A2B38BCAF00F6CB78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		105D99E22C55A03D00323DFF /* TeeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeOptions.swift; sourceTree = "<group>"; };
+		105D99E42C69022500323DFF /* LiveRoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundViewModel.swift; sourceTree = "<group>"; };
+		105D99E62C690E3700323DFF /* LiveRound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRound.swift; sourceTree = "<group>"; };
 		10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		10696A3A2B3259530011FE9B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10696A3C2B325BA30011FE9B /* GolfApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GolfApp.entitlements; sourceTree = "<group>"; };
 		107B54192BB0803300C00654 /* AuthViewModelExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModelExtention.swift; sourceTree = "<group>"; };
 		107B54202BB0EA2B00C00654 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		107B54252BB0EC9F00C00654 /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
+		108A1B542CC58E8C00F0861E /* NativeAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdView.swift; sourceTree = "<group>"; };
+		108A1B562CC5A51600F0861E /* AdLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdLoaderDelegate.swift; sourceTree = "<group>"; };
+		108A1B5A2CC6080900F0861E /* NativeAdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NativeAdView.xib; sourceTree = "<group>"; };
 		108C32962B1976FB008F59F9 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		108C32982B1D4AB3008F59F9 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		108C329A2B1FD103008F59F9 /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
@@ -131,7 +147,7 @@
 		108D36F52AF582AB005DAD22 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverScoreCardView.swift; sourceTree = "<group>"; };
 		10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSearchViewModel.swift; sourceTree = "<group>"; };
-		10B145812B3E62B100983BE8 /* NativeAdViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdViewControllerWrapper.swift; sourceTree = "<group>"; };
+		10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsWithAdsView.swift; sourceTree = "<group>"; };
 		10B1D35E2B0C2BEB004D45E7 /* AllChatCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllChatCellView.swift; sourceTree = "<group>"; };
 		10B1D3602B0D42C2004D45E7 /* NewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageView.swift; sourceTree = "<group>"; };
 		10B1D3632B0D6F75004D45E7 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
@@ -142,7 +158,6 @@
 		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
-		10C89DA52B3F195300DF0837 /* GoogleAdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAdViewController.swift; sourceTree = "<group>"; };
 		10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundView.swift; sourceTree = "<group>"; };
 		7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.release.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.release.xcconfig"; sourceTree = "<group>"; };
 		87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -156,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				10696A352B3249030011FE9B /* FirebaseMessaging in Frameworks */,
+				10A72EED2CBDB98200AD78F1 /* BottomSheet in Frameworks */,
 				10696A332B3248F80011FE9B /* FirebaseDatabase in Frameworks */,
 				100634972B1303DA005CF4CB /* AlertToast in Frameworks */,
 				17B0689C6B5B8076204FC69D /* Pods_GolfApp.framework in Frameworks */,
@@ -247,10 +263,9 @@
 				108D36CA2AF57C6B005DAD22 /* Assets.xcassets */,
 				1032E9E62AF9F41D00001048 /* Extensions.swift */,
 				108D36CC2AF57C6B005DAD22 /* Preview Content */,
-				10B145812B3E62B100983BE8 /* NativeAdViewControllerWrapper.swift */,
-				10C89DA52B3F195300DF0837 /* GoogleAdViewController.swift */,
 				107B54202BB0EA2B00C00654 /* GoogleService-Info.plist */,
 				107B54252BB0EC9F00C00654 /* .gitignore.md */,
+				108A1B562CC5A51600F0861E /* AdLoaderDelegate.swift */,
 			);
 			path = GolfApp;
 			sourceTree = "<group>";
@@ -286,6 +301,8 @@
 				1032E9C72AF665BF00001048 /* User.swift */,
 				1032E9DC2AF9E43B00001048 /* Chat.swift */,
 				1006349A2B13EDA8005CF4CB /* Post.swift */,
+				105D99E22C55A03D00323DFF /* TeeOptions.swift */,
+				105D99E62C690E3700323DFF /* LiveRound.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -312,6 +329,9 @@
 				10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */,
 				10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */,
 				10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */,
+				10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */,
+				108A1B542CC58E8C00F0861E /* NativeAdView.swift */,
+				108A1B5A2CC6080900F0861E /* NativeAdView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -325,6 +345,7 @@
 				10696A3A2B3259530011FE9B /* AppDelegate.swift */,
 				10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */,
 				107B54192BB0803300C00654 /* AuthViewModelExtention.swift */,
+				105D99E42C69022500323DFF /* LiveRoundViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -332,6 +353,8 @@
 		10B1D3622B0D6F25004D45E7 /* ViewChildren */ = {
 			isa = PBXGroup;
 			children = (
+				100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */,
+				100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */,
 				1032E9DF2AF9E54000001048 /* MessageBubble.swift */,
 				1032E9E12AF9EB3800001048 /* TopRow.swift */,
 				1032E9E82AF9F99100001048 /* MessageField.swift */,
@@ -390,6 +413,7 @@
 				10696A342B3249030011FE9B /* FirebaseMessaging */,
 				10696A362B3249390011FE9B /* FirebaseFirestore */,
 				107B54232BB0EB4000C00654 /* GoogleMobileAds */,
+				10A72EEC2CBDB98200AD78F1 /* BottomSheet */,
 			);
 			productName = GolfApp;
 			productReference = 108D36C32AF57C6A005DAD22 /* GolfApp.app */;
@@ -467,6 +491,7 @@
 				100634952B1303DA005CF4CB /* XCRemoteSwiftPackageReference "AlertToast" */,
 				10696A2D2B3245910011FE9B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				107B54222BB0EB4000C00654 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 108D36C42AF57C6A005DAD22 /* Products */;
 			projectDirPath = "";
@@ -484,6 +509,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				108A1B5B2CC6080900F0861E /* NativeAdView.xib in Resources */,
 				108D36CE2AF57C6B005DAD22 /* Preview Assets.xcassets in Resources */,
 				108D36CB2AF57C6B005DAD22 /* Assets.xcassets in Resources */,
 				107B54212BB0EA2B00C00654 /* GoogleService-Info.plist in Resources */,
@@ -573,21 +599,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				10B1D36C2B10403E004D45E7 /* ProfileInfoView.swift in Sources */,
+				105D99E32C55A03D00323DFF /* TeeOptions.swift in Sources */,
 				1032E9DB2AF9172F00001048 /* Step3View.swift in Sources */,
 				10B1D3642B0D6F75004D45E7 /* NewChatView.swift in Sources */,
+				108A1B572CC5A51600F0861E /* AdLoaderDelegate.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
 				100634992B1390FA005CF4CB /* AlertView.swift in Sources */,
 				10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */,
 				10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */,
 				10696A3B2B3259530011FE9B /* AppDelegate.swift in Sources */,
 				10B1D3662B0EBA40004D45E7 /* ScoreCardView.swift in Sources */,
+				105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */,
+				108A1B552CC58E8D00F0861E /* NativeAdView.swift in Sources */,
+				100F7DEE2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift in Sources */,
 				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
 				108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */,
 				10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */,
 				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,
 				1006349B2B13EDA8005CF4CB /* Post.swift in Sources */,
-				10B145822B3E62B100983BE8 /* NativeAdViewControllerWrapper.swift in Sources */,
 				10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */,
+				105D99E72C690E3700323DFF /* LiveRound.swift in Sources */,
 				10B1D3682B100AA0004D45E7 /* PostView.swift in Sources */,
 				1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */,
 				10B0C3A72B369F59003C6F31 /* PopoverScoreCardView.swift in Sources */,
@@ -596,14 +627,15 @@
 				108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */,
 				107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */,
 				10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */,
-				10C89DA62B3F195300DF0837 /* GoogleAdViewController.swift in Sources */,
 				1032E9D22AF7D53B00001048 /* ProfileImage.swift in Sources */,
 				10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */,
+				10B1BB572CC4496400BC8BE8 /* PostsWithAdsView.swift in Sources */,
 				10B0C3A92B38AD70003C6F31 /* CourseSearchViewModel.swift in Sources */,
 				1032E9E92AF9F99100001048 /* MessageField.swift in Sources */,
 				1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */,
 				1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */,
 				10B1D36A2B103F7A004D45E7 /* ProfileHeadingView.swift in Sources */,
+				100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */,
 				1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */,
 				1032E9DD2AF9E43B00001048 /* Chat.swift in Sources */,
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
@@ -992,6 +1024,14 @@
 				minimumVersion = 11.2.0;
 			};
 		};
+		10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lucaszischka/BottomSheet.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1029,6 +1069,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 107B54222BB0EB4000C00654 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		10A72EEC2CBDB98200AD78F1 /* BottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */;
+			productName = BottomSheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

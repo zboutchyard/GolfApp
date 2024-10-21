@@ -9,8 +9,9 @@ import Foundation
 import MapKit
 
 class CourseSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate, CLLocationManagerDelegate {
-    @Published var locationResult: [MKLocalSearchCompletion] = []
+    @Published var locationResult: [GolfCourse] = []
     @Published var currentLocation: CLLocation?
+    @Published var state: GolfCourseLoadingState = .loading
     let completer = MKLocalSearchCompleter()
     private let locationManager = CLLocationManager()
     
@@ -23,13 +24,6 @@ class CourseSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         locationManager.startUpdatingLocation()
     }
     
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let nonSpecificTerms = ["golf course", "golf courses"]
-        locationResult = completer.results.filter { completion in
-            !nonSpecificTerms.contains(completion.title.lowercased())
-        }
-    }
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = locations.first
     }
@@ -38,30 +32,30 @@ class CourseSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         print("Failed to find user's location: \(error.localizedDescription)")
     }
     
-    func fetchGolfCourseDetails(for completion: MKLocalSearchCompletion) {
-        let request = MKLocalSearch.Request(completion: completion)
-        let search = MKLocalSearch(request: request)
-        
-        search.start { (response, error) in
-            guard let response = response, error == nil else {
-                print("Error: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            for item in response.mapItems {
-                // Process the detailed information about each golf course
-                // For example, you could create GolfCourse objects and add them to an array
-            }
-        }
-    }
-    
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
     
     func searchForGolfCourses(near location: CLLocation) {
-        completer.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
-        completer.queryFragment = "Golf Course near me"
-        completer.resultTypes = .query
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = "golf course"
+        request.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
+        
+        let search = MKLocalSearch(request: request)
+        search.start { (response, error) in
+            guard let response = response, error == nil else {
+                print("Search error: \(error?.localizedDescription ?? "Unknown error")")
+                self.state = .error
+                return
+            }
+            let golfCourses = response.mapItems.compactMap { item -> GolfCourse? in
+                guard let name = item.name, let address = item.placemark.title else { return nil }
+                return GolfCourse(name: name, address: address)
+            }
+            DispatchQueue.main.async {
+                self.locationResult = golfCourses
+                self.state = .loaded
+            }
+        }
     }
 }

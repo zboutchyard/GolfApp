@@ -1,0 +1,38 @@
+import SwiftUI
+
+struct PostsWithAdsView: View {
+    @State private var likeBtnClicked: Bool = false
+    @State private var commentBtnClicked: Bool = false
+    @State private var userClicked: Bool = false
+    @StateObject var authViewModel: AuthViewModel
+    @StateObject var notificationViewModel: NotificationViewModel
+    @StateObject var msgViewModel: MessageViewModel
+    @State var user: User?
+    @State var post: Post
+    @State var tempPost: Post?
+    @State var isPostDetailView: Bool = false
+    @FocusState var isTextFieldFocused: Bool
+    @State var otherUser: OtherUser?
+    @State var otherUserClicked: Bool = false
+    @State var index: Int
+    @State var isAdLoading: Bool
+    
+    var body: some View {
+        VStack {
+                if authViewModel.adPositions.contains(index) {
+                    NativeAdView()
+                    .background(Color.whiteOrDark)
+                } else {
+                    if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                        PostView(
+                            authViewModel: authViewModel,
+                            notificationViewModel: notificationViewModel,
+                            msgViewModel: msgViewModel,
+                            user: user,
+                            post: post,
+                            otherUser: otherUser[post.user])
+                    }
+                }
+            }
+    }
+}

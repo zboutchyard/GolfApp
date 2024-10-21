@@ -75,7 +75,11 @@ struct SearchDetailView: View {
         .navigationDestination(isPresented: $isUserSelected, destination: {
             if let selectedUser = selectedUser {
                 if let user = authViewModel.user {
-                    OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: selectedUser, user: user, msgViewModel: msgViewModel)
+                    OtherUserProfileView(authViewModel: authViewModel,
+                                         notificationViewModel: notificationViewModel,
+                                         otherUser: selectedUser,
+                                         user: user,
+                                         msgViewModel: msgViewModel)
                 }
             }
         })

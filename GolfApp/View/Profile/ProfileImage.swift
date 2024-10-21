@@ -79,7 +79,7 @@ struct EditableCircularProfileImage: View {
                         .font(.system(size: 75))
                         .foregroundColor(.accentColor)
                 }
-            }.onChange(of: viewModel.imageSelection) { _ in
+            }.onChange(of: viewModel.imageSelection) { _, _ in
                 guard let item = viewModel.imageSelection else {
                     return
                 }

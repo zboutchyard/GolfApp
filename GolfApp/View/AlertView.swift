@@ -166,7 +166,12 @@ struct AlertView: View {
         }
         .navigationDestination(isPresented: $isNotificationClicked) {
             if let user = authViewModel.user {
-                PostDetailView(post: selectedPost, authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, otherUser: otherUser)
+                PostDetailView(post: selectedPost,
+                               authViewModel: authViewModel,
+                               notificationViewModel: notificationViewModel,
+                               msgViewModel: msgViewModel,
+                               user: user,
+                               otherUser: otherUser)
 
             }
         }

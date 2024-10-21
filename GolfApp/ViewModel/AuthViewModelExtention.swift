@@ -31,12 +31,13 @@ extension AuthViewModel {
             }
             await fetchUserInfo(user: fetchedUser)
             if let friends = fetchedUser.friendsList {
-                await fetchFriendsFromFirebase(ids: friends)
+                fetchFriendsFromFirebase(ids: friends)
             }
-            await self.fetchAllOtherUsersFromFirebase()
+            self.fetchAllOtherUsersFromFirebase()
             if let userPosts = self.user?.posts {
                 await self.fetchAllPostsInUserObject(postIds: userPosts)
             }
+            setupRandomAdPositions(for: posts?.count ?? 0)
             self.state = .loaded
         }
     }

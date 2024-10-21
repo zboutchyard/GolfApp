@@ -35,8 +35,10 @@ struct ProfileView: View {
         } else {
             ScrollView {
                 if let user = authViewModel.user {
-                    ProfileHeadingView(user: user, isEditButtonClicked: $isEditButtonClicked, isOtherViewTriggered: $isOtherViewClicked, authViewModel: authViewModel)
-                        
+                    ProfileHeadingView(user: user,
+                                       isEditButtonClicked: $isEditButtonClicked,
+                                       isOtherViewTriggered: $isOtherViewClicked,
+                                       authViewModel: authViewModel)
                         if !isEditButtonClicked {
                             VStack {
                                 HStack {
@@ -74,7 +76,11 @@ struct ProfileView: View {
                                 
                                 if profileBtnSelected {
                                     if let user = authViewModel.user {
-                                        ProfileInfoView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, msgViewModel: msgViewModel, user: user, isOtherUserProfile: false)
+                                        ProfileInfoView(authViewModel: authViewModel,
+                                                        notificationViewModel: notificationViewModel,
+                                                        msgViewModel: msgViewModel,
+                                                        user: user,
+                                                        isOtherUserProfile: false)
                                     }
                                 }
                                 if badgeViewBtnSelected {
@@ -191,7 +197,11 @@ struct ProfileView: View {
             .navigationDestination(isPresented: $isOtherUserClicked) {
                 if let otherUser = otherUser {
                     if let user = authViewModel.user {
-                        OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: otherUser, user: user, msgViewModel: msgViewModel)
+                        OtherUserProfileView(authViewModel: authViewModel,
+                                             notificationViewModel: notificationViewModel,
+                                             otherUser: otherUser,
+                                             user: user,
+                                             msgViewModel: msgViewModel)
                     }
                 }
             }

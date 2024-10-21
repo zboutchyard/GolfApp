@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct User: Codable, Hashable {
+    var localId = UUID()
     var firstName: String
     var lastName: String
     var email: String
@@ -56,6 +57,7 @@ struct Notification: Codable, Hashable {
 }
 
 struct OtherUser: Codable, Hashable {
+    var localId = UUID()
     var id: String
     var firstName: String
     var profilePicData: Data?
@@ -66,3 +68,31 @@ struct OtherUser: Codable, Hashable {
     var homeCourse: String?
     var posts: [String]?
 }
+
+struct AnyGolfUser: GolfUser, Hashable {
+    private let base: any GolfUser
+    
+    init<U: GolfUser>(_ user: U) {
+        self.base = user
+    }
+    var localId: UUID { base.localId }
+    var firstName: String { base.firstName }
+    var lastName: String { base.lastName }
+    
+    static func == (lhs: AnyGolfUser, rhs: AnyGolfUser) -> Bool {
+        return lhs.localId == rhs.localId
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(localId)
+    }
+}
+
+protocol GolfUser: Hashable, Equatable {
+    var localId: UUID { get }
+    var firstName: String { get }
+    var lastName: String { get }
+}
+
+extension User: GolfUser {}
+extension OtherUser: GolfUser {}
