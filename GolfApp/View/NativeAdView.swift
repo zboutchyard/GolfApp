@@ -15,8 +15,8 @@ struct NativeAdView: View {
        VStack {
          VStack(spacing: 20) {
            NativeAd(nativeViewModel: nativeViewModel)
-             .frame(minHeight: 300)
-             .background(.whiteOrDark)
+                 .frame(minHeight: 425)
+                 .background(.whiteOrDark)
          }
        }
        .onAppear {
@@ -102,7 +102,7 @@ private struct NativeAd: UIViewRepresentable {
     
 }
 
-class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
+class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDelegate, GADVideoControllerDelegate, GADAdLoaderDelegate {
   @Published var nativeAd: GADNativeAd?
   private var adLoader: GADAdLoader!
 
@@ -119,6 +119,9 @@ class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
   func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
     // Native ad data changes are published to its subscribers.
     self.nativeAd = nativeAd
+    if nativeAd.mediaContent.hasVideoContent {
+        nativeAd.mediaContent.videoController.delegate = self
+    }
     nativeAd.delegate = self
   }
 
@@ -130,23 +133,33 @@ class NativeAdViewModel: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
 
 // MARK: - GADNativeAdDelegate implementation
 extension NativeAdViewModel: GADNativeAdDelegate {
-  func nativeAdDidRecordClick(_ nativeAd: GADNativeAd) {
-    print("\(#function) called")
-  }
+    // GADNativeAdDelegate
+       func nativeAdDidRecordClick(_ nativeAd: GADNativeAd) {
+           print("Native ad was clicked.")
+       }
+       
+       func videoControllerDidEndVideoPlayback(_ videoController: GADVideoController) {
+           print("Video playback ended")
+           refreshAd()
+       }
 
-  func nativeAdDidRecordImpression(_ nativeAd: GADNativeAd) {
-    print("\(#function) called")
-  }
+       func nativeAdDidRecordImpression(_ nativeAd: GADNativeAd) {
+           print("Native ad impression recorded.")
+       }
 
-  func nativeAdWillPresentScreen(_ nativeAd: GADNativeAd) {
-    print("\(#function) called")
-  }
+       func nativeAdWillPresentScreen(_ nativeAd: GADNativeAd) {
+           print("Native ad will present screen.")
+       }
 
-  func nativeAdWillDismissScreen(_ nativeAd: GADNativeAd) {
-    print("\(#function) called")
-  }
+       func nativeAdWillDismissScreen(_ nativeAd: GADNativeAd) {
+           print("Native ad will dismiss screen.")
+       }
 
-  func nativeAdDidDismissScreen(_ nativeAd: GADNativeAd) {
-    print("\(#function) called")
-  }
+       func nativeAdDidDismissScreen(_ nativeAd: GADNativeAd) {
+           print("Native ad did dismiss screen.")
+       }
+
+       func nativeAdWillLeaveApplication(_ nativeAd: GADNativeAd) {
+           print("Native ad will leave application.")
+       }
 }

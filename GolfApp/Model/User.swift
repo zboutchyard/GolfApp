@@ -5,6 +5,7 @@
 //  Created by Zack Boutchyard on 11/4/23.
 //
 
+import FirebaseFirestore
 import Foundation
 import SwiftUI
 
@@ -50,6 +51,8 @@ struct Request: Codable, Hashable {
 }
 
 struct Notification: Codable, Hashable {
+    var id: String
+    var hasBeenRead: Bool
     var text: String
     var timeStamp: Date
     var userCommenting: String

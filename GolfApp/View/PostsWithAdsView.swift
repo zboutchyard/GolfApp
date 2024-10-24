@@ -15,7 +15,6 @@ struct PostsWithAdsView: View {
     @State var otherUser: OtherUser?
     @State var otherUserClicked: Bool = false
     @State var index: Int
-    @State var isAdLoading: Bool
     
     var body: some View {
         VStack {

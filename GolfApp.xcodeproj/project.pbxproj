@@ -13,6 +13,9 @@
 		1006349D2B16D3CD005CF4CB /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006349C2B16D3CD005CF4CB /* NewPostView.swift */; };
 		100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */; };
 		100F7DEE2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */; };
+		1014C72F2CC9A79B00D63355 /* LiveRoundActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */; };
+		1014C7312CC9A7CD00D63355 /* LiveRoundActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */; };
+		1014C7332CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */; };
 		1032E9C82AF665BF00001048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C72AF665BF00001048 /* User.swift */; };
 		1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C92AF66B1100001048 /* AuthViewModel.swift */; };
 		1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9CB2AF68C8E00001048 /* LandingView.swift */; };
@@ -100,6 +103,9 @@
 		1006349C2B16D3CD005CF4CB /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
 		100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldWithTextFieldFocused.swift; sourceTree = "<group>"; };
 		100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageToolbarLiveRoundView.swift; sourceTree = "<group>"; };
+		1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivity.swift; sourceTree = "<group>"; };
+		1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivityView.swift; sourceTree = "<group>"; };
+		1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivityViewModel.swift; sourceTree = "<group>"; };
 		1032E9C72AF665BF00001048 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1032E9C92AF66B1100001048 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		1032E9CB2AF68C8E00001048 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
@@ -199,6 +205,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1014C72B2CC9A75E00D63355 /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+				1014C7342CC9A7E800D63355 /* ViewModel */,
+				1014C72D2CC9A77900D63355 /* Model */,
+				1014C72C2CC9A76E00D63355 /* View */,
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
+		1014C72C2CC9A76E00D63355 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1014C72D2CC9A77900D63355 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1014C7342CC9A7E800D63355 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		1032E9C02AF5868C00001048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,6 +350,7 @@
 		108D36F12AF57C8F005DAD22 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1014C72B2CC9A75E00D63355 /* Activity */,
 				10B1D36D2B104129004D45E7 /* Profile */,
 				1032E9DE2AF9E53100001048 /* Message */,
 				1032E9D72AF857CD00001048 /* Walkthrough */,
@@ -637,11 +678,14 @@
 				10B1D36A2B103F7A004D45E7 /* ProfileHeadingView.swift in Sources */,
 				100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */,
 				1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */,
+				1014C72F2CC9A79B00D63355 /* LiveRoundActivity.swift in Sources */,
+				1014C7332CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift in Sources */,
 				1032E9DD2AF9E43B00001048 /* Chat.swift in Sources */,
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
 				1006349D2B16D3CD005CF4CB /* NewPostView.swift in Sources */,
 				1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */,
 				1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */,
+				1014C7312CC9A7CD00D63355 /* LiveRoundActivityView.swift in Sources */,
 				108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */,
 				10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */,
 				108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */,

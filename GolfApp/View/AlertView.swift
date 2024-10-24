@@ -99,9 +99,15 @@ struct AlertView: View {
 
                         }
                         if let notifications = authViewModel.user?.notifications, !notifications.isEmpty {
+                            let sortedNotifications = notifications.sorted { (first, second) -> Bool in
+                                return !first.hasBeenRead && second.hasBeenRead
+                            }
                             VStack(spacing: 3) {
-                            ForEach(notifications, id: \.self) { notification in
+                            ForEach(sortedNotifications, id: \.self) { notification in
                                     Button(action: {
+                                        if !notification.hasBeenRead {
+                                            authViewModel.updateNotificationToRead(notificationId: notification.id)
+                                        }
                                         authViewModel.fetchPostFromFirebase(postId: notification.postId) { fetchedPost in
                                             selectedPost = fetchedPost
                                             isNotificationClicked = true
@@ -143,7 +149,7 @@ struct AlertView: View {
                                             .padding()
                                         }
                                         .padding(3)
-                                        .background(.whiteOrDark)
+                                        .background(!notification.hasBeenRead ? Color.whiteOrGray : Color.lightGrayOrDark)
                                     })
                                     .frame(maxWidth: .infinity)
                                     .buttonStyle(.plain)

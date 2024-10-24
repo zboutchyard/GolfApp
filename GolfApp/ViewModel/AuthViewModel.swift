@@ -135,11 +135,15 @@ class AuthViewModel: ObservableObject {
                     // Convert notificationsData into an array of Notification objects
                     let notifications = notificationsData.compactMap { notificationData in
                         if let text = notificationData["text"] as? String,
+                           let id = notificationData["id"] as? String,
+                           let hasBeenRead = notificationData["hasBeenRead"] as? Bool,
                            let timeStamp = notificationData["timeStamp"] as? Timestamp,
                            let userCommenting = notificationData["userCommenting"] as? String,
                             let postId = notificationData["postId"] as? String {
                             let timeStamp = timeStamp.dateValue()
                             return Notification(
+                                id: id,
+                                hasBeenRead: hasBeenRead,
                                 text: text,
                                 timeStamp: timeStamp,
                                 userCommenting: userCommenting,
@@ -360,90 +364,6 @@ class AuthViewModel: ObservableObject {
                 }
             } else {
                 print(error?.localizedDescription ?? "")
-            }
-        }
-    }
-    
-    func addComment(postId: String, text: String, postOwner: String) {
-        let postRef = Firestore.firestore().collection("Posts").document(postId)
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        let commentData: [String: Any] = [
-            "text": text,
-            "timeStamp": Date.now,
-            "userCommenting": uid
-        ]
-        
-        let notificationData: [String: Any] = [
-            "text": text,
-            "timeStamp": Date.now,
-            "userCommenting": uid,
-            "postId": postId
-        ]
-        
-        let notificationRef = Firestore.firestore().collection("Users").document(postOwner)
-        if uid != postOwner {
-            notificationRef.updateData([
-                "notifications": FieldValue.arrayUnion([notificationData])
-            ]) { error in
-                if let error = error {
-                    print("Error adding notification: \(error.localizedDescription)")
-                } else {
-                    print("notification added successfully")
-                }
-            }
-        }
-       
-        postRef.updateData([
-            "comments": FieldValue.arrayUnion([commentData])
-        ]) { error in
-            if let error = error {
-                print("Error adding comment: \(error.localizedDescription)")
-            } else {
-                print("Comment added successfully")
-            }
-        }
-    }
-
-    func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
-        let postRef = Firestore.firestore().collection("Posts").document(postId)
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(nil)
-            return
-        }
-        postRef.updateData([
-            "likes": FieldValue.arrayUnion([uid])
-        ]) { error in
-            if let error = error {
-                print("Error adding user ID to likes array: \(error.localizedDescription)")
-                completion(nil)
-            } else {
-                print("User ID added to likes array successfully.")
-                completion(nil)
-            }
-        }
-    }
-    
-    func removeUserIdFromLikes(postId: String, completion: @escaping (Post?) -> Void) {
-        let postRef = Firestore.firestore().collection("Posts").document(postId)
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(nil)
-            return
-        }
-        
-        postRef.updateData([
-            "likes": FieldValue.arrayRemove([uid])
-        ]) { error in
-            if let error = error {
-                completion(nil)
-                
-                print("Error removing user ID from likes array: \(error.localizedDescription)")
-            } else {
-                completion(nil)
-                
-                print("User ID removed from likes array successfully.")
-                
             }
         }
     }
@@ -760,6 +680,130 @@ extension AuthViewModel {
                 self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
                 print("Fetched posts successfully")
                 completion(tempPosts)
+            }
+        }
+    }
+}
+
+extension AuthViewModel {
+    func updateNotificationToRead(notificationId: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let userRef = Firestore.firestore().collection("Users").document(uid)
+
+        userRef.getDocument { (document, error) in
+            guard let document = document, document.exists,
+                  var notifications = document.data()?["notifications"] as? [[String: Any]] else {
+                print("Document does not exist or notifications field is missing")
+                return
+            }
+
+            // Step 2: Find the notification by ID and update hasBeenRead
+            for index in 0..<notifications.count {
+                if notifications[index]["id"] as? String == notificationId {
+                    notifications[index]["hasBeenRead"] = true
+                    self.user?.notifications?[index].hasBeenRead = true
+                    break
+                }
+            }
+
+            // Step 3: Write the updated array back to Firestore
+            userRef.updateData([
+                "notifications": notifications
+            ]) { error in
+                if let error = error {
+                    print("Error updating notification: \(error)")
+                } else {
+                    print("Notification updated successfully.")
+                }
+            }
+        }
+    }
+
+    
+    func addComment(postId: String, text: String, postOwner: String) {
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let commentData: [String: Any] = [
+            "text": text,
+            "timeStamp": Date.now,
+            "userCommenting": uid
+        ]
+        
+        let notificationData: [String: Any] = [
+            "id": UUID().uuidString,
+            "hasBeenRead": false,
+            "text": text,
+            "timeStamp": Date.now,
+            "userCommenting": uid,
+            "postId": postId
+        ]
+        
+        let notificationRef = Firestore.firestore().collection("Users").document(postOwner)
+        if uid != postOwner {
+            notificationRef.updateData([
+                "notifications": FieldValue.arrayUnion([notificationData])
+            ]) { error in
+                if let error = error {
+                    print("Error adding notification: \(error.localizedDescription)")
+                } else {
+                    print("notification added successfully")
+                }
+            }
+        }
+       
+        postRef.updateData([
+            "comments": FieldValue.arrayUnion([commentData])
+        ]) { error in
+            if let error = error {
+                print("Error adding comment: \(error.localizedDescription)")
+            } else {
+                print("Comment added successfully")
+            }
+        }
+    }
+
+    func addUserIdToLikes(postId: String, completion: @escaping (Post?) -> Void) {
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        postRef.updateData([
+            "likes": FieldValue.arrayUnion([uid])
+        ]) { error in
+            if let error = error {
+                print("Error adding user ID to likes array: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                print("User ID added to likes array successfully.")
+                completion(nil)
+            }
+        }
+    }
+    
+    func removeUserIdFromLikes(postId: String, completion: @escaping (Post?) -> Void) {
+        let postRef = Firestore.firestore().collection("Posts").document(postId)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        postRef.updateData([
+            "likes": FieldValue.arrayRemove([uid])
+        ]) { error in
+            if let error = error {
+                completion(nil)
+                
+                print("Error removing user ID from likes array: \(error.localizedDescription)")
+            } else {
+                completion(nil)
+                
+                print("User ID removed from likes array successfully.")
+                
             }
         }
     }
