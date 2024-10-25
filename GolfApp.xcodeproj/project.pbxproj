@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,9 +13,6 @@
 		1006349D2B16D3CD005CF4CB /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1006349C2B16D3CD005CF4CB /* NewPostView.swift */; };
 		100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */; };
 		100F7DEE2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */; };
-		1014C72F2CC9A79B00D63355 /* LiveRoundActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */; };
-		1014C7312CC9A7CD00D63355 /* LiveRoundActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */; };
-		1014C7332CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */; };
 		1032E9C82AF665BF00001048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C72AF665BF00001048 /* User.swift */; };
 		1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9C92AF66B1100001048 /* AuthViewModel.swift */; };
 		1032E9CC2AF68C8E00001048 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1032E9CB2AF68C8E00001048 /* LandingView.swift */; };
@@ -75,6 +72,9 @@
 		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
+		10C24E6B2CCB14D8003ECE09 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C24E6A2CCB14D8003ECE09 /* WidgetKit.framework */; };
+		10C24E6D2CCB14D8003ECE09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C24E6C2CCB14D8003ECE09 /* SwiftUI.framework */; };
+		10C24E7E2CCB14D9003ECE09 /* LiveRoundExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */; };
 		17B0689C6B5B8076204FC69D /* Pods_GolfApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00941C7DA6F54FA2FEAEC180 /* Pods_GolfApp.framework */; };
 /* End PBXBuildFile section */
@@ -94,7 +94,28 @@
 			remoteGlobalIDString = 108D36C22AF57C6A005DAD22;
 			remoteInfo = GolfApp;
 		};
+		10C24E7C2CCB14D9003ECE09 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 108D36BB2AF57C6A005DAD22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 10C24E682CCB14D8003ECE09;
+			remoteInfo = LiveRoundExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		10C24E832CCB14D9003ECE09 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				10C24E7E2CCB14D9003ECE09 /* LiveRoundExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00941C7DA6F54FA2FEAEC180 /* Pods_GolfApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GolfApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,9 +124,6 @@
 		1006349C2B16D3CD005CF4CB /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
 		100F7DEB2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldWithTextFieldFocused.swift; sourceTree = "<group>"; };
 		100F7DED2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageToolbarLiveRoundView.swift; sourceTree = "<group>"; };
-		1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivity.swift; sourceTree = "<group>"; };
-		1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivityView.swift; sourceTree = "<group>"; };
-		1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundActivityViewModel.swift; sourceTree = "<group>"; };
 		1032E9C72AF665BF00001048 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1032E9C92AF66B1100001048 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		1032E9CB2AF68C8E00001048 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
@@ -164,12 +182,29 @@
 		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
+		10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LiveRoundExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		10C24E6A2CCB14D8003ECE09 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		10C24E6C2CCB14D8003ECE09 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		10DF7CD72B57433F00D5A879 /* LiveRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundView.swift; sourceTree = "<group>"; };
 		7931625F0A1C2E4CCCB735C6 /* Pods-Par Pals.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.release.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.release.xcconfig"; sourceTree = "<group>"; };
 		87228187871D5A3ABF20EF67 /* Pods-GolfApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.debug.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.debug.xcconfig"; sourceTree = "<group>"; };
 		AA09D7336AA6011BA26F8649 /* Pods-Par Pals.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Par Pals.debug.xcconfig"; path = "Target Support Files/Pods-Par Pals/Pods-Par Pals.debug.xcconfig"; sourceTree = "<group>"; };
 		FC6AA8F33061E5F19C105360 /* Pods-GolfApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GolfApp.release.xcconfig"; path = "Target Support Files/Pods-GolfApp/Pods-GolfApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		10C24E7F2CCB14D9003ECE09 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 10C24E682CCB14D8003ECE09 /* LiveRoundExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		10C24E6E2CCB14D8003ECE09 /* LiveRound */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (10C24E7F2CCB14D9003ECE09 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveRound; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		108D36C02AF57C6A005DAD22 /* Frameworks */ = {
@@ -202,47 +237,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		10C24E662CCB14D8003ECE09 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10C24E6D2CCB14D8003ECE09 /* SwiftUI.framework in Frameworks */,
+				10C24E6B2CCB14D8003ECE09 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1014C72B2CC9A75E00D63355 /* Activity */ = {
-			isa = PBXGroup;
-			children = (
-				1014C7342CC9A7E800D63355 /* ViewModel */,
-				1014C72D2CC9A77900D63355 /* Model */,
-				1014C72C2CC9A76E00D63355 /* View */,
-			);
-			path = Activity;
-			sourceTree = "<group>";
-		};
-		1014C72C2CC9A76E00D63355 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				1014C7302CC9A7CD00D63355 /* LiveRoundActivityView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		1014C72D2CC9A77900D63355 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				1014C72E2CC9A79B00D63355 /* LiveRoundActivity.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		1014C7342CC9A7E800D63355 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				1014C7322CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
 		1032E9C02AF5868C00001048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				00941C7DA6F54FA2FEAEC180 /* Pods_GolfApp.framework */,
+				10C24E6A2CCB14D8003ECE09 /* WidgetKit.framework */,
+				10C24E6C2CCB14D8003ECE09 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -275,6 +287,7 @@
 				108D36C52AF57C6A005DAD22 /* GolfApp */,
 				108D36D62AF57C6C005DAD22 /* GolfAppTests */,
 				108D36E02AF57C6C005DAD22 /* GolfAppUITests */,
+				10C24E6E2CCB14D8003ECE09 /* LiveRound */,
 				108D36C42AF57C6A005DAD22 /* Products */,
 				1032E9C02AF5868C00001048 /* Frameworks */,
 				F0460787AB6B9497A1F1C862 /* Pods */,
@@ -287,6 +300,7 @@
 				108D36C32AF57C6A005DAD22 /* GolfApp.app */,
 				108D36D32AF57C6C005DAD22 /* GolfAppTests.xctest */,
 				108D36DD2AF57C6C005DAD22 /* GolfAppUITests.xctest */,
+				10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -350,7 +364,6 @@
 		108D36F12AF57C8F005DAD22 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1014C72B2CC9A75E00D63355 /* Activity */,
 				10B1D36D2B104129004D45E7 /* Profile */,
 				1032E9DE2AF9E53100001048 /* Message */,
 				1032E9D72AF857CD00001048 /* Walkthrough */,
@@ -440,10 +453,15 @@
 				108D36C12AF57C6A005DAD22 /* Resources */,
 				1BA6265E854D7ACCD9237104 /* [CP] Embed Pods Frameworks */,
 				105D99E12C4C069400323DFF /* ShellScript */,
+				10C24E832CCB14D9003ECE09 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				10C24E7D2CCB14D9003ECE09 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				10C24E6E2CCB14D8003ECE09 /* LiveRound */,
 			);
 			name = GolfApp;
 			packageProductDependencies = (
@@ -496,6 +514,28 @@
 			productReference = 108D36DD2AF57C6C005DAD22 /* GolfAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		10C24E682CCB14D8003ECE09 /* LiveRoundExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 10C24E802CCB14D9003ECE09 /* Build configuration list for PBXNativeTarget "LiveRoundExtension" */;
+			buildPhases = (
+				10C24E652CCB14D8003ECE09 /* Sources */,
+				10C24E662CCB14D8003ECE09 /* Frameworks */,
+				10C24E672CCB14D8003ECE09 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				10C24E6E2CCB14D8003ECE09 /* LiveRound */,
+			);
+			name = LiveRoundExtension;
+			packageProductDependencies = (
+			);
+			productName = LiveRoundExtension;
+			productReference = 10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -503,7 +543,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					108D36C22AF57C6A005DAD22 = {
@@ -516,6 +556,9 @@
 					108D36DC2AF57C6C005DAD22 = {
 						CreatedOnToolsVersion = 15.0;
 						TestTargetID = 108D36C22AF57C6A005DAD22;
+					};
+					10C24E682CCB14D8003ECE09 = {
+						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
@@ -541,6 +584,7 @@
 				108D36C22AF57C6A005DAD22 /* GolfApp */,
 				108D36D22AF57C6C005DAD22 /* GolfAppTests */,
 				108D36DC2AF57C6C005DAD22 /* GolfAppUITests */,
+				10C24E682CCB14D8003ECE09 /* LiveRoundExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -565,6 +609,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		108D36DB2AF57C6C005DAD22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10C24E672CCB14D8003ECE09 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -678,14 +729,11 @@
 				10B1D36A2B103F7A004D45E7 /* ProfileHeadingView.swift in Sources */,
 				100F7DEC2CC09D5A00C368DE /* CustomTextFieldWithTextFieldFocused.swift in Sources */,
 				1032E9EB2AFB1BDC00001048 /* MessageViewModel.swift in Sources */,
-				1014C72F2CC9A79B00D63355 /* LiveRoundActivity.swift in Sources */,
-				1014C7332CC9A7DC00D63355 /* LiveRoundActivityViewModel.swift in Sources */,
 				1032E9DD2AF9E43B00001048 /* Chat.swift in Sources */,
 				1032E9CE2AF6928200001048 /* HomeView.swift in Sources */,
 				1006349D2B16D3CD005CF4CB /* NewPostView.swift in Sources */,
 				1032E9ED2AFB1E5300001048 /* AllChatsView.swift in Sources */,
 				1032E9E72AF9F41D00001048 /* Extensions.swift in Sources */,
-				1014C7312CC9A7CD00D63355 /* LiveRoundActivityView.swift in Sources */,
 				108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */,
 				10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */,
 				108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */,
@@ -713,6 +761,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		10C24E652CCB14D8003ECE09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -725,6 +780,11 @@
 			isa = PBXTargetDependency;
 			target = 108D36C22AF57C6A005DAD22 /* GolfApp */;
 			targetProxy = 108D36DE2AF57C6C005DAD22 /* PBXContainerItemProxy */;
+		};
+		10C24E7D2CCB14D9003ECE09 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 10C24E682CCB14D8003ECE09 /* LiveRoundExtension */;
+			targetProxy = 10C24E7C2CCB14D9003ECE09 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1002,6 +1062,62 @@
 			};
 			name = Release;
 		};
+		10C24E812CCB14D9003ECE09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4FNCP5632;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LiveRound/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LiveRound;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp.LiveRound;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		10C24E822CCB14D9003ECE09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4FNCP5632;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LiveRound/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LiveRound;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp.LiveRound;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1037,6 +1153,15 @@
 			buildConfigurations = (
 				108D36EE2AF57C6C005DAD22 /* Debug */,
 				108D36EF2AF57C6C005DAD22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		10C24E802CCB14D9003ECE09 /* Build configuration list for PBXNativeTarget "LiveRoundExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10C24E812CCB14D9003ECE09 /* Debug */,
+				10C24E822CCB14D9003ECE09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

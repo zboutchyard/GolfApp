@@ -1,8 +1,8 @@
 //
-//  LiveRoundActivity.swift
-//  GolfApp
+//  LiveRoundAttributes.swift
+//  LiveRoundExtension
 //
-//  Created by Zack Boutchyard on 10/23/24.
+//  Created by Zack Boutchyard on 10/24/24.
 //
 
 import ActivityKit

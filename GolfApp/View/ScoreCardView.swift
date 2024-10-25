@@ -22,6 +22,7 @@ struct ScoreCardView: View {
     @State var isCourseSheetPresented: Bool = false
     @State private var showCourseList = false
     @State var isRoundStarted: Bool = false
+    @ObservedObject var liveRoundManager: LiveRoundManager = LiveRoundManager()
     
     @State var selectedTeeOption = TeeOption(name: "Blue", color: .blue)
     
@@ -52,12 +53,12 @@ struct ScoreCardView: View {
             
             Spacer()
             
-            StartRoundButton(isRoundStarted: $isRoundStarted)
-                .popover(isPresented: $isPopoverActivated, attachmentAnchor: .point(.center), arrowEdge: .top) {
-                    PopoverScoreCardView()
-                        .padding()
-                        .presentationCompactAdaptation(.automatic)
-                }
+            StartRoundButton(isRoundStarted: $isRoundStarted, courseName: selectedCourseName, liveRoundManager: liveRoundManager)
+//                .popover(isPresented: $isPopoverActivated, attachmentAnchor: .point(.center), arrowEdge: .top) {
+//                    PopoverScoreCardView()
+//                        .padding()
+//                        .presentationCompactAdaptation(.automatic)
+//                }
                 .sheet(isPresented: $isAddPlayerClicked) {
                     addPlayerSheet
                 }
@@ -340,6 +341,8 @@ struct OtherUserView: View {
 
 struct StartRoundButton: View {
     @Binding var isRoundStarted: Bool
+    @State var courseName: String
+    @StateObject var liveRoundManager: LiveRoundManager
     
     var body: some View {
         VStack {
@@ -348,7 +351,10 @@ struct StartRoundButton: View {
                 .frame(height: 50)
                 .overlay {
                     Button {
-                        isRoundStarted = true
+                        Task {
+                            await liveRoundManager.start(courseName: courseName)
+                            isRoundStarted = true
+                        }
                     } label: {
                         Text("Start round")
                             .fontWeight(.medium)
