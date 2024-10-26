@@ -11,38 +11,93 @@ import SwiftUI
 
 struct LiveRoundLiveActivity: Widget {
     var body: some WidgetConfiguration {
+        
         ActivityConfiguration(for: LiveRoundAttributes.self) { context in
             LiveRoundActivityView(
                 currentScore: context.state.currentScore,
                 currentHole: context.state.currentHole,
                 courseName: context.state.courseName)
-            .activityBackgroundTint(Color.green)
-            .activitySystemActionForegroundColor(Color.black)
         } dynamicIsland: { context in
             DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
-                DynamicIslandExpandedRegion(.leading) {
-                    Text("Current Hole: \(context.state.currentHole)")
-                }
-                DynamicIslandExpandedRegion(.trailing) {
-                    Text("Score: \(context.state.currentScore)")
+                DynamicIslandExpandedRegion(.center) {
+                    VStack {
+                        HStack {
+                            Image(systemName: "figure.golf")
+                                .resizable().aspectRatio(contentMode: .fit)
+                                .frame(width: 14, height: 14)
+                                .foregroundColor(.green)
+                            Spacer()
+                            EmptyView()
+                        }
+                        .padding(.horizontal, 10)
+                        
+                        VStack {
+                            HStack {
+                                Image(systemName: "building.columns.fill")
+                                    .resizable().aspectRatio(contentMode: .fit)
+                                    .frame(width: 44, height: 44)
+                                    .foregroundColor(.green)
+                                VStack(spacing: 0) {
+                                    HStack {
+                                        Text("\(context.state.courseName)")
+                                            .font(.system(size: 20))
+                                            .bold()
+                                        Spacer()
+                                    }
+                                    HStack {
+                                        Button(action: {}, label: {
+                                            HStack {
+                                                Image(systemName: "phone.fill")
+                                                    .resizable().aspectRatio(contentMode: .fit)
+                                                    .frame(width: 14, height: 14)
+                                                    .foregroundColor(.white)
+                                                
+                                                Text("Call")
+                                                    .font(.system(size: 10))
+                                                    .foregroundStyle(.white)
+                                            }
+                                        })
+                                        .buttonBorderShape(.capsule)
+                                        Spacer()
+                                    }
+                                    
+                                }
+                            }.padding(.horizontal, 30)
+                        }
+                        
+                    }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("\(context.state.courseName)")
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Score")
+                                .font(.system(size: 8))
+                            Text("\(context.state.currentScore)")
+                                .font(.system(size: 14))
+                                .bold()
+                        }
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Current Hole")
+                                .font(.system(size: 8))
+                            Text("\(context.state.currentHole)")
+                                .font(.system(size: 14))
+                                .bold()
+                        }
+                    }
+                    .frame(height: 20)
+                    .padding(.horizontal, 10)
                 }
             } compactLeading: {
-                Image("AppIcon")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 40, height: 40)
+                Image(systemName: "figure.golf")
+                    .foregroundStyle(.green)
             } compactTrailing: {
                 Text("Score: \(context.state.currentScore)")
             } minimal: {
                 Text("\(context.state.currentScore)")
             }
-            .widgetURL(URL(string: "http://www.apple.com"))
-            .keylineTint(Color.red)
         }
     }
 }
@@ -55,12 +110,74 @@ struct LiveRoundActivityView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("Score: \(currentScore)")
-                Spacer()
-                Text("Current hole: \(currentHole)")
+            VStack {
+                HStack {
+                    Image(systemName: "figure.golf")
+                        .resizable().aspectRatio(contentMode: .fit)
+                        .frame(width: 14, height: 14)
+                        .foregroundColor(.green)
+                    Spacer()
+                    EmptyView()
+                }
+                .padding(.horizontal, 10)
+                
+                VStack {
+                    HStack {
+                        Image(systemName: "building.columns.fill")
+                            .resizable().aspectRatio(contentMode: .fit)
+                            .frame(width: 44, height: 44)
+                            .foregroundColor(.green)
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("\(courseName)")
+                                    .font(.system(size: 20))
+                                    .bold()
+                                Spacer()
+                            }
+                            HStack {
+                                Button(action: {}, label: {
+                                    HStack {
+                                        Image(systemName: "phone.fill")
+                                            .resizable().aspectRatio(contentMode: .fit)
+                                            .frame(width: 14, height: 14)
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Call")
+                                            .font(.system(size: 10))
+                                            .foregroundStyle(.white)
+                                    }
+                                })
+                                .buttonBorderShape(.capsule)
+                                Spacer()
+                            }
+                            
+                        }
+                    }.padding(.horizontal, 30)
+                }
+                
             }
-            Text("Playing at \(courseName)")
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Score")
+                        .font(.system(size: 8))
+                    Text("\(currentScore)")
+                        .font(.system(size: 14))
+                        .bold()
+                }
+                
+                Spacer()
+                
+                VStack(alignment: .leading) {
+                    Text("Current Hole")
+                        .font(.system(size: 8))
+                    Text("\(currentHole)")
+                        .font(.system(size: 14))
+                        .bold()
+                }
+            }
+            .frame(height: 20)
+            .padding(.horizontal, 10)
         }
+        .padding(10)
     }
 }

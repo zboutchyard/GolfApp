@@ -32,13 +32,13 @@ struct ScoreCardView: View {
                 VStack {
                     ScrollView {
                         VStack {
-                            TopView(authViewModel: authViewModel)
+                            topView
                             if !otherUsers.isEmpty {
                                 ForEach(otherUsers, id: \.self) { otherUser in
                                     OtherUserView(otherUser: otherUser, otherUsers: $otherUsers)
                                 }
                             }
-                            AddPlayerButton(isAddPlayerClicked: $isAddPlayerClicked)
+                            addPlayerButton
                         }
                         .background(Color.whiteOrDark)
                         
@@ -54,11 +54,11 @@ struct ScoreCardView: View {
             Spacer()
             
             startRoundButton
-//                .popover(isPresented: $isPopoverActivated, attachmentAnchor: .point(.center), arrowEdge: .top) {
-//                    PopoverScoreCardView()
-//                        .padding()
-//                        .presentationCompactAdaptation(.automatic)
-//                }
+            //                .popover(isPresented: $isPopoverActivated, attachmentAnchor: .point(.center), arrowEdge: .top) {
+            //                    PopoverScoreCardView()
+            //                        .padding()
+            //                        .presentationCompactAdaptation(.automatic)
+            //                }
                 .sheet(isPresented: $isAddPlayerClicked) {
                     addPlayerSheet
                 }
@@ -77,11 +77,65 @@ struct ScoreCardView: View {
                     otherUsers: otherUsers,
                     selectedCourseName: selectedCourseName)
                 )
-                    .navigationBarBackButtonHidden()
+                .navigationBarBackButtonHidden()
             }
         }
     }
     
+    @ViewBuilder
+    var topView: some View {
+        HStack {
+            if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .clipShape(Circle())
+                    .frame(width: 50, height: 50)
+                    .background {
+                        Circle().fill(Color("AppGray"))
+                    }
+                    .foregroundStyle(.whiteOrDark)
+            } else {
+                Image(systemName: "person.fill")
+                    .scaledToFill()
+                    .clipShape(Circle())
+                    .frame(width: 50, height: 50)
+                    .background {
+                        Circle().fill(Color("AppGray"))
+                    }
+                    .foregroundStyle(.whiteOrDark)
+            }
+            if let user = authViewModel.user {
+                Text("\(user.firstName) \(user.lastName)")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 3)
+                    .fontWeight(.medium)
+                    .font(.title2)
+                    .kerning(0.8)
+            }
+        }
+        .padding(.leading, 5)
+        .padding(.top)
+    }
+    
+    
+    @ViewBuilder
+    var addPlayerButton: some View {
+        
+        Button {
+            isAddPlayerClicked = true
+        } label: {
+            HStack {
+                Image(systemName: "person.badge.plus")
+                Text("Add player")
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .padding(.bottom)
+    }
+    
+    @ViewBuilder
     public var addPlayerSheet: some View {
         VStack {
             TextField("search friends", text: $searchText)
@@ -140,7 +194,7 @@ struct ScoreCardView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .presentationDetents([.height(400)])
     }
-
+    
     func filterUsers() {
         if !searchText.isEmpty {
             if let allUsers = authViewModel.friendsList {
@@ -157,50 +211,32 @@ struct ScoreCardView: View {
     
     @ViewBuilder
     var startRoundButton: some View {
-            VStack {
-                RoundedCorner(radius: 50, corners: .allCorners)
-                    .fill(Color.green)
-                    .frame(height: 50)
-                    .overlay {
-                        Button {
-                            Task {
-                                await liveRoundManager.start(courseName: selectedCourseName)
-                            }
-                            isRoundStarted = true
-                        } label: {
-                            Text("Start round")
-                                .fontWeight(.medium)
-                                .font(.title2)
-                                .kerning(0.8)
-                                .frame(maxWidth: .infinity)
+        VStack {
+            RoundedCorner(radius: 50, corners: .allCorners)
+                .fill(Color.green)
+                .frame(height: 50)
+                .overlay {
+                    Button {
+                        Task {
+                            await liveRoundManager.start(courseName: selectedCourseName)
                         }
-                        .foregroundStyle(.white)
+                        isRoundStarted = true
+                    } label: {
+                        Text("Start round")
+                            .fontWeight(.medium)
+                            .font(.title2)
+                            .kerning(0.8)
+                            .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
-            }
-            .padding(.horizontal)
-            .padding(.bottom)
-            .frame(alignment: .bottom)
-    }
-
-}
-
-struct AddPlayerButton: View {
-    @Binding var isAddPlayerClicked: Bool
-    
-    var body: some View {
-        Button {
-            isAddPlayerClicked = true
-        } label: {
-            HStack {
-                Image(systemName: "person.badge.plus")
-                Text("Add player")
-            }
+                    .foregroundStyle(.white)
+                }
+                .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
         .padding(.bottom)
+        .frame(alignment: .bottom)
     }
+    
 }
 
 struct CourseSearchView: View {
@@ -431,44 +467,5 @@ struct TeeSelectorSheet: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .presentationDetents([.height(400)])
         .presentationDragIndicator(.visible)
-    }
-}
-
-struct TopView: View {
-    @StateObject var authViewModel: AuthViewModel
-    
-    var body: some View {
-        HStack {
-            if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .clipShape(Circle())
-                    .frame(width: 50, height: 50)
-                    .background {
-                        Circle().fill(Color("AppGray"))
-                    }
-                    .foregroundStyle(.whiteOrDark)
-            } else {
-                Image(systemName: "person.fill")
-                    .scaledToFill()
-                    .clipShape(Circle())
-                    .frame(width: 50, height: 50)
-                    .background {
-                        Circle().fill(Color("AppGray"))
-                    }
-                    .foregroundStyle(.whiteOrDark)
-            }
-            if let user = authViewModel.user {
-                Text("\(user.firstName) \(user.lastName)")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 3)
-                    .fontWeight(.medium)
-                    .font(.title2)
-                    .kerning(0.8)
-            }
-        }
-        .padding(.leading, 5)
-        .padding(.top)
     }
 }
