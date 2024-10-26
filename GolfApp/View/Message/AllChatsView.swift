@@ -11,42 +11,33 @@ import Firebase
 
 struct AllChatsView: View {
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @State private var prts: [String]?
-    @State private var isLoading: Bool = false
+    @State private var isLoading: Bool = true
     @State private var isAddMessageButtonClicked = false
     @State private var selectedChatId: String?
+    @State private var otherUser: OtherUser?
     var body: some View {
         VStack {
             if isLoading {
                 LoadingView()
             } else {
                 VStack {
-                    HStack {
-                        Text("Messages")
-                            .font(.title)
-                            .frame(maxWidth: .infinity)
-                        Button(action: {
-                            isAddMessageButtonClicked = true}) {
-                            Image(systemName: "square.and.pencil")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                        } 
-                        .padding(.trailing)
-                    }
                     Divider()
                     if let chats = authViewModel.user?.chats, !chats.isEmpty {
                         List {
-                            ForEach((chats), id: \.self) { chat in
-                                AllChatCellView(authViewModel: authViewModel,
-                                                msgViewModel: msgViewModel,
-                                                selectedChatId: $selectedChatId,
-                                                chatId: chat)
-                                    .frame(maxWidth: .infinity)
+                            if let otherUser = otherUser {
+                                ForEach((chats), id: \.self) { chat in
+                                    AllChatCellView(authViewModel: authViewModel,
+                                                    msgViewModel: msgViewModel,
+                                                    selectedChatId: $selectedChatId,
+                                                    otherUser: otherUser,
+                                                    chatId: chat)
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .onDelete(perform: deleteItem)
                             }
-                            .onDelete(perform: deleteItem)
-
                         }
                     } else {
                         Spacer()
@@ -67,6 +58,13 @@ struct AllChatsView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
+        .backButtonToolbar()
+        .onAppear {
+            Task {
+                fetchData()
+            }
+        }
         .sheet(isPresented: $isAddMessageButtonClicked) {
             if let user = authViewModel.user {
                 NewMessageView(user: user,
@@ -77,7 +75,47 @@ struct AllChatsView: View {
             }
         }
         .toolbar {
-            EditButton()
+            ToolbarItem(placement: .principal) {
+                Text("Messages")
+                    .font(.title)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    isAddMessageButtonClicked = true}) {
+                    Image(systemName: "square.and.pencil")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                }
+            }
+        }
+    }
+    
+    func fetchData() {
+        getChat()
+    }
+    
+    func getChat() {
+        if let chats = authViewModel.user?.chats {
+            for chat in chats {
+                msgViewModel.fetchChat(chatId: chat) { _ in
+                    if let chat = msgViewModel.chat {
+                        getParticipantName(chatModel: chat)
+                    }
+                }
+            }
+        }
+        isLoading = false
+    }
+    
+    func getParticipantName(chatModel: Chat) {
+        guard let userUid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let otherParticipants = chatModel.participants!.filter { $0 != userUid }
+        if let otherUserId = otherParticipants.first {
+            authViewModel.fetchOtherUserFromFirebase(id: otherUserId) { fetchedUser in
+                otherUser = fetchedUser
+            }
         }
     }
     
@@ -86,7 +124,6 @@ struct AllChatsView: View {
             guard let chatId = authViewModel.user?.chats?[index] else { return }
             msgViewModel.deleteUserChat(chatId: chatId)
         }
-        // Update the local state to reflect the deletion
         authViewModel.user?.chats?.remove(atOffsets: offsets)
     }
 }

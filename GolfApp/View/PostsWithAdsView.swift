@@ -6,7 +6,7 @@ struct PostsWithAdsView: View {
     @State private var userClicked: Bool = false
     @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var post: Post
     @State var tempPost: Post?

@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfileInfoView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var otherUser: OtherUser?
     @State var isOtherUserProfile: Bool = false

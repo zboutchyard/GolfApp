@@ -10,7 +10,7 @@ import FirebaseAuth
 
 struct NewChatView: View {
     @Environment(\.colorScheme) var colorScheme
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State private var message: String = ""
     @State var otherUser: OtherUser?
     @State var messages: [Message] = []

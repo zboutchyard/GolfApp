@@ -12,7 +12,7 @@ struct OtherUserProfileView: View {
     @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUser: OtherUser
     @State var user: User
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
     @State var isLoading: Bool = true

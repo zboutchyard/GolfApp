@@ -11,7 +11,7 @@ import AlertToast
 struct SearchDetailView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @Binding var searchText: String
     @State private var filteredUsers: [OtherUser]?
     @State var isAddFriendSelected: Bool = false

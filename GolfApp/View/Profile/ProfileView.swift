@@ -12,7 +12,7 @@ import AlertToast
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State private var badgeViewBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
     @State private var friendsListBtnSelected: Bool = false

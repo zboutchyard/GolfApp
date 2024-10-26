@@ -11,7 +11,7 @@ import AlertToast
 struct HomeView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State private var postSubmissionText: String = ""
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false

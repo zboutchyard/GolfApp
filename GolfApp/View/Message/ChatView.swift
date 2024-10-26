@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 struct ChatView: View {
     @Environment(\.colorScheme) var colorScheme
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @State var chatId: String
     @State var otherUser: OtherUser
     @State var messages: [Message] = []

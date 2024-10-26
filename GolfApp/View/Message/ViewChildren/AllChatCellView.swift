@@ -11,9 +11,9 @@ import Firebase
 
 struct AllChatCellView: View {
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @Binding var selectedChatId: String?
-    @State private var otherUser: OtherUser?
+    @State var otherUser: OtherUser
     @State var isLoading: Bool = true
     @State var image: UIImage?
     let chatId: String
@@ -22,9 +22,8 @@ struct AllChatCellView: View {
     var body: some View {
         VStack {
             NavigationStack {
-                if let user = otherUser {
                     HStack {
-                        if let data = user.profilePicData, let uiImage = UIImage(data: data) {
+                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
@@ -45,7 +44,7 @@ struct AllChatCellView: View {
                                 .foregroundStyle(.whiteOrDark)
                         }
                         VStack {
-                            Text("\(user.firstName) \(user.lastName)")
+                            Text("\(otherUser.firstName) \(otherUser.lastName)")
                                 .font(.title3)
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.leading)
@@ -67,47 +66,10 @@ struct AllChatCellView: View {
                     }
                     .padding()
                     
-                }
             }
         }
         .navigationDestination(isPresented: $isMessageClicked) {
-            if let otherUser = otherUser {
-                ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
-            }
-        }
-        .onAppear {
-            Task {
-                fetchData()
-            }
-        }
-    }
-    
-    func fetchData() {
-        getAllConversations()
-    }
-    
-    func getAllConversations() {
-        msgViewModel.fetchChat(chatId: self.chatId) { _ in
-            if let chat = msgViewModel.chat {
-                getParticipantName(chatModel: chat)
-            }
-        }
-    }
-    
-    func getParticipantName(chatModel: Chat) {
-        isLoading = true
-        guard let userUid = Auth.auth().currentUser?.uid else {
-            isLoading = false
-            return
-        }
-        let otherParticipants = chatModel.participants!.filter { $0 != userUid }
-        if let otherUserId = otherParticipants.first {
-            authViewModel.fetchOtherUserFromFirebase(id: otherUserId) { fetchedUser in
-                otherUser = fetchedUser
-                isLoading = false
-            }
-        } else {
-            isLoading = false
+            ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
         }
     }
 }

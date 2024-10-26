@@ -10,7 +10,7 @@ import SwiftUI
 struct NewMessageView: View {
     @State var user: User
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var msgViewModel: MessageViewModel
+    @ObservedObject var msgViewModel: MessageViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUsers: [OtherUser] = []
     @Binding var isPresented: Bool
