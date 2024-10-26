@@ -12,7 +12,10 @@ import SwiftUI
 struct LiveRoundLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: LiveRoundAttributes.self) { context in
-            LiveRoundActivityView(currentScore: context.state.currentScore, currentHole: context.state.currentHole, courseName: context.state.courseName)
+            LiveRoundActivityView(
+                currentScore: context.state.currentScore,
+                currentHole: context.state.currentHole,
+                courseName: context.state.courseName)
             .activityBackgroundTint(Color.green)
             .activitySystemActionForegroundColor(Color.black)
         } dynamicIsland: { context in
@@ -20,19 +23,21 @@ struct LiveRoundLiveActivity: Widget {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    Text("Current Hole: \(context.state.currentHole)")
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    Text("Score: \(context.state.currentScore)")
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Current Score: \(context.state.currentScore)")
-                    // more content
+                    Text("\(context.state.courseName)")
                 }
             } compactLeading: {
-                Text("L")
+                Image("AppIcon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
             } compactTrailing: {
-                Text("\(context.state.currentScore)")
+                Text("Score: \(context.state.currentScore)")
             } minimal: {
                 Text("\(context.state.currentScore)")
             }
@@ -52,11 +57,10 @@ struct LiveRoundActivityView: View {
         VStack {
             HStack {
                 Text("Score: \(currentScore)")
+                Spacer()
                 Text("Current hole: \(currentHole)")
             }
-            HStack {
-                Text("\(courseName)")
-            }
+            Text("Playing at \(courseName)")
         }
     }
 }

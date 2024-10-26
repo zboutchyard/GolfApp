@@ -64,7 +64,7 @@ extension AuthViewModel.ImageState: Equatable {
 }
 
 struct EditableCircularProfileImage: View {
-    @StateObject var viewModel: AuthViewModel
+    @StateObject var viewModel: AuthViewModel = AuthViewModel()
     var onDataUpdate: ((Data?) -> Void)?
     @Binding var data: Data?
     

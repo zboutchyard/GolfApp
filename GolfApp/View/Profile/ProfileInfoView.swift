@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileInfoView: View {
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State var user: User?
@@ -117,16 +117,23 @@ struct ProfileInfoView: View {
                             }
                             .background(Color.appGray)
                             VStack {
-                                ForEach(authViewModel.userPosts.sorted(by: { $0.timeStamp > $1.timeStamp}), id: \.self) { post in
-                                    PostView(authViewModel: authViewModel,
-                                             notificationViewModel: notificationViewModel,
-                                             msgViewModel: msgViewModel,
-                                             user: user,
-                                             post: post)
+                                if let posts = authViewModel.posts {
+                                    ForEach(posts.indices, id: \.self) { index in
+                                        let post = posts[index]
+                                        if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                                            PostsWithAdsView(
+                                                authViewModel: authViewModel,
+                                                notificationViewModel: notificationViewModel,
+                                                msgViewModel: msgViewModel,
+                                                user: user,
+                                                post: post,
+                                                otherUser: otherUser[post.user], index: index)
+                                        }
+                                    }
                                 }
-                                .padding(.bottom, 2)
                             }
-                            .background(Color.whiteOrBlack)
+                            .padding(.bottom, 2)
+                            .background(Color.blackOrGray)
                             
                         }
                         .background(Color.whiteOrDark)

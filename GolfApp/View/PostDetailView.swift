@@ -12,7 +12,7 @@ struct PostDetailView: View {
     @State var post: Post?
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @FocusState var isTextFieldFocused: Bool

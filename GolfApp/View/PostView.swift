@@ -12,7 +12,7 @@ struct PostView: View {
     @State private var likeBtnClicked: Bool = false
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State var user: User?

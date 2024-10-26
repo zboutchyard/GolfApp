@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OtherUserProfileView: View {
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUser: OtherUser
     @State var user: User
@@ -16,15 +16,16 @@ struct OtherUserProfileView: View {
     @State var isChatViewTriggered: Bool = false
     @State var chatId: String?
     @State var isLoading: Bool = true
+    @State private var isInlineTitle = false
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 0) {
                     VStack {
                         if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 125, height: 125)
+                                .frame(width: 125, height: 200)
                                 .clipShape(Circle())
                                 .background {
                                     Circle().fill(Color("AppGray"))
@@ -34,7 +35,7 @@ struct OtherUserProfileView: View {
                             ProfileImage(imageState: .empty)
                                 .scaledToFill()
                                 .clipShape(Circle())
-                                .frame(width: 125, height: 125)
+                                .frame(width: 125, height: 200)
                                 .background {
                                     Circle().fill(Color("AppGray"))
                                 }
@@ -53,7 +54,6 @@ struct OtherUserProfileView: View {
                             .padding()
                             .lineLimit(1)
                         Spacer()
-                        
                     }
                     .background(.gray)
                     HStack {
@@ -93,26 +93,50 @@ struct OtherUserProfileView: View {
                         .padding()
                         Spacer()
                     }
-                ProfileInfoView(
-                    authViewModel: authViewModel,
-                    notificationViewModel: notificationViewModel,
-                    msgViewModel: msgViewModel,
-                    otherUser: otherUser,
-                    isOtherUserProfile: true)
-                        .background(Color.whiteOrDark)
-               
-            }
+                    ProfileInfoView(
+                        authViewModel: authViewModel,
+                        notificationViewModel: notificationViewModel,
+                        msgViewModel: msgViewModel,
+                        otherUser: otherUser,
+                        isOtherUserProfile: true)
                     .background(Color.whiteOrDark)
-            
-        }
-        .navigationDestination(isPresented: $isChatViewTriggered) {
-            if let chatId = chatId {
-                ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
-            } else {
-                NewChatView(msgViewModel: msgViewModel, otherUser: otherUser, isPresented: .constant(true))
+                    
+                }
+                .background(Color.whiteOrDark)
+                
             }
+            .background {
+                scrollDetector()
+            }
+            .ignoresSafeArea()
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("\(otherUser.firstName) \(otherUser.lastName)")
+                        .opacity(isInlineTitle ? 1 : 0)
+                        .font(.headline)
+                }
+            }
+            .backButtonToolbar()
+            .navigationDestination(isPresented: $isChatViewTriggered) {
+                if let chatId = chatId {
+                    ChatView(msgViewModel: msgViewModel, chatId: chatId, otherUser: otherUser)
+                } else {
+                    NewChatView(msgViewModel: msgViewModel, otherUser: otherUser, isPresented: .constant(true))
+                }
+            }
+            .background(Color.whiteOrDark)
+    }
+    
+    private func scrollDetector() -> some View {
+        GeometryReader { proxy in
+            let minY = proxy.frame(in: .local).minY
+            let isUnderToolbar = minY - proxy.safeAreaInsets.top - 40 < 0
+            Color.clear
+                .onChange(of: isUnderToolbar) { _, newVal in
+                    isInlineTitle = newVal
+                }
         }
-        .background(Color.whiteOrDark)
     }
 }
 

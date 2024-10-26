@@ -7,8 +7,6 @@
 import SwiftUI
 
 struct Step2View: View {
-    @StateObject var authViewModel: AuthViewModel
-    //    @StateObject var mockViewModel = MockAuthViewModel()
     @State var user: User?
     @State var bioText: String = ""
     @State var charLimitReached: Bool = false
@@ -111,7 +109,7 @@ struct Step2View: View {
         }
         .navigationDestination(isPresented: $isStepComplete) {
             Step3View(
-                authViewModel: authViewModel, email: email,
+                email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,

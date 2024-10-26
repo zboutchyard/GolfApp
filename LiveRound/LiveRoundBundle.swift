@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct LiveRoundBundle: WidgetBundle {
     var body: some Widget {
-        LiveRound()
+//        LiveRound()
         LiveRoundLiveActivity()
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseStorage
 
 struct Step3View: View {
-    @StateObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     @State private var user: User?
     @State var isStepComplete: Bool = false
     @State private var selectedInterests: [String] = []
@@ -100,7 +100,7 @@ struct Step3View: View {
             )
             
             .navigationDestination(isPresented: $isStepComplete) {
-                LandingView(authViewModel: authViewModel)
+                LandingView(authViewModel: AuthViewModel())
                     .navigationBarBackButtonHidden()
                     .toolbar(.hidden)
             }

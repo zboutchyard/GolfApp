@@ -9,7 +9,8 @@ import SwiftUI
 import AlertToast
 
 struct SearchDetailView: View {
-    @StateObject var authViewModel: AuthViewModel
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var msgViewModel: MessageViewModel
     @Binding var searchText: String
     @State private var filteredUsers: [OtherUser]?
@@ -72,6 +73,8 @@ struct SearchDetailView: View {
                     }
             }
         }
+        .navigationBarBackButtonHidden()
+        .backButtonToolbar()
         .navigationDestination(isPresented: $isUserSelected, destination: {
             if let selectedUser = selectedUser {
                 if let user = authViewModel.user {

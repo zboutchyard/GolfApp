@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PersonCellView: View {
     @State var otherUser: OtherUser?
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @State var post: Post?
     @Binding var isPostView: Bool
     

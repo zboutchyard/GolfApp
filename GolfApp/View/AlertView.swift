@@ -11,7 +11,7 @@ import FirebaseAuth
 
 struct AlertView: View {
     @State private var otherUser: OtherUser?
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State var isRequestAccepted: Bool = false

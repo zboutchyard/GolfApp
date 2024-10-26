@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct Step1View: View {
-    @StateObject var authViewModel: AuthViewModel
-    //    @StateObject var mockViewModel = MockAuthViewModel()
     @State var user: User?
     @State var email: String
     @State var password: String
@@ -31,7 +29,7 @@ struct Step1View: View {
                     .fontWeight(.semibold)
                     .kerning(1.2)
                     Spacer()
-                    EditableCircularProfileImage(viewModel: authViewModel, data: $data)
+                    EditableCircularProfileImage(data: $data)
                     
                     Text("Let's start by getting an image for your profile.")
                         .fontWeight(.semibold)
@@ -65,8 +63,7 @@ struct Step1View: View {
                 }), alignment: .bottom
             )
             .navigationDestination(isPresented: $isStep1Complete) {
-                Step2View(authViewModel: authViewModel,
-                          email: email,
+                Step2View(email: email,
                           password: password,
                           firstName: firstName,
                           lastName: lastName,

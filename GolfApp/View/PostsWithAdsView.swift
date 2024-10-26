@@ -4,7 +4,7 @@ struct PostsWithAdsView: View {
     @State private var likeBtnClicked: Bool = false
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @StateObject var msgViewModel: MessageViewModel
     @State var user: User?
@@ -22,14 +22,14 @@ struct PostsWithAdsView: View {
                     NativeAdView()
                     .background(Color.whiteOrDark)
                 } else {
-                    if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                    if let user = authViewModel.user {
                         PostView(
                             authViewModel: authViewModel,
                             notificationViewModel: notificationViewModel,
                             msgViewModel: msgViewModel,
                             user: user,
                             post: post,
-                            otherUser: otherUser[post.user])
+                            otherUser: authViewModel.postOtherUsers?[post.user])
                     }
                 }
             }

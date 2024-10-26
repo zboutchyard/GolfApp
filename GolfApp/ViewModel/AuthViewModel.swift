@@ -48,11 +48,11 @@ class AuthViewModel: ObservableObject {
         FirebaseApp.configure()
         if Auth.auth().currentUser != nil {
             self.isUserLoggedIn = true
+            Task {
+                await fetchAllDataForLandingView()
+            }
         } else {
             self.isUserLoggedIn = false
-        }
-        Task {
-            await fetchAllDataForLandingView()
         }
     }
     

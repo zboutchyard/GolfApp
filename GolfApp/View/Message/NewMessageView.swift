@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewMessageView: View {
     @State var user: User
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var msgViewModel: MessageViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @State var otherUsers: [OtherUser] = []

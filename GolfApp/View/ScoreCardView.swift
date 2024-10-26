@@ -15,7 +15,7 @@ struct ScoreCardView: View {
     @State var otherUsers: [OtherUser] = []
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var searchModel: CourseSearchViewModel
     @State var shouldCloseSearch: Bool = false
     @State var selectedCourseName: String = ""
@@ -53,7 +53,7 @@ struct ScoreCardView: View {
             
             Spacer()
             
-            StartRoundButton(isRoundStarted: $isRoundStarted, courseName: selectedCourseName, liveRoundManager: liveRoundManager)
+            startRoundButton
 //                .popover(isPresented: $isPopoverActivated, attachmentAnchor: .point(.center), arrowEdge: .top) {
 //                    PopoverScoreCardView()
 //                        .padding()
@@ -154,6 +154,35 @@ struct ScoreCardView: View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    @ViewBuilder
+    var startRoundButton: some View {
+            VStack {
+                RoundedCorner(radius: 50, corners: .allCorners)
+                    .fill(Color.green)
+                    .frame(height: 50)
+                    .overlay {
+                        Button {
+                            Task {
+                                await liveRoundManager.start(courseName: selectedCourseName)
+                            }
+                            isRoundStarted = true
+                        } label: {
+                            Text("Start round")
+                                .fontWeight(.medium)
+                                .font(.title2)
+                                .kerning(0.8)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .foregroundStyle(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
+            .frame(alignment: .bottom)
+    }
+
 }
 
 struct AddPlayerButton: View {
@@ -336,39 +365,6 @@ struct OtherUserView: View {
             .padding(.trailing)
         }
         .padding(.leading, 5)
-    }
-}
-
-struct StartRoundButton: View {
-    @Binding var isRoundStarted: Bool
-    @State var courseName: String
-    @StateObject var liveRoundManager: LiveRoundManager
-    
-    var body: some View {
-        VStack {
-            RoundedCorner(radius: 50, corners: .allCorners)
-                .fill(Color.green)
-                .frame(height: 50)
-                .overlay {
-                    Button {
-                        Task {
-                            await liveRoundManager.start(courseName: courseName)
-                            isRoundStarted = true
-                        }
-                    } label: {
-                        Text("Start round")
-                            .fontWeight(.medium)
-                            .font(.title2)
-                            .kerning(0.8)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .foregroundStyle(.white)
-                }
-                .frame(maxWidth: .infinity)
-        }
-        .padding(.horizontal)
-        .padding(.bottom)
-        .frame(alignment: .bottom)
     }
 }
 

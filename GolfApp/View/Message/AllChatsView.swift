@@ -10,7 +10,7 @@ import FirebaseDatabase
 import Firebase
 
 struct AllChatsView: View {
-    @StateObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var msgViewModel: MessageViewModel
     @StateObject var notificationViewModel: NotificationViewModel
     @State private var prts: [String]?

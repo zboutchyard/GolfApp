@@ -32,7 +32,7 @@
 		10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10551A032B22BC0A00218E1D /* LoadingView.swift */; };
 		105D99E32C55A03D00323DFF /* TeeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E22C55A03D00323DFF /* TeeOptions.swift */; };
 		105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E42C69022500323DFF /* LiveRoundViewModel.swift */; };
-		105D99E72C690E3700323DFF /* LiveRound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E62C690E3700323DFF /* LiveRound.swift */; };
+		105D99E72C690E3700323DFF /* LiveRoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E62C690E3700323DFF /* LiveRoundModel.swift */; };
 		10696A2C2B2E1FDC0011FE9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */; };
 		10696A2F2B3248CF0011FE9B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A2E2B3248CF0011FE9B /* FirebaseStorage */; };
 		10696A312B3248E00011FE9B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A302B3248E00011FE9B /* FirebaseAuth */; };
@@ -72,6 +72,7 @@
 		10B1D36F2B10425D004D45E7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D36E2B10425D004D45E7 /* EditProfileView.swift */; };
 		10B1D3732B1102D7004D45E7 /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */; };
 		10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1D3742B110A73004D45E7 /* PersonCellView.swift */; };
+		10B43F322CCC5D89004F607D /* BackButtonToolbarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B43F312CCC5D89004F607D /* BackButtonToolbarModifier.swift */; };
 		10C24E6B2CCB14D8003ECE09 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C24E6A2CCB14D8003ECE09 /* WidgetKit.framework */; };
 		10C24E6D2CCB14D8003ECE09 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C24E6C2CCB14D8003ECE09 /* SwiftUI.framework */; };
 		10C24E7E2CCB14D9003ECE09 /* LiveRoundExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -144,7 +145,7 @@
 		10598C1A2B38BCAF00F6CB78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		105D99E22C55A03D00323DFF /* TeeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeOptions.swift; sourceTree = "<group>"; };
 		105D99E42C69022500323DFF /* LiveRoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundViewModel.swift; sourceTree = "<group>"; };
-		105D99E62C690E3700323DFF /* LiveRound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRound.swift; sourceTree = "<group>"; };
+		105D99E62C690E3700323DFF /* LiveRoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundModel.swift; sourceTree = "<group>"; };
 		10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		10696A3A2B3259530011FE9B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10696A3C2B325BA30011FE9B /* GolfApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GolfApp.entitlements; sourceTree = "<group>"; };
@@ -182,6 +183,7 @@
 		10B1D36E2B10425D004D45E7 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		10B1D3722B1102D7004D45E7 /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		10B1D3742B110A73004D45E7 /* PersonCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCellView.swift; sourceTree = "<group>"; };
+		10B43F312CCC5D89004F607D /* BackButtonToolbarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonToolbarModifier.swift; sourceTree = "<group>"; };
 		10C24E692CCB14D8003ECE09 /* LiveRoundExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LiveRoundExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		10C24E6A2CCB14D8003ECE09 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		10C24E6C2CCB14D8003ECE09 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -193,17 +195,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		10C24E7F2CCB14D9003ECE09 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		10B43F342CCCEC58004F607D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				LiveRoundAttributes.swift,
+				LiveRoundManager.swift,
 			);
-			target = 10C24E682CCB14D8003ECE09 /* LiveRoundExtension */;
+			target = 108D36C22AF57C6A005DAD22 /* GolfApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		10C24E6E2CCB14D8003ECE09 /* LiveRound */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (10C24E7F2CCB14D9003ECE09 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveRound; sourceTree = "<group>"; };
+		10C24E6E2CCB14D8003ECE09 /* LiveRound */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (10B43F342CCCEC58004F607D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LiveRound; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +311,7 @@
 		108D36C52AF57C6A005DAD22 /* GolfApp */ = {
 			isa = PBXGroup;
 			children = (
+				10B43F302CCC5D6C004F607D /* Helpers */,
 				10598C1A2B38BCAF00F6CB78 /* Info.plist */,
 				10696A3C2B325BA30011FE9B /* GolfApp.entitlements */,
 				108D36F22AF57C94005DAD22 /* ViewModel */,
@@ -356,7 +360,7 @@
 				1032E9DC2AF9E43B00001048 /* Chat.swift */,
 				1006349A2B13EDA8005CF4CB /* Post.swift */,
 				105D99E22C55A03D00323DFF /* TeeOptions.swift */,
-				105D99E62C690E3700323DFF /* LiveRound.swift */,
+				105D99E62C690E3700323DFF /* LiveRoundModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -429,6 +433,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		10B43F302CCC5D6C004F607D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				10B43F312CCC5D89004F607D /* BackButtonToolbarModifier.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		F0460787AB6B9497A1F1C862 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -459,9 +471,6 @@
 			);
 			dependencies = (
 				10C24E7D2CCB14D9003ECE09 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				10C24E6E2CCB14D8003ECE09 /* LiveRound */,
 			);
 			name = GolfApp;
 			packageProductDependencies = (
@@ -703,6 +712,7 @@
 				10B1D3662B0EBA40004D45E7 /* ScoreCardView.swift in Sources */,
 				105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */,
 				108A1B552CC58E8D00F0861E /* NativeAdView.swift in Sources */,
+				10B43F322CCC5D89004F607D /* BackButtonToolbarModifier.swift in Sources */,
 				100F7DEE2CC09DDD00C368DE /* MessageToolbarLiveRoundView.swift in Sources */,
 				1032E9E22AF9EB3800001048 /* TopRow.swift in Sources */,
 				108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */,
@@ -710,7 +720,7 @@
 				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,
 				1006349B2B13EDA8005CF4CB /* Post.swift in Sources */,
 				10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */,
-				105D99E72C690E3700323DFF /* LiveRound.swift in Sources */,
+				105D99E72C690E3700323DFF /* LiveRoundModel.swift in Sources */,
 				10B1D3682B100AA0004D45E7 /* PostView.swift in Sources */,
 				1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */,
 				10B0C3A72B369F59003C6F31 /* PopoverScoreCardView.swift in Sources */,
@@ -841,6 +851,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -898,6 +909,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -941,6 +953,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRINGS_FILE_INFOPLIST_RENAME = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -980,6 +993,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRINGS_FILE_INFOPLIST_RENAME = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1071,7 +1085,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K4FNCP5632;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LiveRound/Info.plist;
+				INFOPLIST_FILE = "LiveRound/LiveRound-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = LiveRound;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1084,6 +1098,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp.LiveRound;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRINGS_FILE_INFOPLIST_RENAME = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1099,7 +1114,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K4FNCP5632;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = LiveRound/Info.plist;
+				INFOPLIST_FILE = "LiveRound/LiveRound-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = LiveRound;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -1112,6 +1127,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zackboutchyard.golfApp.GolfApp.LiveRound;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				STRINGS_FILE_INFOPLIST_RENAME = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

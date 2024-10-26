@@ -13,7 +13,7 @@ import FirebaseMessaging
 @main
 struct GolfAppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @ObservedObject var authViewModel: AuthViewModel = AuthViewModel()
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -34,7 +34,7 @@ struct ViewSwitcher: View {
             if authViewModel.isUserLoggedIn {
                 LandingView(authViewModel: authViewModel)
             } else {
-                RegisterView(isRegistered: false, authViewModel: authViewModel)
+                RegisterView(isRegistered: false)
             }
         }
     }

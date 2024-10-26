@@ -17,7 +17,6 @@ struct RegisterView: View {
     @State private var lastName = ""
     @State private var image: UIImage?
     @State var isRegistered: Bool
-    @StateObject var authViewModel: AuthViewModel
     @State var showEmailError = false
     @State var showMissingPassword = false
     @State var showFirstNameError = false
@@ -157,7 +156,7 @@ struct RegisterView: View {
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top)
-                NavigationLink( destination: LoginView(authViewModel: authViewModel, isLoggedIn: false)) {
+                NavigationLink( destination: LoginView(isLoggedIn: false)) {
                     Text("Already have an account? Log in")
                         .underline()
                 }
@@ -188,7 +187,7 @@ struct RegisterView: View {
                 }
             .navigationBarBackButtonHidden()
             .navigationDestination(isPresented: $isRegistered) {
-                Step1View(authViewModel: authViewModel, email: email, password: password, firstName: firstName, lastName: lastName)
+                Step1View(email: email, password: password, firstName: firstName, lastName: lastName)
                 
             }
         }

@@ -13,9 +13,9 @@ struct LandingView: View {
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
     @StateObject var authViewModel: AuthViewModel
-    @ObservedObject var msgViewModel: MessageViewModel = .init()
-    @ObservedObject var notificationViewModel: NotificationViewModel = .init()
-    @ObservedObject var searchViewModel: CourseSearchViewModel = .init()
+    @StateObject var msgViewModel: MessageViewModel = .init()
+    @StateObject var notificationViewModel: NotificationViewModel = .init()
+    @StateObject var searchViewModel: CourseSearchViewModel = .init()
     @State var isSettingsButtonClicked = false
     @State var isProfileView = false
     @State private var selectedTab: Int = 0
@@ -49,14 +49,14 @@ struct LandingView: View {
                         isSearchBtnClicked = true
                     }
                 }, label: {
-                    Image(systemName: "magnifyingglass")
+                    Image(systemName: "magnifyingglass").tint(.heading)
                 })
                 .font(.system(size: 25))
                 .padding(.trailing)
                 Button(action: {
                     isMessageBtnClicked = true
                 }, label: {
-                    Image(systemName: "message")
+                    Image(systemName: "message").tint(.heading)
                 })
                 .font(.system(size: 25))
                 .padding(.trailing)
@@ -120,7 +120,6 @@ struct LandingView: View {
                     .onAppear {
                         isProfileView = true
                     }
-                    
                     .toolbar(.visible, for: .tabBar)
                     .toolbarBackground(Color.whiteOrDark, for: .tabBar)
                     .background(Color.whiteOrDark)
@@ -128,6 +127,7 @@ struct LandingView: View {
                     Text("Error")
                 }
             }
+            .tint(.heading)
             .background(Color.whiteOrDark)
             .padding(.top, 0)
         }
