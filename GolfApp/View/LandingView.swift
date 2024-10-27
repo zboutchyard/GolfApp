@@ -39,7 +39,7 @@ struct LandingView: View {
                             isSettingsButtonClicked = true
                         }
                     }, label: {
-                        Image(systemName: "gear")
+                        Image(systemName: "gear").tint(.heading)
                     })
                     .font(.system(size: 25))
                     .padding(.trailing)

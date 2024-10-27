@@ -20,6 +20,7 @@ struct PostDetailView: View {
     @State var user: User?
     @State var otherUser: OtherUser?
     @State var selectedTab: Int?
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView {
@@ -88,6 +89,29 @@ struct PostDetailView: View {
             }
                
         }
+        .padding(.top, 20)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                            Image(systemName: "chevron.left")
+                                .tint(Color.heading)
+                    }
+                    if let otherUser = otherUser, let post = post {
+                        TopNavDetail(otherUser: otherUser, post: post)
+                            .tint(Color.heading)
+                    } else {
+                        if let user = user, let post = post {
+                            TopNavDetail(user: user, post: post)
+                                .tint(Color.heading)
+                        }
+                    }
+                }
+            }
+        }
         .onTapGesture {
             isTextFieldFocused = false
         }
@@ -99,7 +123,6 @@ struct PostDetailView: View {
                 }
             }
         }
-        
     }
     
     struct MessageToolbar: View {
@@ -135,6 +158,97 @@ struct PostDetailView: View {
                 .cornerRadius(50)
                 .padding()
             
+        }
+    }
+    
+    struct TopNavDetail: View {
+        @State var otherUser: OtherUser?
+        @State var user: User?
+        @State var post: Post
+        
+        init(user: User? = nil, otherUser: OtherUser? = nil, post: Post) {
+            self.otherUser = otherUser
+            self.user = user
+            self.post = post
+        }
+        var body: some View {
+            VStack {
+                if let otherUser = otherUser {
+                    HStack {
+                        if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 50, height: 50)
+                                .background {
+                                    Circle().fill(Color("AppGray"))
+                                }
+                                .foregroundStyle(.whiteOrDark)
+                        }
+                        
+                        VStack {
+                            Text("\(otherUser.firstName) \(otherUser.lastName)")
+                                .fontWeight(.semibold)
+                                .kerning(1.2)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
+                                .font(.caption)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                    }
+                    .padding([.leading, .trailing, .top])
+                } else {
+                    if let user = user {
+                        HStack {
+                            if let data = user.profilePicData, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            } else {
+                                Image(systemName: "person.fill")
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50)
+                                    .background {
+                                        Circle().fill(Color("AppGray"))
+                                    }
+                                    .foregroundStyle(.whiteOrDark)
+                            }
+                            
+                            VStack {
+                                Text("\(user.firstName) \(user.lastName)")
+                                    .fontWeight(.semibold)
+                                    .kerning(1.2)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text(String(post.timeStamp.formatted(.dateTime.hour().minute())))
+                                    .font(.caption)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                        }
+                        .padding([.leading, .trailing, .top])
+                    }
+                }
+            }
         }
     }
     
