@@ -17,7 +17,7 @@ struct PostsWithAdsView: View {
     @State var index: Int
     
     var body: some View {
-        VStack {
+        NavigationStack {
                 if authViewModel.adPositions.contains(index) {
                     NativeAdView()
                     .background(Color.whiteOrDark)

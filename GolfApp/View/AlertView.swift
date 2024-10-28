@@ -153,7 +153,7 @@ struct AlertView: View {
                                 })
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(.plain)
-                                .padding()
+                                .padding(.horizontal)
                                 Divider()
                             }
                         }
