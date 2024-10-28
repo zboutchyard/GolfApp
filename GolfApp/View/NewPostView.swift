@@ -13,7 +13,8 @@ struct NewPostView: View {
     @State var postText: String = ""
     @ObservedObject var authViewModel: AuthViewModel
     @State var user: User
-    @State private var showingImagePicker = false
+    @State var showingImagePicker = false
+    @Binding var shouldAutoOpenImagePicker: Bool
     @State private var selectedImage: UIImage?
     @State private var inputImage: UIImage?
     @State var data: Data?
@@ -95,6 +96,9 @@ struct NewPostView: View {
                     .padding(.top)
             }
             
+        }
+        .task {
+            showingImagePicker = shouldAutoOpenImagePicker
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
             ImagePicker(image: $inputImage)

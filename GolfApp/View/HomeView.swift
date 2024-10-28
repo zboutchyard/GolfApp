@@ -16,6 +16,7 @@ struct HomeView: View {
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
     @State private var postCounter = 0
+    @State var shouldShowImagePicker: Bool = false
     
     var body: some View {
         
@@ -39,13 +40,16 @@ struct HomeView: View {
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
-                        NewPostView(authViewModel: authViewModel, user: user, onPostSubmitted: {
+                        NewPostView(authViewModel: authViewModel, user: user, shouldAutoOpenImagePicker: $shouldShowImagePicker, onPostSubmitted: {
                             authViewModel.state = .loading
                             authViewModel.fetchAllPostsFromFirebase { _ in
                                 authViewModel.state = .loaded
                             }
                             isPostSubmitted = true
                         })
+                        .onDisappear {
+                            shouldShowImagePicker = false
+                        }
                     }
                 })
             } else {
@@ -103,7 +107,8 @@ struct HomeView: View {
     @ViewBuilder
     var inputImageView: some View {
         Button(action: {
-            // TODO: add logic for adding a new photo
+            shouldShowImagePicker = true
+            isAddPostClicked = true
         }, label: {
             HStack {
                 Image(systemName: "photo.on.rectangle.angled")
