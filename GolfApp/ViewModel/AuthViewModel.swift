@@ -647,6 +647,7 @@ extension AuthViewModel {
                 timeStamp: Date.now,
                 user: currentUserID,
                 imageRef: imageRef ?? nil)
+            
             self.posts.insert(contentsOf: [postToAppend], at: 0)
             self.posts.sort(by: { $0.timeStamp > $1.timeStamp })
         }

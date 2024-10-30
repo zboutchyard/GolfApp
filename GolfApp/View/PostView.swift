@@ -70,21 +70,7 @@ struct PostView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                if post.user == userId {
-                                    VStack {
-                                        Button {
-                                            selectedPost = post
-                                            debugPrint("selected Post in post view \(selectedPost)")
-                                            shouldShowMoreOptionsView = true
-                                        } label: {
-                                            Image(systemName: "ellipsis")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                        .buttonStyle(.plain)
-                                    }
-                                    .frame(width: 10, height: 3, alignment: .topTrailing)
-                                }
+                                moreOptionsButton
                             }
                             .padding([.leading, .trailing, .top])
                         }
@@ -277,6 +263,28 @@ struct PostView: View {
                 }
             }
         }
+        
+       
+    }
+    
+    @ViewBuilder
+    var moreOptionsButton: some View {
+        if post?.user == userId, let post = post {
+            VStack {
+                Button {
+                    selectedPost = post
+                    debugPrint("selected Post in post view \(selectedPost)")
+                    shouldShowMoreOptionsView = true
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .resizable()
+                        .scaledToFill()
+                }
+                .buttonStyle(.plain)
+            }
+            .frame(width: 10, height: 3, alignment: .topTrailing)
+        }
+       
     }
     func addLikeToFirebase(postId: String) async {
         authViewModel.addUserIdToLikes(postId: postId) { _ in}
