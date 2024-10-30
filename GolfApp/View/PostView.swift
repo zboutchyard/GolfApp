@@ -13,7 +13,7 @@ struct PostView: View {
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var post: Post?
@@ -23,6 +23,8 @@ struct PostView: View {
     @FocusState var isTextFieldFocused: Bool
     @State var otherUser: OtherUser?
     @State var otherUserClicked: Bool = false
+    @Binding var shouldShowMoreOptionsView: Bool
+    @Binding var selectedPost: Post
     
     var body: some View {
         VStack {
@@ -68,7 +70,21 @@ struct PostView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                
+                                if post.user == userId {
+                                    VStack {
+                                        Button {
+                                            selectedPost = post
+                                            debugPrint("selected Post in post view \(selectedPost)")
+                                            shouldShowMoreOptionsView = true
+                                        } label: {
+                                            Image(systemName: "ellipsis")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                    .frame(width: 10, height: 3, alignment: .topTrailing)
+                                }
                             }
                             .padding([.leading, .trailing, .top])
                         }
@@ -137,7 +153,7 @@ struct PostView: View {
                 if let likes = post?.likes {
                     if !likes.isEmpty {
                         Image(systemName: "hand.thumbsup.fill")
-                            .background(Circle().fill(.blue).frame(width: 20, height: 20))
+                            .background(Circle().fill(.green).frame(width: 20, height: 20))
                             .foregroundStyle(.whiteOrDark)
                             .padding([.leading])
                         Text(String(likes.count))
@@ -193,7 +209,7 @@ struct PostView: View {
                     }
                 })
                 .buttonStyle(.plain)
-                .foregroundStyle(likeBtnClicked ? .blue : .primary)
+                .foregroundStyle(likeBtnClicked ? .green : .primary)
                 .padding(.leading, 50)
                 Spacer()
                 Button(action: {
@@ -228,13 +244,15 @@ struct PostView: View {
             }
         }
         .navigationDestination(isPresented: $commentBtnClicked) {
-            PostDetailView(
-                post: post,
-                authViewModel: authViewModel,
-                notificationViewModel: notificationViewModel,
-                msgViewModel: msgViewModel,
-                user: user,
-                otherUser: otherUser)
+            if let post = post {
+                PostDetailView(
+                    post: post,
+                    authViewModel: authViewModel,
+                    notificationViewModel: notificationViewModel,
+                    msgViewModel: msgViewModel,
+                    user: user,
+                    otherUser: otherUser)
+            }
         }
         .navigationDestination(isPresented: $userClicked) {
             if user != nil {
@@ -243,12 +261,19 @@ struct PostView: View {
                             msgViewModel: msgViewModel,
                             otherUser: otherUser)
                 .background(Color.whiteOrDark)
+                .navigationBarBackButtonHidden()
+                .backButtonToolbar()
             }
         }
         .navigationDestination(isPresented: $otherUserClicked) {
             if let otherUser = otherUser {
                 if let user = user {
-                    OtherUserProfileView(authViewModel: authViewModel, notificationViewModel: notificationViewModel, otherUser: otherUser, user: user, msgViewModel: msgViewModel)
+                    OtherUserProfileView(
+                        authViewModel: authViewModel,
+                        notificationViewModel: notificationViewModel,
+                        otherUser: otherUser,
+                        user: user,
+                        msgViewModel: msgViewModel)
                 }
             }
         }

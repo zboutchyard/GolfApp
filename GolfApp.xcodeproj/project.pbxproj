@@ -58,7 +58,7 @@
 		108D36E42AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36E32AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift */; };
 		108D36F42AF57FB0005DAD22 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F32AF57FB0005DAD22 /* RegisterView.swift */; };
 		108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108D36F52AF582AB005DAD22 /* ProfileView.swift */; };
-		10A72EED2CBDB98200AD78F1 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 10A72EEC2CBDB98200AD78F1 /* BottomSheet */; };
+		10B040232CD19B8000F565AE /* MoreOptionsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B040222CD19B8000F565AE /* MoreOptionsSheetView.swift */; };
 		10B0C3A72B369F59003C6F31 /* PopoverScoreCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */; };
 		10B0C3A92B38AD70003C6F31 /* CourseSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */; };
 		10B1BB572CC4496400BC8BE8 /* PostsWithAdsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */; };
@@ -170,6 +170,7 @@
 		108D36E32AF57C6C005DAD22 /* GolfAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GolfAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		108D36F32AF57FB0005DAD22 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		108D36F52AF582AB005DAD22 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		10B040222CD19B8000F565AE /* MoreOptionsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreOptionsSheetView.swift; sourceTree = "<group>"; };
 		10B0C3A62B369F59003C6F31 /* PopoverScoreCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverScoreCardView.swift; sourceTree = "<group>"; };
 		10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSearchViewModel.swift; sourceTree = "<group>"; };
 		10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsWithAdsView.swift; sourceTree = "<group>"; };
@@ -215,7 +216,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				10696A352B3249030011FE9B /* FirebaseMessaging in Frameworks */,
-				10A72EED2CBDB98200AD78F1 /* BottomSheet in Frameworks */,
 				10696A332B3248F80011FE9B /* FirebaseDatabase in Frameworks */,
 				100634972B1303DA005CF4CB /* AlertToast in Frameworks */,
 				17B0689C6B5B8076204FC69D /* Pods_GolfApp.framework in Frameworks */,
@@ -390,6 +390,7 @@
 				10B1BB562CC4496400BC8BE8 /* PostsWithAdsView.swift */,
 				108A1B542CC58E8C00F0861E /* NativeAdView.swift */,
 				108A1B5A2CC6080900F0861E /* NativeAdView.xib */,
+				10B040222CD19B8000F565AE /* MoreOptionsSheetView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -481,7 +482,6 @@
 				10696A342B3249030011FE9B /* FirebaseMessaging */,
 				10696A362B3249390011FE9B /* FirebaseFirestore */,
 				107B54232BB0EB4000C00654 /* GoogleMobileAds */,
-				10A72EEC2CBDB98200AD78F1 /* BottomSheet */,
 			);
 			productName = GolfApp;
 			productReference = 108D36C32AF57C6A005DAD22 /* GolfApp.app */;
@@ -584,7 +584,6 @@
 				100634952B1303DA005CF4CB /* XCRemoteSwiftPackageReference "AlertToast" */,
 				10696A2D2B3245910011FE9B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				107B54222BB0EB4000C00654 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 108D36C42AF57C6A005DAD22 /* Products */;
 			projectDirPath = "";
@@ -747,6 +746,7 @@
 				108C329B2B1FD103008F59F9 /* OtherUserProfileView.swift in Sources */,
 				10B1D3612B0D42C2004D45E7 /* NewMessageView.swift in Sources */,
 				108C32992B1D4AB3008F59F9 /* NotificationViewModel.swift in Sources */,
+				10B040232CD19B8000F565AE /* MoreOptionsSheetView.swift in Sources */,
 				108C32972B1976FB008F59F9 /* PostDetailView.swift in Sources */,
 				1032E9C82AF665BF00001048 /* User.swift in Sources */,
 				108D36C72AF57C6A005DAD22 /* GolfAppApp.swift in Sources */,
@@ -1209,14 +1209,6 @@
 				minimumVersion = 11.2.0;
 			};
 		};
-		10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lucaszischka/BottomSheet.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1254,11 +1246,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 107B54222BB0EB4000C00654 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
-		};
-		10A72EEC2CBDB98200AD78F1 /* BottomSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 10A72EEB2CBDB97700AD78F1 /* XCRemoteSwiftPackageReference "BottomSheet" */;
-			productName = BottomSheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

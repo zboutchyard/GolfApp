@@ -37,7 +37,7 @@ extension AuthViewModel {
             if let userPosts = self.user?.posts {
                 await self.fetchAllPostsInUserObject(postIds: userPosts)
             }
-            setupRandomAdPositions(for: posts?.count ?? 0)
+            setupRandomAdPositions(for: posts.count)
             self.state = .loaded
         }
     }

@@ -5,10 +5,10 @@
 ////  Created by Zack Boutchyard on 10/24/24.
 ////
 //
-//import WidgetKit
-//import SwiftUI
+// import WidgetKit
+// import SwiftUI
 //
-//struct Provider: AppIntentTimelineProvider {
+// struct Provider: AppIntentTimelineProvider {
 //    func placeholder(in context: Context) -> SimpleEntry {
 //        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
 //    }
@@ -31,17 +31,17 @@
 //        return Timeline(entries: entries, policy: .atEnd)
 //    }
 //
-////    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-////        // Generate a list containing the contexts this widget is relevant in.
-////    }
-//}
+/// /    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
+/// /        // Generate a list containing the contexts this widget is relevant in.
+/// /    }
+// }
 //
-//struct SimpleEntry: TimelineEntry {
+// struct SimpleEntry: TimelineEntry {
 //    let date: Date
 //    let configuration: ConfigurationAppIntent
-//}
+// }
 //
-//struct LiveRoundEntryView : View {
+// struct LiveRoundEntryView : View {
 //    var entry: Provider.Entry
 //
 //    var body: some View {
@@ -53,9 +53,9 @@
 //            Text(entry.configuration.favoriteEmoji)
 //        }
 //    }
-//}
+// }
 //
-//struct LiveRound: Widget {
+// struct LiveRound: Widget {
 //    let kind: String = "LiveRound"
 //
 //    var body: some WidgetConfiguration {
@@ -64,9 +64,9 @@
 //                .containerBackground(.fill.tertiary, for: .widget)
 //        }
 //    }
-//}
+// }
 //
-//extension ConfigurationAppIntent {
+// extension ConfigurationAppIntent {
 //    fileprivate static var smiley: ConfigurationAppIntent {
 //        let intent = ConfigurationAppIntent()
 //        intent.favoriteEmoji = "😀"
@@ -78,11 +78,11 @@
 //        intent.favoriteEmoji = "🤩"
 //        return intent
 //    }
-//}
+// }
 //
-//#Preview(as: .systemSmall) {
+// #Preview(as: .systemSmall) {
 //    LiveRound()
-//} timeline: {
+// } timeline: {
 //    SimpleEntry(date: .now, configuration: .smiley)
 //    SimpleEntry(date: .now, configuration: .starEyes)
-//}
+// }

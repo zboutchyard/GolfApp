@@ -100,7 +100,7 @@ struct Step3View: View {
             )
             
             .navigationDestination(isPresented: $isStepComplete) {
-                LandingView(authViewModel: AuthViewModel())
+                LandingView()
                     .navigationBarBackButtonHidden()
                     .toolbar(.hidden)
             }

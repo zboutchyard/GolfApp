@@ -56,11 +56,14 @@ struct ChatView: View {
             Divider()
             MessageField(chatId: chatId, messageViewmodel: msgViewModel, otherUser: otherUser)
                     .environmentObject(msgViewModel)
-        } .onAppear {
+        }
+        .onAppear {
             msgViewModel.fetchChat(chatId: chatId) { fetchedChat in
                 messages = fetchedChat?.messages ?? []
             }
         }
+        .backButtonToolbar()
+        .navigationBarBackButtonHidden()
     }
     private func hideKeyboard() {
            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

@@ -11,7 +11,7 @@ struct NewMessageView: View {
     @State var user: User
     @ObservedObject var authViewModel: AuthViewModel
     @ObservedObject var msgViewModel: MessageViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @State var otherUsers: [OtherUser] = []
     @Binding var isPresented: Bool
     @State var isChatViewTriggered: Bool = false

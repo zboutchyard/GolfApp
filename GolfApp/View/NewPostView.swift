@@ -68,6 +68,7 @@ struct NewPostView: View {
                     Text("Post")
                 })                       
                 .buttonStyle(.borderedProminent)
+                .tint(Color.green.opacity(0.2))
                 .disabled((data == nil) && postText.isEmpty)
                 
             }
@@ -88,6 +89,7 @@ struct NewPostView: View {
             
             TextField("tell me something..", text: $postText, axis: .vertical)
                 .lineLimit(12)
+                .padding(.horizontal)
             if let selectedImage = self.selectedImage {
                 Image(uiImage: selectedImage)
                     .resizable()

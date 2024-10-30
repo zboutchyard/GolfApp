@@ -5,7 +5,7 @@ struct PostsWithAdsView: View {
     @State private var commentBtnClicked: Bool = false
     @State private var userClicked: Bool = false
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
     @State var user: User?
     @State var post: Post
@@ -15,6 +15,8 @@ struct PostsWithAdsView: View {
     @State var otherUser: OtherUser?
     @State var otherUserClicked: Bool = false
     @State var index: Int
+    @Binding var shouldShowMoreOptionsView: Bool
+    @Binding var selectedPost: Post
     
     var body: some View {
         NavigationStack {
@@ -29,7 +31,9 @@ struct PostsWithAdsView: View {
                             msgViewModel: msgViewModel,
                             user: user,
                             post: post,
-                            otherUser: authViewModel.postOtherUsers?[post.user])
+                            otherUser: authViewModel.postOtherUsers?[post.user],
+                            shouldShowMoreOptionsView: $shouldShowMoreOptionsView,
+                            selectedPost: $selectedPost)
                     }
                 }
             }

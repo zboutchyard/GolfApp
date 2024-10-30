@@ -16,13 +16,13 @@ struct ScoreCardView: View {
     @State var searchText: String = ""
     @State private var filteredUsers: [OtherUser]?
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var searchModel: CourseSearchViewModel
+    @ObservedObject var searchModel: CourseSearchViewModel
     @State var shouldCloseSearch: Bool = false
     @State var selectedCourseName: String = ""
     @State var isCourseSheetPresented: Bool = false
     @State private var showCourseList = false
     @State var isRoundStarted: Bool = false
-    @ObservedObject var liveRoundManager: LiveRoundManager = LiveRoundManager()
+    @StateObject var liveRoundManager: LiveRoundManager = LiveRoundManager()
     
     @State var selectedTeeOption = TeeOption(name: "Blue", color: .blue)
     
@@ -75,7 +75,7 @@ struct ScoreCardView: View {
                     totalHoles: selectedHoles,
                     user: user,
                     otherUsers: otherUsers,
-                    selectedCourseName: selectedCourseName)
+                    selectedCourseName: selectedCourseName), liveRoundManager: liveRoundManager
                 )
                 .navigationBarBackButtonHidden()
             }
@@ -117,7 +117,6 @@ struct ScoreCardView: View {
         .padding(.leading, 5)
         .padding(.top)
     }
-    
     
     @ViewBuilder
     var addPlayerButton: some View {
@@ -240,7 +239,7 @@ struct ScoreCardView: View {
 }
 
 struct CourseSearchView: View {
-    @StateObject var searchModel: CourseSearchViewModel
+    @ObservedObject var searchModel: CourseSearchViewModel
     @Binding var selectedCourseName: String
     @Binding var showCourseList: Bool
     
@@ -326,7 +325,7 @@ struct HowManyHolesView: View {
                 ZStack {
                     HStack(spacing: 1) {
                         RoundedCorner(radius: 20, corners: [.topLeft, .bottomLeft])
-                            .fill(selectedHoles == 9 ? Color.blue : Color.gray.opacity(0.2))
+                            .fill(selectedHoles == 9 ? Color.green.opacity(0.2) : Color.gray.opacity(0.2))
                             .frame(height: 50)
                             .overlay {
                                 Button {
@@ -335,10 +334,10 @@ struct HowManyHolesView: View {
                                     Text("9")
                                 }
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(selectedHoles == 9 ? .white : .blue)
+                                .foregroundColor(selectedHoles == 9 ? .black : .green)
                             }
                         RoundedCorner(radius: 20, corners: [.topRight, .bottomRight])
-                            .fill(selectedHoles == 18 ? Color.blue : Color.gray.opacity(0.2))
+                            .fill(selectedHoles == 18 ? Color.green.opacity(0.2) : Color.gray.opacity(0.2))
                             .frame(height: 50)
                             .overlay {
                                 Button {
@@ -347,7 +346,7 @@ struct HowManyHolesView: View {
                                     Text("18")
                                 }
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(selectedHoles == 18 ? .white : .blue)
+                                .foregroundColor(selectedHoles == 18 ? .black : .green)
                             }
                     }
                 }

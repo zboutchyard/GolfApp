@@ -11,7 +11,7 @@ import AlertToast
 
 struct ProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
     @State private var badgeViewBtnSelected: Bool = false
     @State private var profileBtnSelected: Bool = true
@@ -27,6 +27,7 @@ struct ProfileView: View {
     @State var image: UIImage?
     @State var isSubmitButtonPressed: Bool = false
     @State var isLoading: Bool = false
+    @State var shouldShowMoreOptionsView: Bool = false
     
     var body: some View {
         if isLoading {
@@ -51,7 +52,7 @@ struct ProfileView: View {
                                         Text("Profile")
                                     })
                                     .buttonStyle(.bordered)
-                                    .tint(profileBtnSelected ? .blue : nil)
+                                    .tint(profileBtnSelected ? .green : .gray)
                                     Button(action: {
                                         badgeViewBtnSelected = true
                                         profileBtnSelected = false
@@ -61,7 +62,7 @@ struct ProfileView: View {
                                         Text("Badges")
                                     })
                                     .buttonStyle(.bordered)
-                                    .tint(badgeViewBtnSelected ? .blue : nil)
+                                    .tint(badgeViewBtnSelected ? .green : .gray)
                                     Button(action: {
                                         badgeViewBtnSelected = false
                                         profileBtnSelected = false
@@ -71,7 +72,7 @@ struct ProfileView: View {
                                         Text("Friends")
                                     })
                                     .buttonStyle(.bordered)
-                                    .tint(friendsListBtnSelected ? .blue : nil)
+                                    .tint(friendsListBtnSelected ? .green : .gray)
                                 } .padding(.vertical, 5)
                                 
                                 if profileBtnSelected {
@@ -101,8 +102,10 @@ struct ProfileView: View {
                                         }, label: {
                                             Text("Add friend")
                                             
-                                        }).buttonStyle(.borderedProminent)
-                                            .padding(.trailing)
+                                        })
+                                        .buttonStyle(.borderedProminent)
+                                        .padding(.trailing)
+                                        .tint(.green)
                                     }
                                     TextField("search friends", text: $searchText)
                                         .padding(4)
@@ -174,7 +177,6 @@ struct ProfileView: View {
             .navigationDestination(isPresented: $isEditButtonClicked, destination: {
                 if let user = authViewModel.user {
                     EditProfileView(user: user, authViewModel: authViewModel, isSubmitButtonPressed: $isSubmitButtonPressed)
-                        .navigationTitle("Update profile")
                 }
             })
             .navigationDestination(isPresented: $isAddFriendClicked) {
@@ -209,7 +211,6 @@ struct ProfileView: View {
                 filterUsers()
             }
         }
-       
     }
     
     private func filterUsers() {

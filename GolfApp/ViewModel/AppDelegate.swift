@@ -15,10 +15,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 
+        FirebaseApp.configure()
         Messaging.messaging().delegate = self
         
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-//        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "0f8e74103cea9968240727c769f44a07"]
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "0f8e74103cea9968240727c769f44a07"]
 
         if #available(iOS 10.0, *) {
           // For iOS 10 display notification (sent via APNS)
@@ -33,8 +34,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
           UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
           application.registerUserNotificationSettings(settings)
         }
-
-        application.registerForRemoteNotifications()
+        Task {
+            try? await Task.sleep(nanoseconds: 5_000_000)
+            application.registerForRemoteNotifications()
+        }
         return true
     }
 

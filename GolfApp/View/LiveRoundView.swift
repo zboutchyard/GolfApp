@@ -6,22 +6,21 @@
 //
 
 import SwiftUI
-import BottomSheet
 
 struct LiveRoundView: View {
     @State var score: Int = 0
     @FocusState var isTextFieldFocused: Bool
     @State var likeBtnClicked: Bool = false
     @State var isDismissClicked: Bool = false
-    //    @StateObject var authViewModel: AuthViewModel
     @StateObject var liveRoundViewModel: LiveRoundViewModel
     @Environment(\.dismiss) var dismiss
     @State var presentationDetent: PresentationDetent = .height(200)
     @State private var isSheetPresented: Bool = false
-    @State var bottomSheetPosition: BottomSheetPosition = .relative(0.025)
+    @ObservedObject var liveRoundManager: LiveRoundManager
     
-    init(liveRoundViewModel: LiveRoundViewModel) {
+    init(liveRoundViewModel: LiveRoundViewModel, liveRoundManager: LiveRoundManager) {
         _liveRoundViewModel = StateObject(wrappedValue: liveRoundViewModel)
+        _liveRoundManager = ObservedObject(wrappedValue: liveRoundManager)
     }
     
     var body: some View {
@@ -51,7 +50,10 @@ struct LiveRoundView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
-                    isDismissClicked.toggle()
+                    Task {
+                        await liveRoundManager.cancelAllRunningActivities()
+                        isDismissClicked.toggle()
+                    }
                 }) {
                     Image(systemName: "xmark")
                         .padding(10)

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OtherUserProfileView: View {
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @State var otherUser: OtherUser
     @State var user: User
     @ObservedObject var msgViewModel: MessageViewModel
@@ -17,10 +17,17 @@ struct OtherUserProfileView: View {
     @State var chatId: String?
     @State var isLoading: Bool = true
     @State private var isInlineTitle = false
+    @State var shouldShowMoreOptionsView: Bool = false
+
     var body: some View {
             ScrollView {
                 VStack(spacing: 0) {
-                    VStack {
+                    ZStack(alignment: .bottom) {
+                        Image("golf-background")
+                            .resizable()
+                            .ignoresSafeArea()
+                            .frame(maxHeight: 300)
+                        Spacer()
                         if let data = otherUser.profilePicData, let uiImage = UIImage(data: data) {
                             Image(uiImage: uiImage)
                                 .resizable()
@@ -42,9 +49,7 @@ struct OtherUserProfileView: View {
                                 .padding(22)
                         }
                     }
-                    
-                    .frame(maxWidth: .infinity)
-                    .background(Image("golf-background").resizable().ignoresSafeArea())
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     HStack {
                         Spacer()
                         Text("\(otherUser.firstName) \(otherUser.lastName)")
@@ -90,6 +95,7 @@ struct OtherUserProfileView: View {
                             Text("Message")
                         })
                         .buttonStyle(.borderedProminent)
+                        .tint(.green)
                         .padding()
                         Spacer()
                     }
@@ -98,15 +104,12 @@ struct OtherUserProfileView: View {
                         notificationViewModel: notificationViewModel,
                         msgViewModel: msgViewModel,
                         otherUser: otherUser,
-                        isOtherUserProfile: true)
+                        isOtherUserProfile: true, shouldShowMoreOptionsView: false)
                     .background(Color.whiteOrDark)
                     
                 }
                 .background(Color.whiteOrDark)
                 
-            }
-            .background {
-                scrollDetector()
             }
             .ignoresSafeArea()
             .navigationBarBackButtonHidden()
@@ -126,17 +129,6 @@ struct OtherUserProfileView: View {
                 }
             }
             .background(Color.whiteOrDark)
-    }
-    
-    private func scrollDetector() -> some View {
-        GeometryReader { proxy in
-            let minY = proxy.frame(in: .local).minY
-            let isUnderToolbar = minY - proxy.safeAreaInsets.top - 40 < 0
-            Color.clear
-                .onChange(of: isUnderToolbar) { _, newVal in
-                    isInlineTitle = newVal
-                }
-        }
     }
 }
 

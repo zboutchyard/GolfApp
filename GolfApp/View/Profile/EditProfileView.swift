@@ -79,8 +79,8 @@ struct EditProfileView: View {
                                     .padding()
                                     .background(
                                         RoundedRectangle(cornerRadius: 25)
-                                            .stroke(interestArray.contains(item) ? Color.blue : Color.gray, lineWidth: 2)
-                                            .fill(interestArray.contains(item) ? Color.blue : Color.white))
+                                            .stroke(interestArray.contains(item) ? Color.green.opacity(0.2) : Color.gray, lineWidth: 2)
+                                            .fill(interestArray.contains(item) ? Color.green.opacity(0.2) : Color.white))
                             })
                         }
                     }
@@ -170,6 +170,10 @@ struct EditProfileView: View {
                     convertStringToArray()
                 }
         }
+        .backButtonToolbar()
+        .navigationBarBackButtonHidden()
+        .navigationTitle("Update profile")
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showCourseList) {
             switch searchModel.state {
             case .loading:

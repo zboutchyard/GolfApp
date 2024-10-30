@@ -38,7 +38,7 @@ struct LoginView: View {
                     .padding(.top)
             }
             .navigationDestination(isPresented: $isLoggedIn) {
-                LandingView(authViewModel: AuthViewModel())
+                LandingView()
                         .navigationBarBackButtonHidden()
                         .toolbar(.hidden)
             }

@@ -12,7 +12,7 @@ import Firebase
 struct AllChatsView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @ObservedObject var msgViewModel: MessageViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @State private var prts: [String]?
     @State private var isLoading: Bool = true
     @State private var isAddMessageButtonClicked = false

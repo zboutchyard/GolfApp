@@ -12,7 +12,7 @@ struct LandingView: View {
     @State private var isMessageBtnClicked = false
     @State private var isSearchBtnClicked = false
     @State private var searchText: String = ""
-    @StateObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel: AuthViewModel = .init()
     @StateObject var msgViewModel: MessageViewModel = .init()
     @StateObject var notificationViewModel: NotificationViewModel = .init()
     @StateObject var searchViewModel: CourseSearchViewModel = .init()
@@ -20,9 +20,8 @@ struct LandingView: View {
     @State var isProfileView = false
     @State private var selectedTab: Int = 0
     
-    init(authViewModel: AuthViewModel) {
+    init() {
         UITabBar.appearance().backgroundColor = UIColor.whiteOrDark
-        _authViewModel = StateObject(wrappedValue: authViewModel)
     }
     
     var body: some View {

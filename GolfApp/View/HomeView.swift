@@ -10,14 +10,16 @@ import AlertToast
 
 struct HomeView: View {
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
     @State private var postSubmissionText: String = ""
     @State var isAddPostClicked: Bool = false
     @State var isPostSubmitted: Bool = false
     @State private var postCounter = 0
     @State var shouldShowImagePicker: Bool = false
-    
+    @State var shouldShowMoreOptionsView: Bool = false
+    @State var selectedPost: Post = Post(id: "", text: "", timeStamp: Date.now, user: "")
+
     var body: some View {
         
         ScrollView {
@@ -27,7 +29,7 @@ struct HomeView: View {
                 VStack {
                     HStack {
                         HStack {
-                            userProfileImage
+                            UserProfileImage(authViewModel: authViewModel)
                             inputPostView
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,10 +43,6 @@ struct HomeView: View {
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
                         NewPostView(authViewModel: authViewModel, user: user, shouldAutoOpenImagePicker: $shouldShowImagePicker, onPostSubmitted: {
-                            authViewModel.state = .loading
-                            authViewModel.fetchAllPostsFromFirebase { _ in
-                                authViewModel.state = .loaded
-                            }
                             isPostSubmitted = true
                         })
                         .onDisappear {
@@ -63,6 +61,9 @@ struct HomeView: View {
         .toast(isPresenting: $isPostSubmitted, alert: {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
+        .sheet(isPresented: $shouldShowMoreOptionsView) {
+            MoreOptionsSheetView(authViewModel: authViewModel, post: $selectedPost)
+        }
     }
     
     @ViewBuilder
@@ -78,32 +79,34 @@ struct HomeView: View {
         }
     }
     
-    @ViewBuilder
-    var userProfileImage: some View {
-        VStack {
-            if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .background {
-                        Circle().fill(Color("AppGray"))
-                    }
-                self.foregroundStyle(.whiteOrDark)
-            } else {
-                Image(systemName: "person.fill")
-                    .scaledToFill()
-                    .clipShape(Circle())
-                    .frame(width: 50, height: 50)
-                    .background {
-                        Circle().fill(Color("AppGray"))
-                    }
-                    .foregroundStyle(.whiteOrDark)
+    public struct UserProfileImage: View {
+        @ObservedObject var authViewModel: AuthViewModel
+        var body: some View {
+            VStack {
+                if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        .background {
+                            Circle().fill(Color("AppGray"))
+                        }
+                    self.foregroundStyle(.whiteOrDark)
+                } else {
+                    Image(systemName: "person.fill")
+                        .scaledToFill()
+                        .clipShape(Circle())
+                        .frame(width: 50, height: 50)
+                        .background {
+                            Circle().fill(Color("AppGray"))
+                        }
+                        .foregroundStyle(.whiteOrDark)
+                }
             }
         }
     }
-    
+   
     @ViewBuilder
     var inputImageView: some View {
         Button(action: {
@@ -121,18 +124,19 @@ struct HomeView: View {
     @ViewBuilder
     var postAndAdsView: some View {
         VStack {
-            if let posts = authViewModel.posts {
-                ForEach(posts.indices, id: \.self) { index in
-                    let post = posts[index]
-                    if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
-                        PostsWithAdsView(
-                            authViewModel: authViewModel,
-                            notificationViewModel: notificationViewModel,
-                            msgViewModel: msgViewModel,
-                            user: user,
-                            post: post,
-                            otherUser: otherUser[post.user], index: index)
-                    }
+            ForEach(authViewModel.posts, id: \.id) { post in
+                if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
+                    PostsWithAdsView(
+                        authViewModel: authViewModel,
+                        notificationViewModel: notificationViewModel,
+                        msgViewModel: msgViewModel,
+                        user: user,
+                        post: post,
+                        otherUser: otherUser[post.user],
+                        index: authViewModel.posts.firstIndex(where: { $0.id == post.id }) ?? 0, // Optional: for index reference if needed
+                        shouldShowMoreOptionsView: $shouldShowMoreOptionsView,
+                        selectedPost: $selectedPost
+                    )
                 }
             }
         }

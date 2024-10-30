@@ -57,6 +57,7 @@ struct ProfileHeadingView: View {
                     .padding(.trailing)
                     .padding()
                     .buttonStyle(.borderedProminent)
+                    .tint(.green)
                 }
                 if isEditButtonClicked {
                     Button(action: {

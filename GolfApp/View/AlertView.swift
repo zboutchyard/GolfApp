@@ -12,7 +12,7 @@ import FirebaseAuth
 struct AlertView: View {
     @State private var otherUser: OtherUser?
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
     @State var isRequestAccepted: Bool = false
     @State var isRequestDeclined: Bool = false
@@ -154,6 +154,7 @@ struct AlertView: View {
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(.plain)
                                 .padding(.horizontal)
+                                .background(!notification.hasBeenRead ? Color.whiteOrGray : Color.lightGrayOrDark)
                                 Divider()
                             }
                         }

@@ -9,7 +9,7 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-//struct LiveRoundControl: ControlWidget {
+// struct LiveRoundControl: ControlWidget {
 //    static let kind: String = "com.zackboutchyard.golfApp.GolfApp.LiveRound"
 //
 //    var body: some ControlWidgetConfiguration {
@@ -28,9 +28,9 @@ import WidgetKit
 //        .displayName("Timer")
 //        .description("A an example control that runs a timer.")
 //    }
-//}
+// }
 
-//extension LiveRoundControl {
+// extension LiveRoundControl {
 //    struct Value {
 //        var isRunning: Bool
 //        var name: String
@@ -46,16 +46,16 @@ import WidgetKit
 //            return LiveRoundControl.Value(isRunning: isRunning, name: configuration.timerName)
 //        }
 //    }
-//}
+// }
 
-//struct TimerConfiguration: ControlConfigurationIntent {
+// struct TimerConfiguration: ControlConfigurationIntent {
 //    static let title: LocalizedStringResource = "Timer Name Configuration"
 //
 //    @Parameter(title: "Timer Name", default: "Timer")
 //    var timerName: String
-//}
+// }
 //
-//struct StartTimerIntent: SetValueIntent {
+// struct StartTimerIntent: SetValueIntent {
 //    static let title: LocalizedStringResource = "Start a timer"
 //
 //    @Parameter(title: "Timer Name")
@@ -74,4 +74,4 @@ import WidgetKit
 //        // Start the timer…
 //        return .result()
 //    }
-//}
+// }

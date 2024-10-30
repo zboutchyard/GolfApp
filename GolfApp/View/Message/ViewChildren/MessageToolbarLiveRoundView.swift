@@ -10,8 +10,6 @@ struct MessageToolbarLiveRoundView: View {
         //        @State var post: Post
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
-        //        var onCommentAdded: () -> Void
-        //        @StateObject var authViewModel: AuthViewModel = AuthViewModel()
         var body: some View {
             HStack {
                 CustomTextFieldWithTextFieldFocused(

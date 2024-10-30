@@ -13,14 +13,16 @@ struct PostDetailView: View {
     @State var userClicked: Bool = false
     @State var otherUsers: [String: OtherUser] = [:]
     @ObservedObject var authViewModel: AuthViewModel
-    @StateObject var notificationViewModel: NotificationViewModel
+    @ObservedObject var notificationViewModel: NotificationViewModel
     @ObservedObject var msgViewModel: MessageViewModel
-    @FocusState var isTextFieldFocused: Bool
+    @FocusState private var isTextFieldFocused: Bool
     @State var isLoading: Bool = false
     @State var user: User?
     @State var otherUser: OtherUser?
     @State var selectedTab: Int?
     @Environment(\.dismiss) private var dismiss
+    @State var shouldShowMoreOptionsView: Bool = false
+    @State var selectedPost: Post = Post(id: "", text: "", timeStamp: Date.now, user: "")
     
     var body: some View {
         ScrollView {
@@ -33,7 +35,7 @@ struct PostDetailView: View {
                     post: post,
                     isPostDetailView: true,
                     isTextFieldFocused: _isTextFieldFocused,
-                    otherUser: otherUser)
+                    otherUser: otherUser, shouldShowMoreOptionsView: $shouldShowMoreOptionsView, selectedPost: $selectedPost)
                 Divider()
                 if let comments = post.comments {
                     ScrollViewReader { _ in
@@ -88,27 +90,31 @@ struct PostDetailView: View {
                 }
             }
                
+               
         }
         .padding(.top, 20)
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                            Image(systemName: "chevron.left")
+                VStack {
+                    HStack {
+                        Button {
+                            dismiss()
+                        } label: {
+                                Image(systemName: "chevron.left")
+                                    .tint(Color.heading)
+                        }
+                        if let otherUser = otherUser, let post = post {
+                            TopNavDetail(otherUser: otherUser, post: post)
                                 .tint(Color.heading)
-                    }
-                    if let otherUser = otherUser, let post = post {
-                        TopNavDetail(otherUser: otherUser, post: post)
-                            .tint(Color.heading)
-                    } else {
-                        if let user = user, let post = post {
-                            TopNavDetail(user: user, post: post)
-                                .tint(Color.heading)
+                        } else {
+                            if let user = user, let post = post {
+                                TopNavDetail(user: user, post: post)
+                                    .tint(Color.heading)
+                            }
                         }
                     }
+                    Spacer()
                 }
             }
         }
@@ -129,7 +135,7 @@ struct PostDetailView: View {
         @State var post: Post
         @State private var comment: String = ""
         @FocusState var isTextFieldFocused: Bool
-        @StateObject var authViewModel: AuthViewModel
+        @ObservedObject var authViewModel: AuthViewModel
         var onCommentAdded: () -> Void
         
         var body: some View {
