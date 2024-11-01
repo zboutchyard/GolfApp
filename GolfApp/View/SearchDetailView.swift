@@ -43,6 +43,15 @@ struct SearchDetailView: View {
                 }
             }
         }
+        .toolbar(content: {
+            ToolbarItem(placement: .principal) {
+                TextField("search users", text: $searchText)
+                    .padding(.leading)
+                    .padding(4)
+                    .font(.system(size: 20))
+                    .background(RoundedRectangle(cornerRadius: 10).stroke(Color.heading, lineWidth: .init(1.0)))
+            }
+        })
         .navigationBarBackButtonHidden()
         .backButtonToolbar()
         .navigationDestination(isPresented: $isUserSelected) {

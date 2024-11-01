@@ -107,7 +107,7 @@ struct NewMessageView: View {
                                         .padding(.leading)
                                         .padding(4)
                                         .font(.system(size: 20))
-                                        .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
+                                        .background(RoundedRectangle(cornerRadius: 10).stroke(Color.heading, lineWidth: .init(1.0)))
                                 }
                             })
                     

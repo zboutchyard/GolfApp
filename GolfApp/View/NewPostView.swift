@@ -109,7 +109,7 @@ struct NewPostView: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         selectedImage = inputImage
-        data = selectedImage?.jpegData(compressionQuality: 0.2)
+        data = selectedImage?.jpegData(compressionQuality: 0.1)
     }
 }
 

@@ -152,7 +152,8 @@ struct RegisterView: View {
                             isRegistered = true
                         }
                     }
-                }.buttonStyle(.borderedProminent)
+                }
+                .buttonStyle(.borderedProminent)
                     .padding(.leading)
                     .padding(.trailing)
                     .padding(.top)

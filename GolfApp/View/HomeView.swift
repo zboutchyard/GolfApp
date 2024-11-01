@@ -19,17 +19,15 @@ struct HomeView: View {
     @State var shouldShowImagePicker: Bool = false
     @State var shouldShowMoreOptionsView: Bool = false
     @State var selectedPost: Post = Post(id: "", text: "", timeStamp: Date.now, user: "")
-
+    
     var body: some View {
         
         ScrollView {
-            if authViewModel.state == .loading {
-                LoadingView()
-            } else if authViewModel.state == .loaded {
+            VStack {
                 VStack {
                     HStack {
                         HStack {
-                            UserProfileImage(authViewModel: authViewModel)
+                            profileImageView
                             inputPostView
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,7 +40,9 @@ struct HomeView: View {
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
                     if let user = authViewModel.user {
-                        NewPostView(authViewModel: authViewModel, user: user, shouldAutoOpenImagePicker: $shouldShowImagePicker, onPostSubmitted: {
+                        NewPostView(authViewModel: authViewModel, user: user,
+                                    shouldAutoOpenImagePicker: $shouldShowImagePicker,
+                                    onPostSubmitted: {
                             isPostSubmitted = true
                         })
                         .onDisappear {
@@ -50,20 +50,24 @@ struct HomeView: View {
                         }
                     }
                 })
-            } else {
-                VStack {
-                    Text("Error")
-                }
+                
+            }
+            .sheet(isPresented: $shouldShowMoreOptionsView) {
+                MoreOptionsSheetView(authViewModel: authViewModel, post: $selectedPost)
+                    .presentationDetents([.height(400)])
             }
         }
+        
         .frame(maxHeight: .infinity)
         .background(Color.blackOrGray)
         .toast(isPresenting: $isPostSubmitted, alert: {
             AlertToast(displayMode: .alert, type: .systemImage("checkmark", .mint), title: "Post submitted")
         })
-        .sheet(isPresented: $shouldShowMoreOptionsView) {
-            MoreOptionsSheetView(authViewModel: authViewModel, post: $selectedPost)
-        }
+    }
+    
+    @ViewBuilder
+    var profileImageView: some View {
+        UserProfileImage(authViewModel: authViewModel, profileImageData: authViewModel.user?.profilePicData)
     }
     
     @ViewBuilder
@@ -79,34 +83,6 @@ struct HomeView: View {
         }
     }
     
-    public struct UserProfileImage: View {
-        @ObservedObject var authViewModel: AuthViewModel
-        var body: some View {
-            VStack {
-                if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        .background {
-                            Circle().fill(Color("AppGray"))
-                        }
-                    self.foregroundStyle(.whiteOrDark)
-                } else {
-                    Image(systemName: "person.fill")
-                        .scaledToFill()
-                        .clipShape(Circle())
-                        .frame(width: 50, height: 50)
-                        .background {
-                            Circle().fill(Color("AppGray"))
-                        }
-                        .foregroundStyle(.whiteOrDark)
-                }
-            }
-        }
-    }
-   
     @ViewBuilder
     var inputImageView: some View {
         Button(action: {

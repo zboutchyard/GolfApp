@@ -94,7 +94,7 @@ struct LandingView: View {
                         notificationViewModel: notificationViewModel, msgViewModel: msgViewModel
                     )
                     .refreshable {
-                        await authViewModel.fetchAllDataForLandingView()
+//                        await authViewModel.fetchAllDataForLandingView()
                         selectedTab = selectedTab
                     }
                     .tabItem {
@@ -109,7 +109,7 @@ struct LandingView: View {
                         notificationViewModel: notificationViewModel,
                         msgViewModel: msgViewModel)
                     .refreshable {
-                        await authViewModel.fetchAllDataForLandingView()
+//                        await authViewModel.fetchAllDataForLandingView()
                         selectedTab = selectedTab
                     }
                     .tabItem {
@@ -130,6 +130,12 @@ struct LandingView: View {
             .background(Color.whiteOrDark)
             .padding(.top, 0)
         }
+        .task {
+            if authViewModel.isFirstLoad {
+                await authViewModel.fetchAllDataForLandingView()
+            }
+            selectedTab = selectedTab
+        }
         .background(Color.whiteOrDark)
         .padding(.top, 0)
         .navigationDestination(isPresented: $isMessageBtnClicked) {
@@ -145,24 +151,10 @@ struct LandingView: View {
                 searchText: $searchText,
                 isAddFriendView: .constant(true),
                 notificationViewModel: notificationViewModel)
-            .toolbar(content: {
-                ToolbarItem(placement: .principal) {
-                    TextField("search users", text: $searchText)
-                        .padding(.leading)
-                        .padding(4)
-                        .font(.system(size: 20))
-                        .background(RoundedRectangle(cornerRadius: 30).stroke(Color.heading, lineWidth: .init(1.0)))
-                }
-            })
         }
         .navigationDestination(isPresented: $isSettingsButtonClicked) {
-            SettingsView()
+            SettingsView(authViewModel: authViewModel)
                 .navigationTitle("Settings")
-        }
-        .onAppear {
-            Task {
-                selectedTab = selectedTab
-            }
         }
     }
 }

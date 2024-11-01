@@ -9,6 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseMessaging
+import FirebaseStorage
 
 extension AuthViewModel {
     
@@ -16,7 +17,7 @@ extension AuthViewModel {
     func fetchAllDataForLandingView() async {
         state = .loading
         guard let fetchedUser = await fetchUserDataFromFirebase() else {
-            state = .error // Assuming you have an error state
+            state = .error
             return
         }
         do {
@@ -37,8 +38,11 @@ extension AuthViewModel {
             if let userPosts = self.user?.posts {
                 await self.fetchAllPostsInUserObject(postIds: userPosts)
             }
-            setupRandomAdPositions(for: posts.count)
+            if !posts.isEmpty {
+                setupRandomAdPositions(for: posts.count)
+            }
             self.state = .loaded
+            self.isFirstLoad = false
         }
     }
     
@@ -70,9 +74,10 @@ extension AuthViewModel {
         }
     }
     
+    @MainActor
     func fetchUserDataFromFirebase() async -> User? {
         await withCheckedContinuation { continuation in
-            Task { @MainActor in
+            Task {
                 fetchUserDataFromFirebase { fetchedUser in
                     continuation.resume(returning: fetchedUser)
                 }
@@ -80,9 +85,10 @@ extension AuthViewModel {
         }
     }
     
+    @MainActor
     func fetchAllPostsFromFirebase() async -> [Post]? {
-        await withCheckedContinuation { continuation in
-            fetchAllPostsFromFirebase { fetchedPost in
+         await withCheckedContinuation { continuation in
+             fetchAllPostsFromFirebase { fetchedPost in
                 continuation.resume(returning: fetchedPost)
             }
         }
@@ -117,18 +123,31 @@ extension AuthViewModel {
         }
     }
     
-    func saveUserData(user: User, completion: @escaping (Bool, Error?) -> Void) {
+    func saveUserData(user: User, profilePicData: Data?, completion: @escaping (Bool, Error?) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {
             completion(false, nil)
             return
         }
+        let storageReference = Storage.storage().reference().child("\(UUID().uuidString)")
         let database = Firestore.firestore()
         let usersRef = database.collection("Users").document(uid)
+        
+        if let profilePicData = profilePicData {
+            if let compressedImage = UIImage(data: profilePicData)?.jpegData(compressionQuality: 0.1) {
+                storageReference.putData(compressedImage, metadata: nil) { (metadata, _) in
+                    guard metadata != nil else {
+                        return
+                    }
+                }
+            }
+        }
+        
         // Prepare the data dictionary
         var data: [String: Any] = [
             "firstName": user.firstName,
             "lastName": user.lastName,
-            "email": user.email
+            "email": user.email,
+            "profilePic": profilePicData != nil ? storageReference.name : ""
         ]
         // Optional fields
         if let bio = user.bio { data["bio"] = bio }

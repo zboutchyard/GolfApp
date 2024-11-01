@@ -15,6 +15,7 @@ import FirebaseMessaging
 import FirebaseCore
 
 class AuthViewModel: ObservableObject {
+    @Published var isFirstLoad: Bool = true
     @Published var otherUsers: [OtherUser]?
     @Published var friends: [OtherUser]?
     @Published var postOtherUsers: [String: OtherUser]? = [:]
@@ -44,17 +45,6 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    init() {
-        if Auth.auth().currentUser != nil {
-            self.isUserLoggedIn = true
-            Task {
-                await fetchAllDataForLandingView()
-            }
-        } else {
-            self.isUserLoggedIn = false
-        }
-    }
-    
     enum ImageState {
         case empty
         case loading(Progress)
@@ -74,6 +64,18 @@ class AuthViewModel: ObservableObject {
             self.isUserLoggedIn = false
         } catch {
             print("error signing out")
+        }
+    }
+    
+    func resetPassword(email: String, completion: @escaping (Error?) -> Void) {
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                print("Error sending password reset email: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Password reset email sent successfully.")
+                completion(nil)
+            }
         }
     }
     
@@ -437,35 +439,6 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-    
-    func uploadPhoto(uiImage: UIImage ) {
-        // make sure that the selected image is not nil
-        guard profileImage != nil else {
-            print("profile image is nil")
-            return
-        }
-        // create the storage reference
-        let storageRef = Storage.storage().reference()
-        
-        // turn our image into data
-        let imageData = uiImage.jpegData(compressionQuality: 0.3)
-        
-        print("image data \(String(describing: imageData))")
-        
-        guard imageData != nil else {
-            return
-        }
-        
-        // specify the file path and name
-        let fileRef = storageRef.child("images/\(UUID().uuidString).jpg")
-        
-        // upload that data
-        _ = fileRef.putData(imageData!, metadata: nil) { metadata, error in
-            if error == nil && metadata != nil {
-                // save the reference to the file in firestore db
-            }
-        }
-    }
 }
 
 extension AuthViewModel {
@@ -518,7 +491,7 @@ extension AuthViewModel {
     @MainActor
     func fetchPhotoData(photoId: String, completion: @escaping (Data?) -> Void) {
         let photoRef = Storage.storage().reference().child("\(photoId)")
-        photoRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+        photoRef.getData(maxSize: 2 * 1024 * 1024) { data, error in
             if error != nil {
                 completion(nil)
             } else {
@@ -653,49 +626,53 @@ extension AuthViewModel {
         }
     }
     
+    @MainActor
     func fetchAllPostsFromFirebase(completion: @escaping ([Post]) -> Void) {
-        Firestore.firestore().collection("Posts").getDocuments { [weak self] (snapshot, error) in
+        Firestore.firestore().collection("Posts").getDocuments { snapshot, error in
             guard let snapshot = snapshot, error == nil else {
                 print("Error fetching posts:", error?.localizedDescription ?? "Unknown error")
                 completion([])
                 return
             }
             
-            let group = DispatchGroup()
             var tempPosts: [Post] = []
             
+            // Create a dispatch group to synchronize the completion of all fetch tasks
+            let dispatchGroup = DispatchGroup()
+            
             for document in snapshot.documents {
-                group.enter()
                 do {
                     var post = try document.data(as: Post.self)
                     post.id = document.documentID
                     
                     if let imageRef = post.imageRef {
+                        dispatchGroup.enter()
                         Task {
-                            await self?.fetchPhotoData(photoId: imageRef) { data in
+                            // Fetch photo data asynchronously
+                                self.fetchPhotoData(photoId: imageRef) { data in
                                 post.imageData = data
                                 tempPosts.append(post)
-                                group.leave()
+                                dispatchGroup.leave()
                             }
                         }
-                        
                     } else {
                         tempPosts.append(post)
-                        group.leave()
                     }
                 } catch {
                     print("Error decoding document:", error.localizedDescription)
-                    group.leave()
                 }
             }
             
-            group.notify(queue: .main) {
-                self?.posts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
+            // Call completion after all tasks are complete
+            dispatchGroup.notify(queue: .main) {
+                let sortedPosts = tempPosts.sorted(by: { $0.timeStamp > $1.timeStamp })
+                self.posts = sortedPosts
                 print("Fetched posts successfully")
-                completion(tempPosts)
+                completion(sortedPosts)
             }
         }
     }
+
 }
 
 extension AuthViewModel {

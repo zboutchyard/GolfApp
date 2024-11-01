@@ -13,6 +13,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var uid: String = ""
+    @State private var shouldPresentForgotPasswordView: Bool = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -32,18 +33,27 @@ struct LoginView: View {
                     Task {
                         login()
                     }
-                }.buttonStyle(.borderedProminent)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.top)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.top)
+                Button("Forgot password") {
+                    shouldPresentForgotPasswordView = true
+                }
+                .buttonStyle(.plain)
+                .underline()
             }
             .navigationDestination(isPresented: $isLoggedIn) {
                 LandingView()
-                        .navigationBarBackButtonHidden()
-                        .toolbar(.hidden)
+                    .navigationBarBackButtonHidden()
+                    .toolbar(.hidden)
             }
         }
         .padding()
+        .navigationDestination(isPresented: $shouldPresentForgotPasswordView) {
+            ForgotPasswordView()
+        }
     }
     func login() {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
@@ -55,5 +65,75 @@ struct LoginView: View {
                 isLoggedIn = true
             }
         }
+    }
+}
+
+struct ForgotPasswordView: View {
+    @State var emailText: String = ""
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            Image(systemName: "person.fill.questionmark")
+                .resizable()
+                .frame(width: 110, height: 100)
+                .foregroundStyle(Color.green.opacity(0.4))
+                .padding(.bottom, 20)
+            Text("Forgot your password?")
+                .font(.title2)
+                .fontWeight(.bold)
+                .kerning(0.2)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+            Text("Enter your email below to receive your password reset instructions")
+                .font(.subheadline)
+                .fontWeight(.light)
+                .kerning(0.2)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+            VStack(alignment: .leading) {
+                Text("Email")
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.leading, 5)
+                
+                TextField("Enter your email", text: $emailText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding(.top, 20)
+            resetPasswordButton(emailText: emailText)
+                .padding(.top, 20)
+        }
+        .padding(.horizontal, 60)
+    }
+    
+    @ViewBuilder
+    func resetPasswordButton(emailText: String) -> some View {
+        VStack {
+            RoundedCorner(radius: 10, corners: .allCorners)
+                .fill(Color.green)
+                .frame(height: 50)
+                .overlay {
+                    Button {
+                        if !emailText.isEmpty {
+                            authViewModel.resetPassword(email: emailText) { _ in
+                                // maybe not do anything here?
+                            }
+                        } else {
+                            // TODO: add error, also need to check if text is valid email format
+                        }
+                    } label: {
+                        Text("Reset Password")
+                            .fontWeight(.medium)
+                            .font(.title2)
+                            .kerning(0.8)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .foregroundStyle(.white)
+                }
+                .frame(maxWidth: .infinity)
+        }
+        .padding(.bottom)
+        .frame(maxWidth: .infinity, alignment: .bottom)
     }
 }

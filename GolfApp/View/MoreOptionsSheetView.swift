@@ -9,32 +9,33 @@ import SwiftUI
 
 struct MoreOptionsSheetView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var authViewModel: AuthViewModel
-    @Binding var post: Post
-
+        @ObservedObject var authViewModel: AuthViewModel
+        @Binding var post: Post
+    
     // TODO: handle navigation to post detail view
     var body: some View {
-        ScrollView {
-            VStack {
+        Form {
+            Section(header: Text("More options")) {
                 Button {
                     authViewModel.deletePost(currentPost: post)
                     dismiss()
                 } label: {
                     Text("Remove Post")
                 }
-                Divider()
+                .buttonStyle(.plain)
                 Button {
                     // TODO: shouldNavigateToPostDetailView = true
                 } label: {
                     Text("View Post")
                 }
-                Divider()
+                .buttonStyle(.plain)
+                
                 Button {
                     dismiss()
                 } label: {
                     Text("Cancel")
                 }
-                Divider()
+                .buttonStyle(.plain)
             }
         }
     }

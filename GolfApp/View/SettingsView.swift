@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct SettingsView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @State var isUserSignedOut: Bool = false
     var body: some View {
         VStack {
@@ -32,6 +32,6 @@ struct SettingsView: View {
     }
 }
 
-#Preview {
-    SettingsView()
-}
+//#Preview {
+//    SettingsView()
+//}

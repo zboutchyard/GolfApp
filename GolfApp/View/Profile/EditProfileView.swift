@@ -15,6 +15,7 @@ struct EditProfileView: View {
     @ObservedObject var searchModel = CourseSearchViewModel()
     @State private var showCourseList = false
     @State var selectedCourseName: String = ""
+    @State var data: Data?
     
     @State var interests: [String] = [
         "baseball",
@@ -31,6 +32,7 @@ struct EditProfileView: View {
         ScrollView {
             Section {
                 VStack {
+                    EditableCircularProfileImage(data: $data)
                     Text("Bio:")
                         .fontWeight(.regular)
                         .font(.callout)
@@ -151,7 +153,7 @@ struct EditProfileView: View {
                 .overlay {
                     Button {
                         user.interests = interestArray.joined(separator: ",")
-                        authViewModel.saveUserData(user: user) { _, _ in
+                        authViewModel.saveUserData(user: user, profilePicData: data) { _, _ in
                             isSubmitButtonPressed = true
                             presentationMode.wrappedValue.dismiss()
                         }

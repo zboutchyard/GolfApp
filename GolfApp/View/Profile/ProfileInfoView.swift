@@ -128,6 +128,7 @@ struct ProfileInfoView: View {
                     })
                     .sheet(isPresented: $shouldShowMoreOptionsView) {
                         MoreOptionsSheetView(authViewModel: authViewModel, post: $selectedPost)
+                            .presentationDetents([.height(400)])
                     }
                     
                     if !authViewModel.userPosts.isEmpty {
@@ -143,7 +144,8 @@ struct ProfileInfoView: View {
                                 VStack {
                                     HStack {
                                         HStack {
-                                            UserProfileImage(authViewModel: authViewModel)
+                                            UserProfileImage(authViewModel: authViewModel,
+                                                             profileImageData: authViewModel.user?.profilePicData)
                                             inputPostView
                                         }
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -157,7 +159,7 @@ struct ProfileInfoView: View {
                             .background(Color.appGray)
                             VStack {
                                 if !authViewModel.userPosts.isEmpty {
-                                    ForEach(authViewModel.posts, id: \.id) { post in
+                                    ForEach(authViewModel.userPosts, id: \.id) { post in
                                         if let user = authViewModel.user, let otherUser = authViewModel.postOtherUsers {
                                             PostsWithAdsView(
                                                 authViewModel: authViewModel,
@@ -166,7 +168,7 @@ struct ProfileInfoView: View {
                                                 user: user,
                                                 post: post,
                                                 otherUser: otherUser[post.user],
-                                                index: authViewModel.posts.firstIndex(where: { $0.id == post.id }) ?? 0,
+                                                index: authViewModel.userPosts.firstIndex(where: { $0.id == post.id }) ?? 0,
                                                 shouldShowMoreOptionsView: $shouldShowMoreOptionsView,
                                                 selectedPost: $selectedPost
                                             )
@@ -338,12 +340,15 @@ struct ProfileInfoView: View {
     }
 }
 
- struct UserProfileImage: View {
+struct UserProfileImage: View {
     @ObservedObject var authViewModel: AuthViewModel
+    @State private var profileImage: UIImage?
+    let profileImageData: Data?
+
     var body: some View {
-        VStack {
-            if let data = authViewModel.user?.profilePicData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
+        Group {
+            if let image = profileImage {
+                Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 50, height: 50)
@@ -351,9 +356,10 @@ struct ProfileInfoView: View {
                     .background {
                         Circle().fill(Color("AppGray"))
                     }
-                self.foregroundStyle(.whiteOrDark)
+                    .foregroundStyle(.whiteOrDark)
             } else {
                 Image(systemName: "person.fill")
+                    .resizable()
                     .scaledToFill()
                     .clipShape(Circle())
                     .frame(width: 50, height: 50)
@@ -363,8 +369,23 @@ struct ProfileInfoView: View {
                     .foregroundStyle(.whiteOrDark)
             }
         }
+        .onAppear {
+            loadImageIfNeeded()
+        }
+    }
+
+    private func loadImageIfNeeded() {
+        guard profileImage == nil else { return }
+        guard let data = profileImageData else {
+            return
+        }
+        
+        if let image = UIImage(data: data) {
+            profileImage = image
+        }
     }
 }
+
 // #Preview {
 //    ProfileInfoView(user: User(firstName: "Zack", lastName: "Boutchyard", email: "zackboutchyard@gmail.com", chats: ["123123"], friendsList: ["123123"], bio: "Here is a short bio about a boy who was sitting on the ouch doing nothing but coding for months so he could get maybe a slightly bigger paycheck", handicap: 12, homeCourse: "asheboro municipal"), isLoading: false)
 // }
