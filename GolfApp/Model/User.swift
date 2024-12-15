@@ -26,8 +26,9 @@ struct User: Codable, Hashable {
     var receivedRequests: [Request]?
     var notifications: [Notification]?
     var fcmToken: String?
+    var liveRound: String?
     
-    init(firstName: String, lastName: String, email: String, profilePicData: Data? = nil, chats: [String]? = nil, friendsList: [String]? = nil, bio: String? = nil, interests: String? = nil, handicap: Int? = nil, homeCourse: String? = nil, posts: [String]? = nil, sentRequests: [Request]? = nil, receivedRequests: [Request]? = nil, notifications: [Notification]? = nil, fcmToken: String? = nil) {
+    init(firstName: String, lastName: String, email: String, profilePicData: Data? = nil, chats: [String]? = nil, friendsList: [String]? = nil, bio: String? = nil, interests: String? = nil, handicap: Int? = nil, homeCourse: String? = nil, posts: [String]? = nil, sentRequests: [Request]? = nil, receivedRequests: [Request]? = nil, notifications: [Notification]? = nil, fcmToken: String? = nil, liveRound: String? = nil) {
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
@@ -43,6 +44,7 @@ struct User: Codable, Hashable {
         self.receivedRequests = receivedRequests
         self.notifications = notifications
         self.fcmToken = fcmToken
+        self.liveRound = liveRound
     }
 }
 

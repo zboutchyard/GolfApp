@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LiveRound {
+struct LiveRoundNotificationModel {
     var userRoundData: UserRoundModel
     var otherUsersRoundData: [OtherUserRoundModel]?
     

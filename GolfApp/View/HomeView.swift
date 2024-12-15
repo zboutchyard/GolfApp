@@ -36,6 +36,9 @@ struct HomeView: View {
                     }
                     .background(.whiteOrDark)
                     Spacer().frame(height: 8)
+                    if !authViewModel.liveRounds.isEmpty {
+                        liveRoundPostView
+                    }
                     postAndAdsView
                 }
                 .sheet(isPresented: $isAddPostClicked, content: {
@@ -114,6 +117,20 @@ struct HomeView: View {
                         selectedPost: $selectedPost
                     )
                 }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var liveRoundPostView: some View {
+        VStack {
+            ForEach(0 ..< authViewModel.liveRounds.count, id: \.self) { index in
+                LiveRoundPostView(viewModel: authViewModel, index: index)
+                    .task {
+                        await authViewModel.getOtherUsersForLiveRound(
+                            mainUser: authViewModel.liveRounds[index].users.mainUser.id,
+                            otherUser: authViewModel.liveRounds[index].users.otherUser.id)
+                    }
             }
         }
     }

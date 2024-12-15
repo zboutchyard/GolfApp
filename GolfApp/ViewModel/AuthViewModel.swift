@@ -34,6 +34,8 @@ class AuthViewModel: ObservableObject {
     @Published private(set) var imageState: ImageState = .empty
     @Published var profileImage: ProfileImage?
     @Published var adPositions: [Int] = []
+    @Published var liveRounds: [LiveRoundFirebaseModel] = []
+    @Published var liveRoundPostUsers: LiveRoundFirebaseUsers?
     @Published var imageSelection: PhotosPickerItem? {
         didSet {
             if let imageSelection {
@@ -274,6 +276,7 @@ class AuthViewModel: ObservableObject {
                         let handicap = data["handicap"] as? Int ?? 0
                         let homeCourse = data["homeCourse"] as? String ?? ""
                         let posts = data["posts"] as? [String] ?? []
+                        let liveRound = data["liveRound"] as? String ?? nil
                         if profilePic != nil {
                             fetchPhotoData(photoId: profilePic ?? "") { fetchedPhoto in
                                 let otherUserModel = OtherUser(
@@ -301,6 +304,9 @@ class AuthViewModel: ObservableObject {
                                 posts: posts)
                             otherUsers.append(otherUserModel)
                             self.friendsList = otherUsers
+                        }
+                        if let roundId = liveRound {
+                            fetchLiveRoundData(id: roundId)
                         }
                     } else {
                         print(error?.localizedDescription ?? "")
@@ -710,7 +716,6 @@ extension AuthViewModel {
             }
         }
     }
-    
     
     func addComment(postId: String, text: String, postOwner: String) {
         let postRef = Firestore.firestore().collection("Posts").document(postId)

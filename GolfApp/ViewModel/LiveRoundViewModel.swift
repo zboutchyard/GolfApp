@@ -13,7 +13,7 @@ class LiveRoundViewModel: ObservableObject {
     @Published var roundFinished: Bool = false
     @Published var selectedScore: Int = 0
     @Published var selectedPutts: Int = 1
-    @Published var liveRoundModel: LiveRound
+    @Published var liveRoundModel: LiveRoundNotificationModel
     @Published var user: User
     @Published var otherUsers: [OtherUser]
     @Published var missingInput: Bool = false
@@ -43,7 +43,7 @@ class LiveRoundViewModel: ObservableObject {
             }
         }
         
-        self.liveRoundModel = LiveRound(
+        self.liveRoundModel = LiveRoundNotificationModel(
             userRoundData: UserRoundModel(
                 user: user,
                 roundData: RoundData(

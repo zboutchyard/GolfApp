@@ -141,7 +141,6 @@ struct LandingView: View {
         .navigationDestination(isPresented: $isMessageBtnClicked) {
             if authViewModel.user != nil {
                 AllChatsView(authViewModel: authViewModel, msgViewModel: msgViewModel, notificationViewModel: notificationViewModel)
-                
             }
         }
         .navigationDestination(isPresented: $isSearchBtnClicked) {

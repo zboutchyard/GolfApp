@@ -32,7 +32,7 @@
 		10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10551A032B22BC0A00218E1D /* LoadingView.swift */; };
 		105D99E32C55A03D00323DFF /* TeeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E22C55A03D00323DFF /* TeeOptions.swift */; };
 		105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E42C69022500323DFF /* LiveRoundViewModel.swift */; };
-		105D99E72C690E3700323DFF /* LiveRoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E62C690E3700323DFF /* LiveRoundModel.swift */; };
+		105D99E72C690E3700323DFF /* LiveRoundNotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105D99E62C690E3700323DFF /* LiveRoundNotificationModel.swift */; };
 		10696A2C2B2E1FDC0011FE9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */; };
 		10696A2F2B3248CF0011FE9B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A2E2B3248CF0011FE9B /* FirebaseStorage */; };
 		10696A312B3248E00011FE9B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 10696A302B3248E00011FE9B /* FirebaseAuth */; };
@@ -43,6 +43,10 @@
 		107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107B54192BB0803300C00654 /* AuthViewModelExtention.swift */; };
 		107B54212BB0EA2B00C00654 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 107B54202BB0EA2B00C00654 /* GoogleService-Info.plist */; };
 		107B54242BB0EB4000C00654 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 107B54232BB0EB4000C00654 /* GoogleMobileAds */; };
+		107BE8B92D0BA2EA0082D5D0 /* LiveRoundFirebaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107BE8B82D0BA2EA0082D5D0 /* LiveRoundFirebaseModel.swift */; };
+		107BE8BB2D0BA3E70082D5D0 /* LiveRoundViewModelExtension+Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107BE8BA2D0BA3E70082D5D0 /* LiveRoundViewModelExtension+Firebase.swift */; };
+		107BE8BD2D0BA4FC0082D5D0 /* AuthViewModelExtension+LiveRoundData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107BE8BC2D0BA4FC0082D5D0 /* AuthViewModelExtension+LiveRoundData.swift */; };
+		107BE8BF2D0CAD6C0082D5D0 /* LiveRoundPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107BE8BE2D0CAD6C0082D5D0 /* LiveRoundPostView.swift */; };
 		108A1B552CC58E8D00F0861E /* NativeAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108A1B542CC58E8C00F0861E /* NativeAdView.swift */; };
 		108A1B572CC5A51600F0861E /* AdLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108A1B562CC5A51600F0861E /* AdLoaderDelegate.swift */; };
 		108A1B5B2CC6080900F0861E /* NativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 108A1B5A2CC6080900F0861E /* NativeAdView.xib */; };
@@ -145,13 +149,17 @@
 		10598C1A2B38BCAF00F6CB78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		105D99E22C55A03D00323DFF /* TeeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeOptions.swift; sourceTree = "<group>"; };
 		105D99E42C69022500323DFF /* LiveRoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundViewModel.swift; sourceTree = "<group>"; };
-		105D99E62C690E3700323DFF /* LiveRoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundModel.swift; sourceTree = "<group>"; };
+		105D99E62C690E3700323DFF /* LiveRoundNotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundNotificationModel.swift; sourceTree = "<group>"; };
 		10696A2B2B2E1FDC0011FE9B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		10696A3A2B3259530011FE9B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10696A3C2B325BA30011FE9B /* GolfApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GolfApp.entitlements; sourceTree = "<group>"; };
 		107B54192BB0803300C00654 /* AuthViewModelExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModelExtention.swift; sourceTree = "<group>"; };
 		107B54202BB0EA2B00C00654 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		107B54252BB0EC9F00C00654 /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
+		107BE8B82D0BA2EA0082D5D0 /* LiveRoundFirebaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundFirebaseModel.swift; sourceTree = "<group>"; };
+		107BE8BA2D0BA3E70082D5D0 /* LiveRoundViewModelExtension+Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveRoundViewModelExtension+Firebase.swift"; sourceTree = "<group>"; };
+		107BE8BC2D0BA4FC0082D5D0 /* AuthViewModelExtension+LiveRoundData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AuthViewModelExtension+LiveRoundData.swift"; sourceTree = "<group>"; };
+		107BE8BE2D0CAD6C0082D5D0 /* LiveRoundPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRoundPostView.swift; sourceTree = "<group>"; };
 		108A1B542CC58E8C00F0861E /* NativeAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAdView.swift; sourceTree = "<group>"; };
 		108A1B562CC5A51600F0861E /* AdLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdLoaderDelegate.swift; sourceTree = "<group>"; };
 		108A1B5A2CC6080900F0861E /* NativeAdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NativeAdView.xib; sourceTree = "<group>"; };
@@ -360,7 +368,8 @@
 				1032E9DC2AF9E43B00001048 /* Chat.swift */,
 				1006349A2B13EDA8005CF4CB /* Post.swift */,
 				105D99E22C55A03D00323DFF /* TeeOptions.swift */,
-				105D99E62C690E3700323DFF /* LiveRoundModel.swift */,
+				105D99E62C690E3700323DFF /* LiveRoundNotificationModel.swift */,
+				107BE8B82D0BA2EA0082D5D0 /* LiveRoundFirebaseModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -391,6 +400,7 @@
 				108A1B542CC58E8C00F0861E /* NativeAdView.swift */,
 				108A1B5A2CC6080900F0861E /* NativeAdView.xib */,
 				10B040222CD19B8000F565AE /* MoreOptionsSheetView.swift */,
+				107BE8BE2D0CAD6C0082D5D0 /* LiveRoundPostView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -405,6 +415,8 @@
 				10B0C3A82B38AD70003C6F31 /* CourseSearchViewModel.swift */,
 				107B54192BB0803300C00654 /* AuthViewModelExtention.swift */,
 				105D99E42C69022500323DFF /* LiveRoundViewModel.swift */,
+				107BE8BA2D0BA3E70082D5D0 /* LiveRoundViewModelExtension+Firebase.swift */,
+				107BE8BC2D0BA4FC0082D5D0 /* AuthViewModelExtension+LiveRoundData.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -705,8 +717,10 @@
 				108A1B572CC5A51600F0861E /* AdLoaderDelegate.swift in Sources */,
 				108D36F62AF582AB005DAD22 /* ProfileView.swift in Sources */,
 				100634992B1390FA005CF4CB /* AlertView.swift in Sources */,
+				107BE8B92D0BA2EA0082D5D0 /* LiveRoundFirebaseModel.swift in Sources */,
 				10551A042B22BC0A00218E1D /* LoadingView.swift in Sources */,
 				10B1D35F2B0C2BEB004D45E7 /* AllChatCellView.swift in Sources */,
+				107BE8BF2D0CAD6C0082D5D0 /* LiveRoundPostView.swift in Sources */,
 				10696A3B2B3259530011FE9B /* AppDelegate.swift in Sources */,
 				10B1D3662B0EBA40004D45E7 /* ScoreCardView.swift in Sources */,
 				105D99E52C69022500323DFF /* LiveRoundViewModel.swift in Sources */,
@@ -719,11 +733,12 @@
 				1032E9E42AF9EE4A00001048 /* ChatView.swift in Sources */,
 				1006349B2B13EDA8005CF4CB /* Post.swift in Sources */,
 				10B1D3752B110A73004D45E7 /* PersonCellView.swift in Sources */,
-				105D99E72C690E3700323DFF /* LiveRoundModel.swift in Sources */,
+				105D99E72C690E3700323DFF /* LiveRoundNotificationModel.swift in Sources */,
 				10B1D3682B100AA0004D45E7 /* PostView.swift in Sources */,
 				1032E9CA2AF66B1100001048 /* AuthViewModel.swift in Sources */,
 				10B0C3A72B369F59003C6F31 /* PopoverScoreCardView.swift in Sources */,
 				1032E9D62AF7FFEB00001048 /* Step1View.swift in Sources */,
+				107BE8BD2D0BA4FC0082D5D0 /* AuthViewModelExtension+LiveRoundData.swift in Sources */,
 				1032E9D92AF8580C00001048 /* Step2View.swift in Sources */,
 				108D36C92AF57C6A005DAD22 /* LoginView.swift in Sources */,
 				107B541A2BB0803300C00654 /* AuthViewModelExtention.swift in Sources */,
@@ -731,6 +746,7 @@
 				1032E9D22AF7D53B00001048 /* ProfileImage.swift in Sources */,
 				10DF7CD82B57433F00D5A879 /* LiveRoundView.swift in Sources */,
 				10B1BB572CC4496400BC8BE8 /* PostsWithAdsView.swift in Sources */,
+				107BE8BB2D0BA3E70082D5D0 /* LiveRoundViewModelExtension+Firebase.swift in Sources */,
 				10B0C3A92B38AD70003C6F31 /* CourseSearchViewModel.swift in Sources */,
 				1032E9E92AF9F99100001048 /* MessageField.swift in Sources */,
 				1032E9E02AF9E54000001048 /* MessageBubble.swift in Sources */,

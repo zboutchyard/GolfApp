@@ -94,10 +94,11 @@ extension AuthViewModel {
         }
     }
     
-    func fetchOtherUserFromFirebase(id: String) async -> OtherUser? {
+    func fetchOtherUserFromFirebase(id: String) async -> OtherUser {
         await withCheckedContinuation { continuation in
             Task { @MainActor in
                 self.fetchOtherUserFromFirebase(id: id) { fetchedUser in
+                    guard let fetchedUser else { return }
                     continuation.resume(returning: fetchedUser)
                 }
             }
